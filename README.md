@@ -1,6 +1,6 @@
 # lubejs-tester
 
-this is a test project for lubejs  & lubejs-mssql
+this is a test project for lubejs & lubejs-mssql
 
 > [lubejs](https://github.com/jovercao/lubejs)
 > [lubejs-mssql](https://github.com/jovercao/lubejs)
@@ -14,12 +14,20 @@ this is a test project for lubejs  & lubejs-mssql
 
 ```bash
 git clone https://github.com/jovercao/lubejs
+cd lubejs
+npm install
 
+cd ..
 git clone https://github.com/jovercao/lubejs-mssql
 
-git clone https://github.com/jovercao/lubejs-tester
+cd lubejs-mssql
+npm install
 
+cd ..
+git clone https://github.com/jovercao/lubejs-tester
 cd lubejs-tester
+
+npm install
 
 npm start
 ```

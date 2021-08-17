@@ -13,11 +13,11 @@
     "dist"
   ],
   "scripts": {
-    "update:lib": "pwsh ./prepare.ps1",
+    "update": "pwsh ./prepare.ps1",
     "test": "npm start",
     "start": "npm run update:lib && node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
     "lint": "eslint --fix ./src --ext .ts",
-    "migrate": "node --require ts-node/register --require tsconfig-paths/register  ../lubejs/src/bin.ts migrate"
+    "migrate": "lube migrate"
   },
   "repository": {
     "type": "git",
@@ -79,8 +79,8 @@
     "crypto-js": "^4.1.1",
     "decimal.js-light": "^2.5.1",
     "install": "^0.13.0",
-    "lubejs": "file:../lubejs/lubejs-3.0.0-preview.tgz",
-    "lubejs-mssql": "file:../lubejs-mssql/lubejs-mssql-3.0.0-preview.tgz",
+    "lubejs": "file:../lubejs/lubejs-3.0.0-preview01.tgz",
+    "lubejs-mssql": "file:../lubejs-mssql/lubejs-mssql-3.0.0-preview01.tgz",
     "npm": "^7.19.1",
     "reflect-metadata": "^0.1.13",
     "uuid": "^8.3.2"
