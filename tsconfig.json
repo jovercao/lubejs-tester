@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "target": "ES2020",
+    "declaration": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictFunctionTypes": false,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "outDir": "dist",
+    // "typeRoots": [
+    //   "./node_modules/@types",
+    //   "../lubejs-mssql/typings",
+    //   "./typings"
+    // ],
+    "paths": {
+      // "lubejs": ["../lubejs/src"],
+      // "lubejs/*": ["../lubejs/src/*"],
+      // "lubejs-mssql": ["../lubejs-mssql/src"],
+      // "lubejs-mssql/*": ["./lubejs-mssql/src/*"],
+      "orm": ["./orm-configure"],
+      "orm/*": ["./orm-configure/*"]
+    }
+  },
+  "include": [
+    ".lubejs.ts",
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

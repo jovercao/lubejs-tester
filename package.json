@@ -1,0 +1,88 @@
+{
+  "name": "lubejs-tester",
+  "version": "1.0.0",
+  "description": "An easy-to-use nodejs oracledb client",
+  "main": "dist/index.js",
+  "directories": {
+    "dist": "dist"
+  },
+  "bin": {
+    "lube": "./dist/bin.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "update:lib": "pwsh ./prepare.ps1",
+    "test": "npm start",
+    "start": "npm run update:lib && node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
+    "lint": "eslint --fix ./src --ext .ts",
+    "migrate": "node --require ts-node/register --require tsconfig-paths/register  ../lubejs/src/bin.ts migrate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jovercao/lubejs.git"
+  },
+  "keywords": [
+    "node",
+    "nodejs",
+    "oracle",
+    "oracledb",
+    "mongodb",
+    "db",
+    "mssql",
+    "mysql",
+    "database"
+  ],
+  "author": "jover",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jovercao/lubejs/issues"
+  },
+  "homepage": "https://github.com/jovercao/lubejs#readme",
+  "devDependencies": {
+    "@types/crypto-js": "^4.0.2",
+    "@types/lodash": "^4.14.170",
+    "@types/mocha": "^8.2.2",
+    "@types/mockjs": "^1.0.3",
+    "@types/mssql": "^6.0.8",
+    "@types/node": "^14.17.4",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "lodash": "^4.17.21",
+    "mocha": "^6.2.3",
+    "mockjs": "^1.1.0",
+    "mssql": "^6.3.2",
+    "oracledb": "^5.0.0",
+    "power-assert": "^1.6.1",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "typedoc": "^0.17.8",
+    "typedoc-plugin-markdown": "^2.3.1",
+    "typeorm": "^0.2.31",
+    "typescript": "^4.3.5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "dependencies": {
+    "@jovercao/mssql": "^7.2.1-jover.2",
+    "colors": "^1.4.0",
+    "commander": "^7.2.0",
+    "crypto-js": "^4.1.1",
+    "decimal.js-light": "^2.5.1",
+    "install": "^0.13.0",
+    "lubejs": "file:../lubejs/lubejs-3.0.0-preview.tgz",
+    "lubejs-mssql": "file:../lubejs-mssql/lubejs-mssql-3.0.0-preview.tgz",
+    "npm": "^7.19.1",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.2"
+  }
+}
