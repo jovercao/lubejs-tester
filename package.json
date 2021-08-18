@@ -13,9 +13,9 @@
     "dist"
   ],
   "scripts": {
-    "update": "pwsh ./prepare.ps1",
+    "update": "pwsh ./update.ps1",
     "test": "npm start",
-    "start": "npm run update:lib && node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
+    "start": "npm run update && node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
     "lint": "eslint --fix ./src --ext .ts",
     "migrate": "lube migrate"
   },
