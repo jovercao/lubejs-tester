@@ -1,43 +1,100 @@
-import { createLube, SqlBuilder as SQL, Decimal, Uuid, InputObject } from 'lubejs';
-import 'lubejs-mssql';
+import {
+  createLube,
+  SqlBuilder as SQL,
+  Decimal,
+  Uuid,
+  Lube,
+  DbType,
+  outputCommand,
+} from "lubejs";
+import "lubejs-mssql";
+import { floor } from "lubejs-mssql";
 
 interface Table1 {
   id: number;
   name: string;
-  stringField?: string,
-  floatField?: number,
-  dateField?: Date,
-  decimalField?: Decimal,
-  uuidField?: Uuid,
-  updatedAt: Date,
-  createdAt: Date,
-  operator?: string
+  stringField?: string;
+  floatField?: number;
+  dateField?: Date;
+  decimalField?: Decimal;
+  uuidField?: Uuid;
+  updatedAt: Date;
+  binaryField?: ArrayBuffer;
+  createdAt: Date;
+  operator?: string;
+}
+
+interface Pay {
+  id?: number;
+  year: number;
+  month: number;
+  amount: Decimal;
+  personId: number;
+}
+
+interface Person {
+  id?: number;
+  name: string;
+  age: number;
+}
+
+/**
+ * 初始化数据库
+ */
+async function initDb(db: Lube) {
+  await db.query(
+    SQL.if(SQL.existsTable('table1')).then(SQL.dropTable("table1"))
+  );
+
+  await db.query(
+    SQL.createTable("table1").as(({ column }) => [
+      column("id", DbType.int32).identity().primaryKey(),
+      column("name", DbType.string(100)).notNull(),
+      column("stringField", DbType.string(100)).null(),
+      column("floatField", DbType.float).null(),
+      column("dateField", DbType.datetimeoffset).null(),
+      column("decimalField", DbType.decimal(18, 6)),
+      column("uuidField", DbType.uuid),
+      column("updatedAt", DbType.datetimeoffset).default(SQL.now()),
+      column("binaryField", DbType.binary(DbType.MAX)),
+      column("createdAt", DbType.datetimeoffset).default(SQL.now()),
+      column("operator", DbType.string(100)).null(),
+    ])
+  );
+
+  await db.query(
+    SQL.if(SQL.existsTable('pay')).then(SQL.dropTable("pay"))
+  );
+
+  await db.query(
+    SQL.createTable("pay").as(({ column }) => [
+      column("id", DbType.int32).identity().primaryKey(),
+      column("year", DbType.int32),
+      column("month", DbType.int32),
+      column("amount", DbType.decimal(18, 2)),
+      column("personId", DbType.int32),
+    ])
+  );
+
+  await db.query(
+    SQL.if(SQL.existsTable('person')).then(SQL.dropTable("person"))
+  );
+
+  await db.query(
+    SQL.createTable("person").as(({ column }) => [
+      column("id", DbType.int32).identity().primaryKey(),
+      column("name", DbType.int32).notNull(),
+      column("age", DbType.int32),
+    ])
+  );
+
 }
 
 /**
  * Table1表声明
  */
 // 这是一个范例
-async function example() {
-  // 创建一个Lube连接
-  const db = await createLube('mssql://sa:password@rancher.vm/test-db');
-
-  // 打开连接
-  await db.open();
-
-  // 初始化数据库，请在MSSQL执行
-  await db.query`CREATE TABLE table1(
-  id INT identity(1, 1) primary key,
-  stringField nvarchar(100),
-  floatField2 float,
-  dateField DATETIMEOFFSET,
-  decimalField DECIMAL(18, 6),
-  uuidField UNIQUEIDENTIFIER,
-  updatedAt DATETIMEOFFSET NOT NULL default (getdate()),
-  createdAt DATETIMEOFFSET NOT NULL default (getdate()),
-  operator nvarchar(100)
-)`
-
+async function example(db: Lube) {
   //---------------插入数据------------------
   /*
    * INSERT INTO table1 (stringField, floatField, dateField)
@@ -45,33 +102,81 @@ async function example() {
    * ('value1-2', 1, Convert(DATETIMEOFFSET, '2019-11-18 00:00:00'))
    * ('value1-3', 45, Convert(DATETIMEOFFSET, '2019-11-18 00:00:00'))
    */
-  const insertSql = SQL.insert<Table1>('table1').values([
-    { name: 'item1', stringField: 'value1-1', floatField: 3.14, dateField: new Date(), decimalField: new Decimal('3.1415'), uuidField: Uuid.new() },
-    { name: 'item2', stringField: 'value1-2', floatField: 1.132, dateField: new Date(), decimalField: new Decimal('3.1415'), uuidField: Uuid.new() },
-    { name: 'item3', stringField: 'value1-3', floatField: 45.2656, dateField: new Date(), decimalField: new Decimal('3.1415'), uuidField: Uuid.new() },
+  const insertSql = SQL.insert<Table1>("table1").values([
+    {
+      name: "item1",
+      stringField: "value1-1",
+      floatField: 3.14,
+      dateField: new Date(),
+      decimalField: new Decimal("3.1415"),
+      uuidField: Uuid.new(),
+      binaryField: Buffer.from('abcdefeg')
+    },
+    {
+      name: "item2",
+      stringField: "value1-2",
+      floatField: 1.132,
+      dateField: new Date(),
+      decimalField: new Decimal("3.1415"),
+      uuidField: Uuid.new(),
+      binaryField: Buffer.from('abcdefeg')
+    },
+    {
+      name: "item3",
+      stringField: "value1-3",
+      floatField: 45.2656,
+      dateField: new Date(),
+      decimalField: new Decimal("3.1415"),
+      uuidField: Uuid.new(),
+      binaryField: Buffer.from('abcdefeg')
+    },
   ]);
 
   await db.query(insertSql);
 
   // 你还以使用以下方式插入，等效于上面的写法
-  await db.insert<Table1>('table1', [
-    { name: 'item1', stringField: 'value1-1', floatField: 3.14, dateField: new Date(), decimalField: new Decimal('3.1415'), uuidField: Uuid.new() },
-    { name: 'item2', stringField: 'value1-2', floatField: 1.132, dateField: new Date(), decimalField: new Decimal('3.1415'), uuidField: Uuid.new() },
-    { name: 'item3', stringField: 'value1-3', floatField: 45.2656, dateField: new Date(), decimalField: new Decimal('3.1415'), uuidField: Uuid.new() },
+  await db.insert<Table1>("table1", [
+    {
+      name: "item1",
+      stringField: "value1-1",
+      floatField: 3.14,
+      dateField: new Date(),
+      decimalField: new Decimal("3.1415"),
+      uuidField: Uuid.new(),
+      binaryField: Buffer.from('abcdefeg')
+    },
+    {
+      name: "item2",
+      stringField: "value1-2",
+      floatField: 1.132,
+      dateField: new Date(),
+      decimalField: new Decimal("3.1415"),
+      uuidField: Uuid.new(),
+      binaryField: Buffer.from('abcdefeg')
+    },
+    {
+      name: "item3",
+      stringField: "value1-3",
+      floatField: 45.2656,
+      dateField: new Date(),
+      decimalField: new Decimal("3.1415"),
+      uuidField: Uuid.new(),
+      binaryField: Buffer.from('abcdefeg')
+    },
   ]);
 
   //---------------更新数据------------------
   // UPDATE t SET updatedAt = Convert(DateTime, '2019-11-18 00:00:00') FROM table1 t WHERE id = 1
-  const t = SQL.table<Table1>('table1').as('t');
+  const t = SQL.table<Table1>("table1").as("t");
   const updateSql = SQL.update(t)
-    .set({ updatedAt: new Date(), operator: 'your name' })
+    .set({ updatedAt: new Date(), operator: "your name" })
     .where(t.id.eq(1));
   await db.query(updateSql);
 
   // 你还以使用以下方式更新，等效于上面的写法
   await db.update<Table1>(
-    'table1',
-    { updatedAt: new Date(), operator: 'your name' },
+    "table1",
+    { updatedAt: new Date(), operator: "your name" },
     { id: 1 }
   );
 
@@ -82,73 +187,62 @@ async function example() {
 
   // 你还以使用以下方式删除
   // DELETE table1 WHERE id = 1
-  await db.delete('table1', { id: 1 });
+  await db.delete("table1", { id: 1 });
 
   //----------------查询数据--------------------
   // SELECT t.* FROM table1 AS t WHERE t.id = 1 AND t.name = 'name1'
   const selectSql = SQL.select(t._)
     .from(t)
-    .where(SQL.and(t.id.eq(1), t.name.eq('name1')));
+    .where(SQL.and(t.id.eq(1), t.name.eq("name1")));
   console.log((await db.query(selectSql)).rows);
 
   //  You can also select in this way
   // SELECT * FROM table1 WHERE id = 1 AND name = 'name1'
   console.log(
-    await await db.select('table1', {
+    await await db.select("table1", {
       where: {
         id: 1,
-        name: 'name1',
+        name: "item1",
       },
     })
   );
 
-  //---------------以下是一个复合查询 (mssql)------------
-  /*
-   * SELECT
-   *     pay.year,
-   *     pay.month
-   *     p.name,
-   *     p.age,
-   *     sum(pay.amount) as total,
-   * FROM pay
-   * JOIN persion as p ON pay.persionId = p.id
-   * WHERE p.age >= 18
-   * GROUP BY
-   *     p.name,
-   *     p.age,
-   *     pay.year,
-   *     pay.month
-   * HAVING SUM(pay.amount) >= 100000.00
-   * ORDER BY
-   *     pay.year ASC,
-   *     pay.month ASC,
-   *     pay.amount ASC,
-   *     p.age ASC
-   *  OFFSET 20 ROWS
-   *  FETCH NEXT 50 ROWS ONLY
-   */
-  const p = SQL.table('person').as('p');
-  const pay = SQL.table('pay');
+
+
+  // //---------------以下是一个复合查询------------
+  const p = SQL.table<Person>("person").as("p");
+  const pay = SQL.table<Pay>("pay");
   const sql = SQL.select(
     pay.year,
     pay.month,
     p.name,
     p.age,
-    SQL.sum(pay.amount).as('total')
+    SQL.sum(pay.amount).as("total")
   )
     .from(pay)
-    .join(p, pay.persionId.eq(p.id))
+    .join(p, pay.personId.eq(p.id))
     .where(p.age.lte(18))
     .groupBy(p.name, p.age, pay.year, pay.month)
-    .having(SQL.sum(pay.amount).gte(100000.0))
-    .orderBy(pay.year.asc(), pay.month.asc(), pay.amount.asc(), p.age.asc())
+    .having(SQL.sum(pay.amount).gte(new Decimal(100000)))
+    .orderBy(pay.year.asc(), pay.month.asc(), SQL.sum(pay.amount).asc(), p.age.asc())
     .offset(20)
     .limit(50);
 
   console.log((await db.query(sql)).rows);
-
-  // 关闭连接
-  await db.close();
 }
 
-example();
+
+(async () => {
+  // 创建一个Lube连接
+  const db = await createLube("mssql://sa:!crgd-2021@rancher.vm/Test");
+  // 打开连接
+  await db.open();
+  // 输出日志
+  db.on('command', outputCommand)
+  try {
+    await initDb(db);
+    await example(db);
+  } finally {
+    await db.close();
+  }
+})();

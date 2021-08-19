@@ -3,13 +3,11 @@ $startdir = Get-Location
 npm un lubejs lubejs-mssql
 
 Set-Location "$startdir/../lubejs"
-tsc
-npm pack
+npm run build
 $lubeVersion = ((Get-Content "package.json") | ConvertFrom-Json).version
 
 Set-Location "$startdir/../lubejs-mssql/"
-tsc
-npm pack
+npm run build
 $driverVersion = ((Get-Content "package.json") | ConvertFrom-Json).version
 
 Set-Location $startdir
