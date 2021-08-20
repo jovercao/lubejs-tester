@@ -79,8 +79,8 @@
     "crypto-js": "^4.1.1",
     "decimal.js-light": "^2.5.1",
     "install": "^0.13.0",
-    "lubejs": "file:../lubejs/lubejs-3.0.0-preview01.tgz",
-    "lubejs-mssql": "file:../lubejs-mssql/lubejs-mssql-3.0.0-preview01.tgz",
+    "lubejs": "file:../lubejs/lubejs-3.0.0-preview02.tgz",
+    "lubejs-mssql": "file:../lubejs-mssql/lubejs-mssql-3.0.0-preview02.tgz",
     "npm": "^7.19.1",
     "reflect-metadata": "^0.1.13",
     "uuid": "^8.3.2"
