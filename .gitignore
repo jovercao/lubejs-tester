@@ -2,3 +2,4 @@ node_modules/
 dist/
 migrates/
 scripts/
+package-lock.json

@@ -8,7 +8,6 @@ import {
   outputCommand,
 } from "lubejs";
 import "lubejs-mssql";
-import { floor } from "lubejs-mssql";
 
 interface Table1 {
   id: number;
