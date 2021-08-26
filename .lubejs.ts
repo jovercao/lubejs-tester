@@ -4,8 +4,6 @@ import 'lubejs-mssql';
 import './orm-configure'
 // import 'orm';
 
-import 'mssql';
-
 // declare module '@jovercao/mssql' = import('mssql')
 
 
@@ -13,7 +11,7 @@ export const config: LubeConfig = {
   default: 'DB',
   migrateDir: 'migrates',
   configures: {
-    _DB: {
+    DB: {
       dialect: 'mssql',
       host: 'jover.wicp.net',
       user: 'sa',
@@ -21,7 +19,7 @@ export const config: LubeConfig = {
       database: 'Test',
       port: 2433,
     },
-    DB: {
+    _DB: {
       dialect: 'mssql',
       host: 'rancher.vm',
       user: 'sa',
