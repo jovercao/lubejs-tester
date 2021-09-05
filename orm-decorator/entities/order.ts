@@ -16,7 +16,7 @@ import {
   oneToMany,
   ProxiedRowset,
   rowflag,
-  SqlBuilder,
+  SQL,
   table,
 } from 'lubejs';
 import { OrderDetail } from './order-detail'
@@ -34,7 +34,7 @@ import { OrderDetail } from './order-detail'
    id?: bigint;
 
    @comment('OrderDate')
-   @defaultValue(() => SqlBuilder.now())
+   @defaultValue(() => SQL.std.now())
    @column()
    date!: Date;
    // 自动生成，因此可以为空

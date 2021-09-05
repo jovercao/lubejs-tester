@@ -1,7 +1,7 @@
 import assert from 'assert';
 import mock from 'mockjs';
 import _ from 'lodash';
-import { Lube, createLube, SqlBuilder as SQL, SortObject, Decimal } from 'lubejs';
+import { Connection, connect, SQL, SortObject, Decimal } from 'lubejs';
 
 const {
   table,
@@ -20,9 +20,11 @@ const {
   literal: value,
   with: $with,
   type: DbType,
-  count,
-  now,
-  identityValue,
+  std: {
+    count,
+    now,
+    identityValue,
+  }
 } = SQL;
 
 interface IItem {
@@ -37,12 +39,12 @@ interface IItem {
 
 describe('Lube Test', function () {
   this.timeout(0);
-  let db: Lube;
+  let db: Connection;
   const sqlLogs = true;
 
   before(async function () {
     // db = await connect('mssql://sa:!crgd-2019@jover.wicp.net:2443/TEST?poolMin=0&poolMax=5&idelTimeout=30000&connectTimeout=15000&requestTimeout=15000');
-    db = await createLube();
+    db = await connect();
     if (sqlLogs) {
       db.on('command', cmd => {
         console.debug('sql:', cmd.sql);
@@ -169,7 +171,7 @@ describe('Lube Test', function () {
     const i = table<IItem>('Items').as('i');
     const y = x.as('y');
 
-    const sql = $with(x)
+    const sql = $with([x])
       .select(y._)
       .from(y)
       .unionAll(select(i._).from(i).join(y, i.FParentId.eq(y.FId)));
@@ -405,20 +407,20 @@ describe('Lube Test', function () {
   it('db.trans -> rollback', async () => {
     const srcRows = await db.select('Items');
     try {
-      await db.trans(async (executor) => {
-        let lines = await executor.delete('Items');
+      await db.trans(async () => {
+        let lines = await db.delete('Items');
         assert(lines > 0);
         const row = {
           FName: 'China',
           FAge: 70,
           FSex: false,
         };
-        lines = await executor.insert('Items', [row]);
+        lines = await db.insert('Items', [row]);
         assert(lines > 0);
 
         const t = table<IItem>('Items');
         const item = (
-          await executor.query<any>(
+          await db.query<any>(
             select(t._)
               .from(t)
               .where(t.FId.eq(identityValue('Items', 'FId')))
@@ -437,9 +439,9 @@ describe('Lube Test', function () {
   });
 
   it('db.trans -> commit', async () => {
-    await db.trans(async executor => {
-      await executor.query('SET identity_insert [Items] ON');
-      const lines = await executor.insert('Items', [
+    await db.trans(async () => {
+      await db.query('SET identity_insert [Items] ON');
+      const lines = await db.insert('Items', [
         {
           // FId: 10000,
           FName: '添加测试',
@@ -448,7 +450,7 @@ describe('Lube Test', function () {
         },
       ]);
       assert(lines > 0);
-      await executor.query('SET identity_insert [Items] OFF');
+      await db.query('SET identity_insert [Items] OFF');
     });
 
     const rows = await db.select('Items');

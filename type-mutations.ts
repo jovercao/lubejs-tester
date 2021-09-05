@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  createLube,
+  connect,
   Decimal,
   outputCommand,
 } from "lubejs";
@@ -29,7 +29,7 @@ const INT32_MAX_VALUE = 2147483647;
 
 (async () => {
   // 创建一个Lube连接
-  const db = await createLube("mssql://sa:!crgd-2021@rancher.vm/Test");
+  const db = await connect("mssql://sa:!crgd-2021@rancher.vm/Test");
   // 打开连接
   await db.open();
     

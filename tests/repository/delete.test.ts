@@ -7,7 +7,7 @@ import {
   User,
 } from 'orm';
 import assert from 'assert';
-import { createContext, Decimal, outputCommand, SqlBuilder as SQL } from 'lubejs';
+import { createContext, Decimal, outputCommand, SQL } from 'lubejs';
 
 describe('Repository: delete', function () {
   this.timeout(0);
@@ -16,12 +16,12 @@ describe('Repository: delete', function () {
   before(async () => {
     db = await createContext(DB);
     if (outputSql) {
-      db.lube.on('command', outputCommand);
+      db.connection.on('command', outputCommand);
     }
   });
 
   after(async () => {
-    await db.lube.close();
+    await db.connection.close();
   });
 
   it('PrimaryOneToOne: User <- Employee', async () => {

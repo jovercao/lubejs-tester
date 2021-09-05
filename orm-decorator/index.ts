@@ -17,7 +17,7 @@ import {
 
 import 'lubejs-mssql';
 
-declare module 'lubejs/dist/types' {
+declare module 'lubejs' {
   /**
    * 主键声明接口
    */

@@ -1,9 +1,9 @@
 import {
-  createLube,
-  SqlBuilder as SQL,
+  connect,
+  SQL,
   Decimal,
   Uuid,
-  Lube,
+  Connection,
   DbType,
   outputCommand,
 } from "lubejs";
@@ -40,9 +40,9 @@ interface Person {
 /**
  * 初始化数据库
  */
-async function initDb(db: Lube) {
+async function initDb(db: Connection) {
   await db.query(
-    SQL.if(SQL.existsTable('table1')).then(SQL.dropTable("table1"))
+    SQL.if(SQL.std.existsTable('table1')).then(SQL.dropTable("table1"))
   );
 
   await db.query(
@@ -54,15 +54,15 @@ async function initDb(db: Lube) {
       column("dateField", DbType.datetimeoffset).null(),
       column("decimalField", DbType.decimal(18, 6)),
       column("uuidField", DbType.uuid),
-      column("updatedAt", DbType.datetimeoffset).default(SQL.now()),
+      column("updatedAt", DbType.datetimeoffset).default(SQL.std.now()),
       column("binaryField", DbType.binary(DbType.MAX)),
-      column("createdAt", DbType.datetimeoffset).default(SQL.now()),
+      column("createdAt", DbType.datetimeoffset).default(SQL.std.now()),
       column("operator", DbType.string(100)).null(),
     ])
   );
 
   await db.query(
-    SQL.if(SQL.existsTable('pay')).then(SQL.dropTable("pay"))
+    SQL.if(SQL.std.existsTable('pay')).then(SQL.dropTable("pay"))
   );
 
   await db.query(
@@ -76,7 +76,7 @@ async function initDb(db: Lube) {
   );
 
   await db.query(
-    SQL.if(SQL.existsTable('person')).then(SQL.dropTable("person"))
+    SQL.if(SQL.std.existsTable('person')).then(SQL.dropTable("person"))
   );
 
   await db.query(
@@ -93,7 +93,7 @@ async function initDb(db: Lube) {
  * Table1表声明
  */
 // 这是一个范例
-async function example(db: Lube) {
+async function example(db: Connection) {
   //---------------插入数据------------------
   /*
    * INSERT INTO table1 (stringField, floatField, dateField)
@@ -216,14 +216,14 @@ async function example(db: Lube) {
     pay.month,
     p.name,
     p.age,
-    SQL.sum(pay.amount).as("total")
+    SQL.std.sum(pay.amount).as("total")
   )
     .from(pay)
     .join(p, pay.personId.eq(p.id))
     .where(p.age.lte(18))
     .groupBy(p.name, p.age, pay.year, pay.month)
-    .having(SQL.sum(pay.amount).gte(new Decimal(100000)))
-    .orderBy(pay.year.asc(), pay.month.asc(), SQL.sum(pay.amount).asc(), p.age.asc())
+    .having(SQL.std.sum(pay.amount).gte(new Decimal(100000)))
+    .orderBy(pay.year.asc(), pay.month.asc(), SQL.std.sum(pay.amount).asc(), p.age.asc())
     .offset(20)
     .limit(50);
 
@@ -233,7 +233,7 @@ async function example(db: Lube) {
 
 (async () => {
   // 创建一个Lube连接
-  const db = await createLube("mssql://sa:!crgd-2021@rancher.vm/Test");
+  const db = await connect("mssql://sa:!crgd-2021@rancher.vm/Test");
   // 打开连接
   await db.open();
   // 输出日志

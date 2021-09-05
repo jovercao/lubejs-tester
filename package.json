@@ -71,8 +71,9 @@
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:../lubejs/lubejs-3.0.0-preview02.tgz",
-    "lubejs-mssql": "file:../lubejs-mssql/lubejs-mssql-3.0.0-preview02.tgz",
+    "@jovercao/mssql": "^7.2.1-jover.2",
+    "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview02.tgz",
+    "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview02.tgz",
     "reflect-metadata": "^0.1.13"
   }
 }

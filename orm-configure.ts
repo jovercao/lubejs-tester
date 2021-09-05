@@ -4,7 +4,7 @@ import {
   Repository,
   DbType,
   Entity,
-  SqlBuilder as SQL,
+  SQL,
   EntityKey,
   Binary,
   Decimal,
@@ -12,7 +12,7 @@ import {
 
 /*************************试验代码****************************/
 
-declare module 'lubejs/dist/types' {
+declare module 'lubejs' {
   /**
    * 主键声明接口
    */
@@ -221,7 +221,7 @@ modelBuilder.context(DB, context => {
       builder
         .property(p => p.date, Date)
         .hasType(DbType.datetime)
-        .hasDefaultValue(SQL.now());
+        .hasDefaultValue(SQL.std.now());
       builder.property(p => p.description, String).isNullable();
       builder
         .hasMany(p => p.details, OrderDetail)
