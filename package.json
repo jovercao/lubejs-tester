@@ -14,8 +14,7 @@
   ],
   "scripts": {
     "update": "pwsh ./update.ps1",
-    "test": "npm start",
-    "test-only": "node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
+    "test": "node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
     "start": "npm run update && npm run test-only",
     "lint": "eslint --fix ./src --ext .ts",
     "migrate": "lube migrate"
@@ -47,12 +46,13 @@
     "@types/mocha": "^8.2.2",
     "@types/mockjs": "^1.0.3",
     "@types/mssql": "^6.0.8",
-    "@types/node": "^14.17.4",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
+    "@types/node": "^14.17.14",
+    "@types/power-assert": "^1.5.4",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
@@ -60,18 +60,17 @@
     "mocha": "^6.2.3",
     "mockjs": "^1.1.0",
     "power-assert": "^1.6.1",
-    "ts-node": "^10.0.0",
-    "tsconfig-paths": "^3.9.0",
+    "ts-node": "^10.2.1",
+    "tsconfig-paths": "^3.11.0",
     "typedoc": "^0.17.8",
     "typedoc-plugin-markdown": "^2.3.1",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "dependencies": {
-    "@jovercao/mssql": "^7.2.1-jover.2",
     "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview02.tgz",
     "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview02.tgz",
     "reflect-metadata": "^0.1.13"

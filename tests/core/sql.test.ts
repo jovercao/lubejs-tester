@@ -16,11 +16,11 @@ describe('AST测试', function () {
   let db: Connection
   before(async () => {
     db = await connect()
-    await db.open()
+    // await db.open()
   })
 
   after(async () => {
-    await db.close()
+    // await db.close()
   })
 
   it('AST.clone', async () => {

@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from 'power-assert';
 import mock from 'mockjs';
 import _ from 'lodash';
 import { Connection, connect, SQL, SortObject, Decimal } from 'lubejs';
@@ -37,11 +37,11 @@ interface IItem {
   FParentId: number;
 }
 
-describe('Lube Test', function () {
+describe.only('Core Test', function () {
   this.timeout(0);
   let db: Connection;
   const sqlLogs = true;
-
+  const testDatabase = 'lubejs-core-test'
   before(async function () {
     // db = await connect('mssql://sa:!crgd-2019@jover.wicp.net:2443/TEST?poolMin=0&poolMax=5&idelTimeout=30000&connectTimeout=15000&requestTimeout=15000');
     db = await connect();
@@ -58,6 +58,9 @@ describe('Lube Test', function () {
         }
       });
     }
+
+    await db.query(SQL.createDatabase(testDatabase));
+    await db.changeDatabase(testDatabase)
 
     await db.query`CREATE FUNCTION dosomething(
         @x int
@@ -89,9 +92,11 @@ describe('Lube Test', function () {
   });
 
   after(async function () {
-    await db.query`drop table Items`;
-    await db.query`drop function dosomething`;
-    await db.query`drop PROC doProc`;
+    await db.changeDatabase('master');
+    // await db.query`drop table Items`;
+    // await db.query`drop function dosomething`;
+    // await db.query`drop PROC doProc`;
+    await db.query(SQL.dropDatabase(testDatabase));
     db.close();
   });
 
@@ -189,7 +194,7 @@ describe('Lube Test', function () {
         null,
       ]);
       assert(lines === 1);
-    } catch (e) {
+    } catch (e: any) {
       err = e;
     }
     assert(
@@ -429,7 +434,7 @@ describe('Lube Test', function () {
         assert.strictEqual(item.FName, row.FName);
         throw new Error('事务错误回滚测试');
       });
-    } catch (ex) {
+    } catch (ex: any) {
       console.log(ex.message);
       assert(ex.message === '事务错误回滚测试');
     }
