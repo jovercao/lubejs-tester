@@ -59,7 +59,6 @@
     "lodash": "^4.17.21",
     "mocha": "^6.2.3",
     "mockjs": "^1.1.0",
-    "power-assert": "^1.6.1",
     "ts-node": "^10.2.1",
     "tsconfig-paths": "^3.11.0",
     "typedoc": "^0.17.8",

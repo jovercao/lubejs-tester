@@ -1,6 +1,6 @@
 import { DbProvider, SQL } from "lubejs";
 import { driver } from "lubejs-mssql";
-import assert from "power-assert";
+import assert from "assert";
 
 const {
   table,
@@ -22,7 +22,7 @@ describe("tests/core/sql.test.ts", function () {
 
     assert.deepStrictEqual(abcCopied.abc.$name, "abc");
 
-    let offset: number = 0,
+    const offset: number = 0,
       limit: number = 50,
       providerId: number | null = null,
       producerId: number | null = null,
@@ -30,17 +30,17 @@ describe("tests/core/sql.test.ts", function () {
       warehouseId: number | null = null,
       location: string | null = null,
       qualityStatus: number | null = null,
-      unsalable: boolean | null = null,
-      unsalableDay: number = 180,
       nearExpire: boolean | null = null,
-      nearExpireDay: number = 180,
-      keyword: string | null = null,
-      sorts: [
+      unsalable: boolean | null = null,
+      keyword: string | null = null;
+    let sorts: [
         {
           column: "quantity";
           direction: "DESC";
         }
-      ];
+      ],
+      nearExpireDay: number = 180,
+      unsalableDay: number = 180;
 
     unsalableDay = unsalableDay || 180;
     nearExpireDay = nearExpireDay || 180;

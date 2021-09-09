@@ -1,4 +1,4 @@
-import assert from "power-assert";
+import assert from 'assert';
 import mock from "mockjs";
 import _ from "lodash";
 import { Connection, connect, SQL, SortObject, Decimal, loadConfig } from "lubejs";

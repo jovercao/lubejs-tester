@@ -8,7 +8,7 @@ import {
   SQL,
   outputCommand,
 } from "lubejs";
-import assert from "power-assert";
+import assert from 'assert';
 import { join } from "path";
 import { existsSync, mkdirSync } from "fs";
 
