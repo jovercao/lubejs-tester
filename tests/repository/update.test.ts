@@ -1,15 +1,20 @@
 import { DB, Employee, Order, OrderDetail, User } from 'orm'
 import assert from 'assert'
-import { createContext, Decimal, outputCommand, SQL } from 'lubejs'
+import { createContext, Decimal, MigrateCli, outputCommand, SQL } from 'lubejs'
 
 describe('Repository: update', function () {
   this.timeout(0)
   let db: DB
   const outputSql: boolean = false
   before(async () => {
+    const cli = await new MigrateCli();
+    await cli.dropDatabase();
+    await cli.sync();
+    await cli.dispose();
     db = await createContext(DB)
+    console.log(await db.connection.getDatabaseName())
     if (outputSql) {
-      db.connection.on('command', outputCommand)
+      db.connection.on('command', (cmd) => outputCommand(cmd, process.stdout))
     }
   })
 

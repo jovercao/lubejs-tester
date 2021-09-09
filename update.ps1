@@ -1,6 +1,8 @@
 $startdir = Get-Location
 
-npm un lubejs lubejs-mssql
+# npm un lubejs lubejs-mssql
+Remove-Item -Recurse -Force .\node_modules\lubejs-mssql
+Remove-Item -Recurse -Force .\node_modules\lubejs
 
 Set-Location "$startdir/../lubejs"
 npm run build

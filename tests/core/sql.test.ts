@@ -1,5 +1,6 @@
-import { connect, Connection, SQL } from 'lubejs'
-import assert from 'assert'
+import { DbProvider, SQL } from "lubejs";
+import { driver } from "lubejs-mssql";
+import assert from "power-assert";
 
 const {
   table,
@@ -9,25 +10,17 @@ const {
   or,
   literal: value,
   field,
-  std: { addDays, now, nvl, count }
-} = SQL
+  std: { addDays, now, nvl, count },
+} = SQL;
 
-describe('AST测试', function () {
-  let db: Connection
-  before(async () => {
-    db = await connect()
-    // await db.open()
-  })
+describe("tests/core/sql.test.ts", function () {
+  let db: DbProvider = driver();
 
-  after(async () => {
-    // await db.close()
-  })
+  it("AST.clone", async () => {
+    const abc = table("abc");
+    const abcCopied = abc.clone();
 
-  it('AST.clone', async () => {
-    const abc = table('abc')
-    const abcCopied = abc.clone()
-
-    assert.deepStrictEqual(abcCopied.abc.$name, 'abc')
+    assert.deepStrictEqual(abcCopied.abc.$name, "abc");
 
     let offset: number = 0,
       limit: number = 50,
@@ -44,15 +37,15 @@ describe('AST测试', function () {
       keyword: string | null = null,
       sorts: [
         {
-          column: 'quantity'
-          direction: 'DESC'
+          column: "quantity";
+          direction: "DESC";
         }
-      ]
+      ];
 
-    unsalableDay = unsalableDay || 180
-    nearExpireDay = nearExpireDay || 180
+    unsalableDay = unsalableDay || 180;
+    nearExpireDay = nearExpireDay || 180;
 
-    const unsalableStock = table('stock').as('unsalableStock')
+    const unsalableStock = table("stock").as("unsalableStock");
     const stock = select({
       id: unsalableStock.id,
       date: unsalableStock.date,
@@ -67,18 +60,25 @@ describe('AST测试', function () {
       amount: unsalableStock.quantity.mul(nvl(unsalableStock.costPrice, 0)),
       qualityStatus: unsalableStock.status,
       location: unsalableStock.location,
-      isNearExpiry: $case().when(addDays(now(), nearExpireDay).gte(unsalableStock.expiryDate), true).else(false),
-      isUnsalable: $case().when(addDays(unsalableStock.date, unsalableDay).gte(now()), true).else(false),
-      belongId: unsalableStock.belongId
+      isNearExpiry: $case()
+        .when(
+          addDays(now(), nearExpireDay).gte(unsalableStock.expiryDate),
+          true
+        )
+        .else(false),
+      isUnsalable: $case()
+        .when(addDays(unsalableStock.date, unsalableDay).gte(now()), true)
+        .else(false),
+      belongId: unsalableStock.belongId,
     })
       .from(unsalableStock)
-      .as('stock')
+      .as("stock");
 
-    const product = table('product').as('product')
-    const provider = table('company').as('provider')
-    const comefrom = table('company').as('comefrom')
-    const producer = table('company').as('producer')
-    const warehouse = table('warehouse').as('warehouse')
+    const product = table("product").as("product");
+    const provider = table("company").as("provider");
+    const comefrom = table("company").as("comefrom");
+    const producer = table("company").as("producer");
+    const warehouse = table("warehouse").as("warehouse");
 
     const detailSql = select({
       id: stock.id,
@@ -92,24 +92,24 @@ describe('AST测试', function () {
       quantity: stock.quantity,
       unit: stock.unit,
       providerId: stock.providerId,
-      providerName: provider.$('name'),
+      providerName: provider.name,
       providerCode: provider.code,
       comefromId: stock.comefromId,
       comefromCode: comefrom.code,
-      comefromName: comefrom.$('name'),
+      comefromName: comefrom.name,
       producerId: product.producerId,
       producerCode: producer.code,
-      producerName: producer.$('name'),
+      producerName: producer.name,
       warehouseId: stock.warehouseId,
       warehouseCode: warehouse.code,
-      warehouseName: warehouse.$('name'),
+      warehouseName: warehouse.name,
       description: stock.description,
       location: stock.location,
       amount: stock.amount,
       qualityStatus: stock.qualityStatus,
       isNearExpiry: stock.isNearExpiry,
       isUnsalable: stock.isUnsalable,
-      belongId: stock.belongId
+      belongId: stock.belongId,
     })
       .from(stock)
       .join(product, product.id.eq(stock.productId))
@@ -124,25 +124,31 @@ describe('AST测试', function () {
           or(value(providerId).isNull(), stock.providerId.eq(providerId)),
           or(value(producerId).isNull(), product.producerId.eq(producerId)),
           or(value(warehouseId).isNull(), stock.warehouseId.eq(warehouseId)),
-          or(nvl(location, '').eq(''), stock.location.like(location!)),
-          or(value(qualityStatus).isNull(), stock.qualityStatus.eq(qualityStatus)),
+          or(nvl(location, "").eq(""), stock.location.like(location!)),
+          or(
+            value(qualityStatus).isNull(),
+            stock.qualityStatus.eq(qualityStatus)
+          ),
           or(value(unsalable).isNull(), stock.isUnsalable.eq(unsalable)),
           or(value(nearExpire).isNull(), stock.isNearExpiry.eq(nearExpire))
         )
-      )
-    const countView = detailSql.as('countView')
-    const countSql = select(count(countView.id)).from(countView)
-    const copiedCountSql = countSql.clone()
+      );
+    const countView = detailSql.as("countView");
+    const countSql = select(count(countView.id)).from(countView);
+    const copiedCountSql = countSql.clone();
 
-    assert(countView !== copiedCountSql.$froms![0])
-    assert.deepStrictEqual((copiedCountSql.$froms![0] as any).abc.$name, 'abc')
+    assert(countView !== copiedCountSql.$froms![0]);
+    assert.deepStrictEqual((copiedCountSql.$froms![0] as any).abc.$name, "abc");
 
-    const sql = db.sqlUtil.sqlify(countSql)
-    const copiedSql = db.sqlUtil.sqlify(copiedCountSql)
-    assert(sql.sql === copiedSql.sql, '克隆功能出现问题：' + sql.sql + '\n\n' + copiedSql.sql)
-  })
+    const sql = db.sqlUtil.sqlify(countSql);
+    const copiedSql = db.sqlUtil.sqlify(copiedCountSql);
+    assert(
+      sql.sql === copiedSql.sql,
+      "克隆功能出现问题：" + sql.sql + "\n\n" + copiedSql.sql
+    );
+  });
 
-  it('and/or 升级条件检查', function () {
+  it("and/or 升级条件检查", function () {
     const sql = select(1).where(
       and(
         value(1).eq(1),
@@ -150,18 +156,19 @@ describe('AST测试', function () {
         or(
           value(1).eq(1),
           value(1).eq(1).or(value(1).eq(1)),
-          field('name').in([1, 2, 3, 4]),
-          field('name').in(...[1, 2, 3, 4]),
-          field('name').in(select(1))
+          field("name").in([1, 2, 3, 4]),
+          field("name").in(...[1, 2, 3, 4]),
+          field("name").in(1, 2, 3, 4)
         )
       )
-    )
+    );
 
-    const cmd = db.sqlUtil.sqlify(sql)
-    console.log(cmd)
+    const cmd = db.sqlUtil.sqlify(sql);
+    console.log(cmd);
     assert(
-      cmd.sql ===
-        'SELECT 1 WHERE (1 = 1 AND (1 = 1 OR 1 = 1) AND (1 = 1 OR (1 = 1 OR 1 = 1) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4) OR [name] IN (SELECT 1)))'
-    )
-  })
-})
+      cmd.sql.endsWith(
+        "WHERE (1 = 1 AND (1 = 1 OR 1 = 1) AND (1 = 1 OR (1 = 1 OR 1 = 1) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4)))"
+      )
+    );
+  });
+});

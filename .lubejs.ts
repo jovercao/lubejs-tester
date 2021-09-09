@@ -24,9 +24,16 @@ export const config: LubeConfig = {
       host: 'rancher.vm',
       user: 'sa',
       password: '!crgd-2021',
-      database: 'Test',
+      database: 'lubejs-orm-test',
       port: 1433,
     },
+    CoreTest: {
+      dialect: 'mssql',
+      host: 'rancher.vm',
+      user: 'sa',
+      password: '!crgd-2021',
+      port: 1433,
+    }
   },
 };
 

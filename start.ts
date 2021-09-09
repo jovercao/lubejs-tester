@@ -190,7 +190,7 @@ async function example(db: Connection) {
 
   //----------------查询数据--------------------
   // SELECT t.* FROM table1 AS t WHERE t.id = 1 AND t.name = 'name1'
-  const selectSql = SQL.select(t._)
+  const selectSql = SQL.select(t.star)
     .from(t)
     .where(SQL.and(t.id.eq(1), t.name.eq("name1")));
   console.log((await db.query(selectSql)).rows);
@@ -237,7 +237,7 @@ async function example(db: Connection) {
   // 打开连接
   await db.open();
   // 输出日志
-  db.on('command', outputCommand)
+  db.on('command', (cmd) => outputCommand(cmd, process.stdout))
   try {
     await initDb(db);
     await example(db);

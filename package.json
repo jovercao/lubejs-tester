@@ -15,7 +15,7 @@
   "scripts": {
     "update": "pwsh ./update.ps1",
     "test": "node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
-    "start": "npm run update && npm run test-only",
+    "start": "npm run update && npm run test",
     "lint": "eslint --fix ./src --ext .ts",
     "migrate": "lube migrate"
   },
