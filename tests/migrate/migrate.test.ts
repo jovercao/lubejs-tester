@@ -8,7 +8,7 @@ import {
   SQL,
   outputCommand,
 } from "lubejs";
-import assert from 'assert';
+import assert from "assert";
 import { join } from "path";
 import { existsSync, mkdirSync } from "fs";
 
@@ -20,7 +20,9 @@ describe("Migrate", function () {
   before(async () => {
     cli = await new MigrateCli();
     dbContext = cli.dbContext;
-    dbContext.connection.on('command', (cmd) => outputCommand(cmd, process.stdout));
+    dbContext.connection.on("command", (cmd) =>
+      outputCommand(cmd, process.stdout)
+    );
     const migrateDir = join(process.cwd(), "migrates");
     if (!existsSync(migrateDir)) {
       mkdirSync(migrateDir);
