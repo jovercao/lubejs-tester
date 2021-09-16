@@ -12,7 +12,7 @@ import { outputCommand } from "lubejs";
 
 const dbName = "lubejs-core-test";
 
-describe.only("tests/core/migrate.test.ts", function () {
+describe("tests/core/migrate.test.ts", function () {
   this.timeout(0);
   let db: Connection;
   const sqlLogs = true;

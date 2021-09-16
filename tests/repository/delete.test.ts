@@ -1,15 +1,8 @@
-import {
-  DB,
-  Employee,
-  EmployeePosition,
-  Order,
-  OrderDetail,
-  User,
-} from 'orm';
-import assert from 'assert';
-import { createContext, Decimal, MigrateCli, outputCommand, SQL } from 'lubejs';
+import { DB, Employee, EmployeePosition, Order, OrderDetail, User } from "orm";
+import assert from "assert";
+import { createContext, Decimal, MigrateCli, outputCommand, SQL } from "lubejs";
 
-describe('Repository: delete', function () {
+describe("Repository: delete", function () {
   this.timeout(0);
   let db: DB;
   const outputSql: boolean = false;
@@ -21,7 +14,7 @@ describe('Repository: delete', function () {
     db = await createContext(DB);
     await db.connection.changeDatabase(cli.targetDatabase);
     if (outputSql) {
-      db.connection.on('command', (cmd) => outputCommand(cmd, process.stdout));
+      db.connection.on("command", (cmd) => outputCommand(cmd, process.stdout));
     }
   });
 
@@ -29,44 +22,42 @@ describe('Repository: delete', function () {
     await db.connection.close();
   });
 
-  it('PrimaryOneToOne: User <- Employee', async () => {
+  it("PrimaryOneToOne: User <- Employee", async () => {
     const employee = Employee.create({
-      name: 'PrimaryOneToOne: employee',
+      name: "PrimaryOneToOne: employee",
       organization: await db.Organization.get(0n),
     });
 
     const user = User.create({
-      name: 'PrimaryOneToOne: user',
-      password: 'pwd',
+      name: "PrimaryOneToOne: user",
+      password: "pwd",
       employee,
     });
 
     await db.save(user);
 
-    user.description = 'updated user';
-    user.employee!.description = 'updated employee';
+    user.description = "updated user";
+    user.employee!.description = "updated employee";
 
     await db.User.delete(user, { withDetail: true });
 
-    const deletedUser = await db.User.get(user.id!);
-    const deletedEmployee = await db.Employee.get(employee.id!);
-    assert(!deletedUser);
-    assert(!deletedEmployee);
+    await assert.rejects(async () => await db.User.get(user.id!));
+    await assert.rejects(async () => await db.Employee.get(employee.id!));
   });
 
-  it('OneToMany: Order <- OrderDetail', async () => {
+  it("OneToMany: Order <- OrderDetail", async () => {
     const order = Order.create({
-      orderNo: 'OrderNo',
+      orderNo: "OrderNo",
       date: new Date(),
       details: [
         {
-          product: 'product1',
+          product: "product1",
           count: 1,
           price: new Decimal(100),
           amount: new Decimal(100),
         },
         {
-          product: 'product2',
+          product: "product2",
           count: 2,
           price: new Decimal(100),
           amount: new Decimal(200),
@@ -81,37 +72,39 @@ describe('Repository: delete', function () {
 
     await db.Order.delete(newOrder, { withDetail: true });
 
-    const deleted = await db.get(Order, order.id!, {
-      includes: { details: true },
-    });
+    await assert.rejects(
+      async () =>
+        await db.get(Order, order.id!, {
+          includes: { details: true },
+        })
+    );
 
     const deletedDetails = await db
       .getQueryable(OrderDetail)
-      .filter(p => p.orderId.eq(newOrder.id))
+      .filter((p) => p.orderId.eq(newOrder.id))
       .fetchAll();
 
-    assert(!deleted);
     assert(deletedDetails.length == 0);
   });
 
-  it('ManyToMany: Employee <- EmployeePosition -> Position', async () => {
+  it("ManyToMany: Employee <- EmployeePosition -> Position", async () => {
     const employee: Employee = {
       user: {
-        name: 'ManyToManyDelete: user',
-        password: 'hehe',
+        name: "ManyToManyDelete: user",
+        password: "hehe",
       },
-      name: 'repository.update ManyToMany1',
+      name: "repository.update ManyToMany1",
       organization: await db.User.get(0n),
       positions: [
         {
-          name: 'position1',
+          name: "position1",
         },
         {
-          name: 'position2',
+          name: "position2",
         },
       ],
     };
-    employee.description = '职员更新内容';
+    employee.description = "职员更新内容";
 
     await db.Employee.save(employee);
 
@@ -120,13 +113,14 @@ describe('Repository: delete', function () {
 
     await db.Employee.delete(employee, { withDetail: true });
 
-    const deleted = await db.Employee.get(employee.id!, { withDetail: true });
+    await assert.rejects(
+      async () => await db.Employee.get(employee.id!, { withDetail: true })
+    );
 
     const relationDetails = await db
       .getQueryable(EmployeePosition)
-      .filter(p => p.employeeId.eq(employee.id!))
+      .filter((p) => p.employeeId.eq(employee.id!))
       .fetchAll();
-    assert(!deleted);
-    assert(relationDetails.length === 0);
+    await assert(relationDetails.length === 0);
   });
 });

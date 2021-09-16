@@ -393,13 +393,13 @@ describe("tests/core/crud.test.ts", function () {
       .limit(10)
       .orderBy(a.FId.asc());
 
-    let { rows: rows1 } = await db.query(sql);
+    const { rows: rows1 } = await db.query(sql);
     assert(_.isDate(rows1[0].Now), "不是日期类型");
     assert(rows1[0].aid === 51, "数据不是预期结果");
     assert(["Man", "Woman"].includes(rows1[0]["Sex"]), "性别不正确");
     assert(rows1.length === 10, "查询到的数据不正确");
 
-    const sql2 = select(a.FId, a.FSex).from(a).distinct();
+    const sql2 = select({ FId: a.FId, FSex: a.FSex }).from(a).distinct();
     const rows2 = (await db.query(sql2)).rows;
     console.log(rows2[0].FId);
     const sql3 = select({ count: count(any) }).from(a);
@@ -418,12 +418,12 @@ describe("tests/core/crud.test.ts", function () {
   it("db.query(sql: Select)", async function () {
     const o = table("sysobjects").as("o");
     const p = table({ name: "extended_properties", schema: "sys" }).as("p");
-    const sql = select(
-      o.id,
-      o.name,
-      p.value.as("desc"),
-      input("inputValue", 1000).as("inputValue")
-    )
+    const sql = select({
+      id: o.id,
+      name: o.name,
+      desc: p.value,
+      inputValue: input("inputValue", 1000)
+    })
       .from(o)
       .leftJoin(
         p,
