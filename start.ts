@@ -211,13 +211,13 @@ async function example(db: Connection) {
   // //---------------以下是一个复合查询------------
   const p = SQL.table<Person>("person").as("p");
   const pay = SQL.table<Pay>("pay");
-  const sql = SQL.select(
-    pay.year,
-    pay.month,
-    p.name,
-    p.age,
-    SQL.std.sum(pay.amount).as("total")
-  )
+  const sql = SQL.select({
+    year: pay.year,
+    month: pay.month,
+    name: p.name,
+    age: p.age,
+    total: SQL.std.sum(pay.amount)
+  })
     .from(pay)
     .join(p, pay.personId.eq(p.id))
     .where(p.age.lte(18))
@@ -229,7 +229,6 @@ async function example(db: Connection) {
 
   console.log((await db.query(sql)).rows);
 }
-
 
 (async () => {
   // 创建一个Lube连接

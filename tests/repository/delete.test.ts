@@ -5,7 +5,7 @@ import { createContext, Decimal, MigrateCli, outputCommand, SQL } from "lubejs";
 describe("Repository: delete", function () {
   this.timeout(0);
   let db: DB;
-  const outputSql: boolean = false;
+  const outputSql: boolean = true;
   before(async () => {
     const cli = await new MigrateCli();
     await cli.dropDatabase();
@@ -66,18 +66,20 @@ describe("Repository: delete", function () {
     });
     await db.insert(order);
 
-    const newOrder = (await db.get(Order, order.id!, { withDetail: true }))!;
+    const newOrder = (await db.get(Order, order.id!, {
+      withDetail: true,
+    }))!;
 
     assert(newOrder.details?.length === 2);
 
     await db.Order.delete(newOrder, { withDetail: true });
 
-    await assert.rejects(
-      async () =>
-        await db.get(Order, order.id!, {
-          includes: { details: true },
-        })
-    );
+    await assert.rejects(async () => {
+      const data = await db.get(Order, order.id!, {
+        includes: { details: true },
+      });
+      console.log(data);
+    });
 
     const deletedDetails = await db
       .getQueryable(OrderDetail)
@@ -108,7 +110,9 @@ describe("Repository: delete", function () {
 
     await db.Employee.save(employee);
 
-    const newEmp = await db.Employee.get(employee.id!, { withDetail: true });
+    const newEmp = await db.Employee.get(employee.id!, {
+      withDetail: true,
+    });
     assert(newEmp?.positions?.length === 2);
 
     await db.Employee.delete(employee, { withDetail: true });

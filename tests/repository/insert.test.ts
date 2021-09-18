@@ -26,9 +26,11 @@ describe("Repository: insert", function () {
   });
 
   it("Single: User", async () => {
-    const { count: beforeCount } = (await db.User.map((p) => ({
-      count: count(star),
-    })).fetchFirst())!;
+    const { count: beforeCount } = (await db.User.query()
+      .map((p) => ({
+        count: count(star),
+      }))
+      .fetchFirst())!;
     const user: User = User.create({
       name: "single test: user",
       password: "123456",
@@ -36,9 +38,11 @@ describe("Repository: insert", function () {
     });
     await db.User.insert(user);
 
-    const { count: afterCount } = (await db.User.map((p) => ({
-      count: count(star),
-    })).fetchFirst())!;
+    const { count: afterCount } = (await db.User.query()
+      .map((p) => ({
+        count: count(star),
+      }))
+      .fetchFirst())!;
 
     assert(afterCount - beforeCount === 1, "插用户入数量不正确");
     const newUser = await db.User.get(user.id!);

@@ -20,6 +20,7 @@ import {
   table,
 } from 'lubejs';
 import { OrderDetail } from './order-detail'
+import { detail } from 'lubejs/orm/decorators/relation-decorators';
 /**
  * Order
  */
@@ -57,6 +58,10 @@ import { OrderDetail } from './order-detail'
    @rowflag()
    rowflag?: Binary;
 
+   /**
+    * 订单明细
+    */
+   @detail()
    @oneToMany(() => OrderDetail, p => p.order)
    details?: OrderDetail[];
  }
