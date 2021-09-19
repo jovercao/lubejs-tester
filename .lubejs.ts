@@ -11,7 +11,7 @@ export const config: LubeConfig = {
   default: 'DB',
   migrateDir: 'migrates',
   configures: {
-    _DB: {
+    DB: {
       dialect: 'mssql',
       host: 'jover.wicp.net',
       user: 'sa',
@@ -19,7 +19,7 @@ export const config: LubeConfig = {
       database: 'Test',
       port: 2433,
     },
-    DB: {
+    _DB: {
       dialect: 'mssql',
       host: 'rancher.vm',
       user: 'sa',
@@ -27,12 +27,19 @@ export const config: LubeConfig = {
       database: 'lubejs-orm-test',
       port: 1433,
     },
-    CoreTest: {
+    _CoreTest: {
       dialect: 'mssql',
       host: 'rancher.vm',
       user: 'sa',
       password: '!crgd-2021',
       port: 1433,
+    },
+    CoreTest: {
+      dialect: 'mssql',
+      host: 'jover.wicp.net',
+      user: 'sa',
+      password: '!crgd-2019',
+      port: 2433,
     }
   },
 };

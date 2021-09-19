@@ -2,7 +2,7 @@ import { DB, Employee, EmployeePosition, Order, OrderDetail, User } from "orm";
 import assert from "assert";
 import { createContext, Decimal, MigrateCli, outputCommand, SQL } from "lubejs";
 
-describe("Repository: delete", function () {
+describe.only("Repository: delete", function () {
   this.timeout(0);
   let db: DB;
   const outputSql: boolean = true;
@@ -89,7 +89,7 @@ describe("Repository: delete", function () {
     assert(deletedDetails.length == 0);
   });
 
-  it("ManyToMany: Employee <- EmployeePosition -> Position", async () => {
+  it.only("ManyToMany: Employee <- EmployeePosition -> Position", async () => {
     const employee: Employee = {
       user: {
         name: "ManyToManyDelete: user",

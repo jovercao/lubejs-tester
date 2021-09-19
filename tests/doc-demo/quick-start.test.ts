@@ -52,7 +52,7 @@ describe("Quick start", function () {
   it("Hello World!", async () => {
     (async () => {
       // 创建连接
-      const db = await connect("mssql://user:password@localhost:1433/database");
+      const db = await connect();
       // SELECT 'hello world'
       console.log(await db.queryScalar(SQL.select("hello world!"))); // => 'hello world'
 
@@ -257,7 +257,7 @@ describe("Quick start", function () {
     }
 
     // 创建一个Lube连接
-    const db = await connect("mssql://sa:!crgd-2021@rancher.vm/Test");
+    const db = await connect();
     // 打开连接
     await db.open();
     // 输出日志
