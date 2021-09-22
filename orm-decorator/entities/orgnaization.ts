@@ -14,6 +14,7 @@ import {
   table,
 } from 'lubejs';
 import { Employee } from './employee'
+import { detail } from 'lubejs/orm/decorators/relation-decorators';
 
 @table()
 @comment('Organization')
@@ -42,6 +43,7 @@ export class Organization extends Entity implements EntityKey {
   @manyToOne(() => Organization, p => p.children)
   parent?: Organization;
 
+  @detail()
   @oneToMany(() => Organization, p => p.parent)
   children?: Organization[];
 

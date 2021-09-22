@@ -13,6 +13,7 @@ import {
   table,
 } from 'lubejs';
 import { Employee } from './employee'
+import { detail } from 'lubejs/orm/decorators/relation-decorators';
 
 /**
  * User实体类
@@ -41,6 +42,7 @@ import { Employee } from './employee'
    @column()
    description?: string;
 
+   @detail()
    @principal()
    @oneToOne(() => Employee, p => p.user)
    employee?: Employee;

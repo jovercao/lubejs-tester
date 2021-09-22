@@ -7,12 +7,11 @@ import {
   Parameter,
 } from "lubejs/core";
 import assert from "assert";
-import { Item } from "reflect-demo/item";
 import { outputCommand } from "lubejs";
 
 const dbName = "lubejs-core-test";
 
-describe("tests/core/migrate.test.ts", function () {
+describe.only("tests/core/migrate.test.ts", function () {
   this.timeout(0);
   let db: Connection;
   const sqlLogs = true;
@@ -21,17 +20,7 @@ describe("tests/core/migrate.test.ts", function () {
     const options = (await loadConfig()).configures["CoreTest"];
     db = await connect(options);
     if (sqlLogs) {
-      db.on("command", (cmd) => {
-        console.debug("sql:", cmd.sql);
-        if (cmd.params && cmd.params.length > 0) {
-          console.debug(
-            "params: {\n",
-            cmd.params
-              .map((p) => `${p.name}: ${JSON.stringify(p.value)}`)
-              .join(",\n") + "\n}"
-          );
-        }
-      });
+      db.on("command", (cmd) => outputCommand(cmd, process.stdout));
     }
 
     if (
