@@ -2,7 +2,7 @@ import { DB, Order, Position } from "orm";
 import { createContext, Decimal, MigrateCli, outputCommand } from "lubejs";
 import assert from "assert";
 
-describe("Repository: query", function () {
+describe("Queryable:", function () {
   this.timeout(0);
   let db: DB;
   const showLog: boolean = true;

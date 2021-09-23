@@ -46,6 +46,7 @@ import { detail } from 'lubejs/orm/decorators/relation-decorators';
    @column(DbType.string(20))
    orderNo?: string;
 
+   @column()
    @comment('Description')
    @nullable()
    description?: string;

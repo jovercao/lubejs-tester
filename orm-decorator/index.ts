@@ -1,10 +1,11 @@
 /*************************试验代码****************************/
 
-import { Organization } from './entities/orgnaization';
-import { Order } from './entities/order';
-import { Position } from './entities/position';
-import { Employee } from './entities/employee';
-import { User } from './entities/user';
+import { Organization } from "./entities/orgnaization";
+import { Order } from "./entities/order";
+import { Position } from "./entities/position";
+import { Employee } from "./entities/employee";
+import { User } from "./entities/user";
+import "./entities/employee-position";
 import {
   comment,
   connection,
@@ -13,11 +14,11 @@ import {
   modelBuilder,
   repository,
   Repository,
-} from 'lubejs';
+} from "lubejs";
 
-import 'lubejs-mssql';
+import "lubejs-mssql";
 
-declare module 'lubejs' {
+declare module "lubejs" {
   /**
    * 主键声明接口
    */
@@ -26,9 +27,9 @@ declare module 'lubejs' {
   }
 }
 
-@comment('Test Database')
-@connection('mssql://sa:!crgd-2019@jover.wicp.net:2433/Test')
-@database('Test')
+@comment("Test Database")
+@connection("mssql://sa:!crgd-2019@jover.wicp.net:2433/Test")
+@database("Test")
 export class DB extends DbContext {
   @repository(() => Organization)
   Organization!: Repository<Organization>;
@@ -48,10 +49,10 @@ export class DB extends DbContext {
 
 modelBuilder.ready();
 
-export * from './entities/employee';
-export * from './entities/user';
-export * from './entities/order';
-export * from './entities/order-detail';
-export * from './entities/orgnaization';
-export * from './entities/position';
-export * from './entities/employee-position';
+export * from "./entities/employee";
+export * from "./entities/user";
+export * from "./entities/order";
+export * from "./entities/order-detail";
+export * from "./entities/orgnaization";
+export * from "./entities/position";
+export * from "./entities/employee-position";

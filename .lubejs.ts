@@ -33,6 +33,7 @@ export const config: LubeConfig = {
       user: 'sa',
       password: '!crgd-2021',
       port: 1433,
+      database: 'lubejs-core-test-db'
     },
     _CoreTest: {
       dialect: 'mssql',

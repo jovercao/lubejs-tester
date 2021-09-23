@@ -13,10 +13,10 @@ const {
   std: { addDays, now, nvl, count },
 } = SQL;
 
-describe("tests/core/sql.test.ts", function () {
+describe("tests/core/sql-ast.test.ts", function () {
   let db: DbProvider = driver();
 
-  it("AST.clone", async () => {
+  it("SQL.prototype.clone", async () => {
     const abc = table("abc");
     const abcCopied = abc.clone();
 
@@ -148,7 +148,7 @@ describe("tests/core/sql.test.ts", function () {
     );
   });
 
-  it("and/or 条件检查", function () {
+  it("and/or", function () {
     const sql = select(1).where(
       and(
         value(1).eq(1),

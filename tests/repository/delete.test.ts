@@ -83,7 +83,7 @@ describe("Repository: delete", function () {
 
     const deletedDetails = await db
       .getQueryable(OrderDetail)
-      .filter((p) => p.orderId.eq(newOrder.id))
+      .filter((p) => p.orderId.eq(newOrder.id!))
       .fetchAll();
 
     assert(deletedDetails.length == 0);

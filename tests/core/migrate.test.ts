@@ -1,38 +1,21 @@
 import {
   Connection,
-  loadConfig,
-  connect,
   SQL,
   DbType,
   Parameter,
+  FunctionParameter,
+  ProcedureParameter,
 } from "lubejs/core";
 import assert from "assert";
-import { outputCommand } from "lubejs";
+import { connectToEmptyDb } from "tests/util";
 
-const dbName = "lubejs-core-test";
-
-describe.only("tests/core/migrate.test.ts", function () {
+describe("tests/core/migrate.test.ts", function () {
   this.timeout(0);
   let db: Connection;
-  const sqlLogs = true;
   before(async function () {
-    // db = await connect('mssql://sa:!crgd-2019@jover.wicp.net:2443/TEST?poolMin=0&poolMax=5&idelTimeout=30000&connectTimeout=15000&requestTimeout=15000');
-    const options = (await loadConfig()).configures["CoreTest"];
-    db = await connect(options);
-    if (sqlLogs) {
-      db.on("command", (cmd) => outputCommand(cmd, process.stdout));
-    }
-
-    if (
-      (await db.queryScalar(
-        SQL.select(1).where(SQL.std.existsDatabase(dbName))
-      )) === 1
-    ) {
-      await db.query(SQL.dropDatabase(dbName));
-    }
-
-    await db.query(SQL.createDatabase(dbName));
-    await db.changeDatabase(dbName);
+    db = await connectToEmptyDb({
+      config: "CoreTest",
+    });
   });
 
   after(async function () {
@@ -147,13 +130,12 @@ describe.only("tests/core/migrate.test.ts", function () {
 
   it("Function", async () => {
     const schemaName = await db.getSchemaName();
+    const $x = new FunctionParameter("x", DbType.int32);
     await db.query(
       SQL.createFunction(`${schemaName}.dosomething`)
-        .params({
-          x: DbType.int32,
-        })
+        .params($x)
         .returns(DbType.int32)
-        .as([SQL.return(SQL.variant("x"))])
+        .as(SQL.return($x))
     );
     const data1 = await db.queryScalar(
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
@@ -161,11 +143,9 @@ describe.only("tests/core/migrate.test.ts", function () {
     assert(data1 === 1);
     await db.query(
       SQL.alterFunction(`${schemaName}.dosomething`)
-        .params({
-          x: DbType.int32,
-        })
+        .params($x)
         .returns(DbType.int32)
-        .as([SQL.return(SQL.variant("x").add(1))])
+        .as([SQL.return($x.add(1))])
     );
     const data2 = await db.queryScalar(
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
@@ -175,19 +155,17 @@ describe.only("tests/core/migrate.test.ts", function () {
   });
 
   it("Procedure", async () => {
+    const $i = new ProcedureParameter("i", DbType.int32);
+    const $o = new ProcedureParameter<string>(
+      "o",
+      DbType.string(100),
+      "INOUT",
+      "no value"
+    );
     await db.query(
       SQL.createProcedure("doProc")
-        .params({
-          i: DbType.int32,
-          o: {
-            type: DbType.string(100),
-            direction: "OUTPUT",
-          },
-        })
-        .as(
-          SQL.assign(SQL.variant("o"), "hello world"),
-          SQL.return(SQL.variant("i"))
-        )
+        .params($i, $o)
+        .as($o.set("hello world"), SQL.return($i))
     );
     const params1 = [1, SQL.output("o", DbType.string(100), "abcdefg")];
     const data1 = await db.execute("doProc", params1);
@@ -200,13 +178,10 @@ describe.only("tests/core/migrate.test.ts", function () {
           i: DbType.int32,
           o: {
             type: DbType.string(100),
-            direction: "OUTPUT",
+            direction: "INOUT",
           },
         })
-        .as(
-          SQL.assign(SQL.variant("o"), "hello world 2"),
-          SQL.return(SQL.variant("i").add(1))
-        )
+        .as($o.set("hello world 2"), SQL.return($i.add(1)))
     );
     const params2 = [1, SQL.output("o", DbType.string(100), "abcdefg")];
     const data2 = await db.execute("doProc", params2);

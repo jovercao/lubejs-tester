@@ -1,7 +1,15 @@
-import assert from 'assert';
+import assert from "assert";
 import mock from "mockjs";
 import _ from "lodash";
-import { Connection, connect, SQL, SortObject, Decimal, loadConfig } from "lubejs";
+import {
+  Connection,
+  SQL,
+  DbType,
+  Decimal,
+  FunctionParameter,
+  ProcedureParameter,
+} from "lubejs";
+import { connectToEmptyDb } from "tests/util";
 
 const {
   table,
@@ -9,71 +17,42 @@ const {
   select,
   insert,
   update,
-  star: any,
+  star,
   execute,
-  makeInvoke: makeFunc,
+  makeInvoke,
   exists,
   input,
   output,
   and,
   group,
-  literal: value,
+  literal,
   with: $with,
-  type: DbType,
   std: { count, now, identityValue },
 } = SQL;
 
 interface IItem {
   FId: number;
   FName: string;
-  FAge: number;
-  FSex: boolean;
+  FAge?: number | null;
+  FSex?: boolean | null;
   FCreateDate: Date;
   Flag: ArrayBuffer;
-  FParentId: number;
+  FParentId?: number | null;
 }
-
-const dbName = "lubejs-core-test";
 
 describe("tests/core/crud.test.ts", function () {
   this.timeout(0);
   let db: Connection;
-  const sqlLogs = true;
   before(async function () {
-    // db = await connect('mssql://sa:!crgd-2019@jover.wicp.net:2443/TEST?poolMin=0&poolMax=5&idelTimeout=30000&connectTimeout=15000&requestTimeout=15000');
-    const options = (await loadConfig()).configures['CoreTest'];
-    db = await connect(options);
-    if (sqlLogs) {
-      db.on("command", (cmd) => {
-        console.debug("sql:", cmd.sql);
-        if (cmd.params && cmd.params.length > 0) {
-          console.debug(
-            "params: {\n",
-            cmd.params
-              .map((p) => `${p.name}: ${JSON.stringify(p.value)}`)
-              .join(",\n") + "\n}"
-          );
-        }
-      });
-    }
-
-    if (
-      (await db.queryScalar(
-        SQL.select(1).where(SQL.std.existsDatabase(dbName))
-      )) === 1
-    ) {
-      await db.query(SQL.dropDatabase(dbName));
-    }
-
-    await db.query(SQL.createDatabase(dbName));
-    await db.changeDatabase(dbName);
+    db = await connectToEmptyDb({
+      config: "CoreTest",
+    });
+    const $x = new FunctionParameter("x", DbType.int32);
     await db.query(
       SQL.createFunction("dosomething")
-        .params({
-          x: DbType.int32,
-        })
+        .params($x)
         .returns(DbType.int32)
-        .as([SQL.return(SQL.variant("x"))])
+        .as([SQL.return($x)])
     );
 
     // await db.query`CREATE PROC doProc(
@@ -85,30 +64,24 @@ describe("tests/core/crud.test.ts", function () {
     //   set @o = 'hello world'
     //   return @i
     // END`;
+
+    const $o = new ProcedureParameter<string>("o", DbType.string(20), "INOUT");
+    const $i = new ProcedureParameter<number>("i", DbType.int32);
     await db.query(
       SQL.createProcedure("doProc")
-        .params({
-          i: DbType.int32,
-          o: {
-            type: DbType.string(20),
-            direction: "OUTPUT",
-          },
-        })
-        .as(
-          SQL.assign(SQL.variant("o"), "hello world"),
-          SQL.return(SQL.variant("i"))
-        )
+        .params($i, $o)
+        .as($o.set("hello world"), SQL.return($i))
     );
 
     await db.query(
       SQL.createTable("Items").as(({ column }) => [
         column("FId", DbType.int32).identity(1, 1).primaryKey(),
-        column("FName", DbType.string(120)),
-        column("FAge", DbType.boolean),
-        column("FSex", DbType.boolean),
-        column("FCreateDate", DbType.datetime).default(SQL.std.now()),
-        column("Flag", DbType.rowflag),
-        column("FParentId", DbType.int32),
+        column("FName", DbType.string(120)).notNull(),
+        column("FAge", DbType.boolean).null(),
+        column("FSex", DbType.boolean).null(),
+        column("FCreateDate", DbType.datetime).notNull().default(SQL.std.now()),
+        column("Flag", DbType.rowflag).notNull(),
+        column("FParentId", DbType.int32).null(),
       ])
     );
 
@@ -229,8 +202,8 @@ describe("tests/core/crud.test.ts", function () {
       err = e;
     }
     assert(
-        err?.message ===
-          "Cannot insert an explicit value into a timestamp column. Use INSERT with a column list to exclude the timestamp column, or insert a DEFAULT into the timestamp column.",
+      err?.message ===
+        "Cannot insert an explicit value into a timestamp column. Use INSERT with a column list to exclude the timestamp column, or insert a DEFAULT into the timestamp column.",
       "因为Flag字段原因，该语句必须报错，否则是不正常的"
     );
   });
@@ -261,7 +234,7 @@ describe("tests/core/crud.test.ts", function () {
     const sql = insert(t).values(row);
     const { rowsAffected } = await db.query(sql);
     assert(rowsAffected === 1);
-    const sql2 = select<IItem>(any)
+    const sql2 = select<IItem>(star)
       .from("Items")
       .where(field("FId").eq(identityValue("Items", "FId")));
     const res2 = await db.query(sql2);
@@ -374,7 +347,7 @@ describe("tests/core/crud.test.ts", function () {
     const sql = select({
       Sex: SQL.case<string>(a.FSex).when(true, "Man").else("Woman"),
       Now: now(),
-      SomeThingResult: makeFunc<number, number>("scalar", {
+      SomeThingResult: makeInvoke<number, number>("scalar", {
         name: "dosomething",
         schema: "dbo",
       })(100),
@@ -402,14 +375,14 @@ describe("tests/core/crud.test.ts", function () {
     const sql2 = select({ FId: a.FId, FSex: a.FSex }).from(a).distinct();
     const rows2 = (await db.query(sql2)).rows;
     console.log(rows2[0].FId);
-    const sql3 = select({ count: count(any) }).from(a);
+    const sql3 = select({ count: count(star) }).from(a);
     const rows3 = (await db.query(sql3)).rows;
     assert(rows3[0].count > 0);
   });
 
   it("db.queryScalar(sql: Select)", async function () {
     const t = table<IItem>("Items").as("t");
-    const sql = select(count(any)).from(t);
+    const sql = select(count(star)).from(t);
 
     const records = (await db.queryScalar(sql))!;
     assert(records > 0);
@@ -422,7 +395,7 @@ describe("tests/core/crud.test.ts", function () {
       id: o.id,
       name: o.name,
       desc: p.value,
-      inputValue: input("inputValue", 1000)
+      inputValue: input("inputValue", 1000),
     })
       .from(o)
       .leftJoin(
@@ -461,13 +434,13 @@ describe("tests/core/crud.test.ts", function () {
 
         const t = table<IItem>("Items");
         const item = (
-          await db.query<any>(
+          await db.query(
             select(t.star)
               .from(t)
               .where(t.FId.eq(identityValue("Items", "FId")))
           )
         ).rows[0];
-        assert.equal(item.FName, row.FName);
+        assert(item.FName === row.FName);
         throw new Error("事务错误回滚测试");
       });
     } catch (ex: any) {
@@ -523,12 +496,12 @@ describe("tests/core/crud.test.ts", function () {
     const bin = Buffer.from("abc");
 
     const sql = select({
-      strToDate: value(date.toISOString()).to(DbType.datetimeoffset),
-      strToint32: value(str).to(DbType.int32),
-      int32ToStr: value(number).to(DbType.string(100)),
-      strToNumbice: value(str).to(DbType.decimal(18, 2)),
-      boolean: value(true).to(DbType.boolean),
-      binary: value(bin),
+      strToDate: literal(date.toISOString()).to(DbType.datetimeoffset),
+      strToint32: literal(str).to(DbType.int32),
+      int32ToStr: literal(number).to(DbType.string(100)),
+      strToNumbice: literal(str).to(DbType.decimal(18, 2)),
+      boolean: literal(true).to(DbType.boolean),
+      binary: literal(bin),
     });
     const {
       rows: [row],

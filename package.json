@@ -70,8 +70,8 @@
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview04.tgz",
-    "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview04.tgz",
+    "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview06.tgz",
+    "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview06.tgz",
     "reflect-metadata": "^0.1.13"
   }
 }

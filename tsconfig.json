@@ -23,6 +23,8 @@
       // "lubejs/*": ["../lubejs/src/*"],
       // "lubejs-mssql": ["../lubejs-mssql/src"],
       // "lubejs-mssql/*": ["./lubejs-mssql/src/*"],
+      // "orm": ["./orm-decorator/index"],
+      // "orm/*": ["./orm-decorator/*"],
       "orm": ["./orm-configure"],
       "orm/*": ["./orm-configure/*"]
     }
