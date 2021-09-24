@@ -52,7 +52,7 @@ describe("tests/core/crud.test.ts", function () {
       SQL.createFunction("dosomething")
         .params($x)
         .returns(DbType.int32)
-        .as([SQL.return($x)])
+        .body([SQL.return($x)])
     );
 
     // await db.query`CREATE PROC doProc(
@@ -70,11 +70,11 @@ describe("tests/core/crud.test.ts", function () {
     await db.query(
       SQL.createProcedure("doProc")
         .params($i, $o)
-        .as($o.set("hello world"), SQL.return($i))
+        .body($o.set("hello world"), SQL.return($i))
     );
 
     await db.query(
-      SQL.createTable("Items").as(({ column }) => [
+      SQL.createTable("Items", ({ column }) => [
         column("FId", DbType.int32).identity(1, 1).primaryKey(),
         column("FName", DbType.string(120)).notNull(),
         column("FAge", DbType.boolean).null(),

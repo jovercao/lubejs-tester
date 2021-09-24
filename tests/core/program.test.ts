@@ -79,8 +79,8 @@ describe("tests/core/program.test.ts", function () {
 
   it("set <variant> = ...", async () => {
     const $i = SQL.var<number>("i", DbType.int32);
-    const sql = SQL.declare($i).as(
-      SQL.set($i, 100),
+    const sql = SQL.declare($i).body(
+      $i.set(100),
       SQL.select({
         result: $i,
       })
@@ -91,7 +91,7 @@ describe("tests/core/program.test.ts", function () {
 
   it("while ... do", async () => {
     const $i = SQL.var<number>("i", DbType.int32);
-    const sql = SQL.declare($i).as(
+    const sql = SQL.declare($i).body(
       SQL.set($i, 1),
       SQL.while($i.lte(10)).do(
         SQL.set($i, $i.add(1)),
@@ -103,5 +103,35 @@ describe("tests/core/program.test.ts", function () {
     );
     const { rows } = await db.query(sql);
     assert(rows?.[0]?.result === 5);
+  });
+
+  it("table variant", async () => {
+    const $t = SQL.table("t", [
+      SQL.createTable.column("id", DbType.int32).primaryKey().identity(),
+      SQL.createTable.column("name", DbType.string(100)).notNull(),
+      SQL.createTable.column("value", DbType.string(DbType.MAX)),
+    ]);
+    const sql = SQL.declare($t).body(
+      SQL.insert($t).values([
+        {
+          name: "item1",
+          value: "this is item1",
+        },
+        {
+          name: "item2",
+          value: "this is item2",
+        },
+      ]),
+      SQL.delete($t).where($t.name.eq("item2")),
+      SQL.update($t).set({ value: "this is updated item1" }),
+      SQL.select($t.star).from($t)
+    );
+
+    const { rows } = await db.query(sql);
+    assert(
+      rows.length === 1 &&
+        rows[0]?.name === "item1" &&
+        rows[0]?.value === "this is updated item1"
+    );
   });
 });

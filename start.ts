@@ -46,7 +46,7 @@ async function initDb(db: Connection) {
   );
 
   await db.query(
-    SQL.createTable("table1").as(({ column }) => [
+    SQL.createTable("table1", ({ column }) => [
       column("id", DbType.int32).identity().primaryKey(),
       column("name", DbType.string(100)).notNull(),
       column("stringField", DbType.string(100)).null(),
@@ -66,7 +66,7 @@ async function initDb(db: Connection) {
   );
 
   await db.query(
-    SQL.createTable("pay").as(({ column }) => [
+    SQL.createTable("pay", ({ column }) => [
       column("id", DbType.int32).identity().primaryKey(),
       column("year", DbType.int32),
       column("month", DbType.int32),
@@ -80,7 +80,7 @@ async function initDb(db: Connection) {
   );
 
   await db.query(
-    SQL.createTable("person").as(({ column }) => [
+    SQL.createTable("person", ({ column }) => [
       column("id", DbType.int32).identity().primaryKey(),
       column("name", DbType.int32).notNull(),
       column("age", DbType.int32),

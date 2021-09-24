@@ -24,7 +24,7 @@ describe("tests/core/migrate.test.ts", function () {
 
   it("Table & Relation", async () => {
     await db.query(
-      SQL.createTable("Item").as(({ column, uniqueKey }) => [
+      SQL.createTable("Item", ({ column, uniqueKey }) => [
         column("id", DbType.int32).identity(1, 1).primaryKey(),
         column("key", DbType.string(32)).notNull(),
         column("value", DbType.string(DbType.MAX)),
@@ -36,7 +36,7 @@ describe("tests/core/migrate.test.ts", function () {
     );
 
     await db.query(
-      SQL.createTable("ItemInfo").as(({ column, foreignKey }) => [
+      SQL.createTable("ItemInfo", ({ column, foreignKey }) => [
         column("id", DbType.int32).primaryKey().identity(1, 1),
         column("itemId", DbType.int32).notNull(),
         column("detailInfo", DbType.string(100)),
@@ -135,7 +135,7 @@ describe("tests/core/migrate.test.ts", function () {
       SQL.createFunction(`${schemaName}.dosomething`)
         .params($x)
         .returns(DbType.int32)
-        .as(SQL.return($x))
+        .body(SQL.return($x))
     );
     const data1 = await db.queryScalar(
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
@@ -145,7 +145,7 @@ describe("tests/core/migrate.test.ts", function () {
       SQL.alterFunction(`${schemaName}.dosomething`)
         .params($x)
         .returns(DbType.int32)
-        .as([SQL.return($x.add(1))])
+        .body([SQL.return($x.add(1))])
     );
     const data2 = await db.queryScalar(
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
@@ -155,17 +155,13 @@ describe("tests/core/migrate.test.ts", function () {
   });
 
   it("Procedure", async () => {
-    const $i = new ProcedureParameter("i", DbType.int32);
-    const $o = new ProcedureParameter<string>(
-      "o",
-      DbType.string(100),
-      "INOUT",
-      "no value"
-    );
     await db.query(
       SQL.createProcedure("doProc")
-        .params($i, $o)
-        .as($o.set("hello world"), SQL.return($i))
+        .params((param) => [
+          param("i", DbType.int32),
+          param("o", DbType.string(100), "INOUT", "no value"),
+        ])
+        .body(([$i, $o]) => [$o.set("hello world"), SQL.return($i)])
     );
     const params1 = [1, SQL.output("o", DbType.string(100), "abcdefg")];
     const data1 = await db.execute("doProc", params1);
@@ -174,14 +170,11 @@ describe("tests/core/migrate.test.ts", function () {
 
     await db.query(
       SQL.alterProcedure("doProc")
-        .params({
-          i: DbType.int32,
-          o: {
-            type: DbType.string(100),
-            direction: "INOUT",
-          },
-        })
-        .as($o.set("hello world 2"), SQL.return($i.add(1)))
+        .params((param) => [
+          param("i", DbType.int32),
+          param("o", DbType.string(100), "INOUT"),
+        ])
+        .body(([$i, $o]) => [$o.set("hello world 2"), SQL.return($i.add(1))])
     );
     const params2 = [1, SQL.output("o", DbType.string(100), "abcdefg")];
     const data2 = await db.execute("doProc", params2);
@@ -193,7 +186,7 @@ describe("tests/core/migrate.test.ts", function () {
 
   it("View", async () => {
     await db.query(
-      SQL.createTable("TestTable").as(({ column }) => [
+      SQL.createTable("TestTable").body(({ column }) => [
         column("id", DbType.int32).identity(1, 1).primaryKey(),
         column("name", DbType.string(100)).notNull(),
         column("description", DbType.string(100)).null(),
