@@ -25,8 +25,18 @@
       // "lubejs-mssql/*": ["./lubejs-mssql/src/*"],
       // "orm": ["./orm-decorator/index"],
       // "orm/*": ["./orm-decorator/*"],
-      "orm": ["./orm-configure"],
-      "orm/*": ["./orm-configure/*"]
+      "@orm": [
+        "./orm-configure"
+      ],
+      "@orm/*": [
+        "./orm-configure/*"
+      ],
+      "@lubejs-driver": [
+        "./node_modules/lubejs-mssql"
+      ],
+      "@lubejs-driver/*": [
+        "./node_modules/lubejs-mssql/*"
+      ]
     }
   },
   "include": [

@@ -1,6 +1,6 @@
-import { DbProvider, SQL } from "lubejs";
-import { driver } from "lubejs-mssql";
-import assert from "assert";
+import { DbProvider, SQL } from 'lubejs';
+import { driver } from 'lubejs-mssql';
+import assert from 'assert';
 
 const {
   table,
@@ -13,14 +13,14 @@ const {
   std: { addDays, now, nvl, count },
 } = SQL;
 
-describe("tests/core/sql-ast.test.ts", function () {
-  let db: DbProvider = driver();
+describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
+  const db: DbProvider = driver();
 
-  it("SQL.prototype.clone", async () => {
-    const abc = table("abc");
+  it('SQL.prototype.clone', async () => {
+    const abc = table('abc');
     const abcCopied = abc.clone();
 
-    assert.deepStrictEqual(abcCopied.abc.$name, "abc");
+    assert.deepStrictEqual(abcCopied.abc.$name, 'abc');
 
     const offset: number = 0,
       limit: number = 50,
@@ -35,8 +35,8 @@ describe("tests/core/sql-ast.test.ts", function () {
       keyword: string | null = null;
     let sorts: [
         {
-          column: "quantity";
-          direction: "DESC";
+          column: 'quantity';
+          direction: 'DESC';
         }
       ],
       nearExpireDay: number = 180,
@@ -45,7 +45,7 @@ describe("tests/core/sql-ast.test.ts", function () {
     unsalableDay = unsalableDay || 180;
     nearExpireDay = nearExpireDay || 180;
 
-    const unsalableStock = table("stock").as("unsalableStock");
+    const unsalableStock = table('stock').as('unsalableStock');
     const stock = select({
       id: unsalableStock.id,
       date: unsalableStock.date,
@@ -72,13 +72,13 @@ describe("tests/core/sql-ast.test.ts", function () {
       belongId: unsalableStock.belongId,
     })
       .from(unsalableStock)
-      .as("stock");
+      .as('stock');
 
-    const product = table("product").as("product");
-    const provider = table("company").as("provider");
-    const comefrom = table("company").as("comefrom");
-    const producer = table("company").as("producer");
-    const warehouse = table("warehouse").as("warehouse");
+    const product = table('product').as('product');
+    const provider = table('company').as('provider');
+    const comefrom = table('company').as('comefrom');
+    const producer = table('company').as('producer');
+    const warehouse = table('warehouse').as('warehouse');
 
     const detailSql = select({
       id: stock.id,
@@ -124,7 +124,7 @@ describe("tests/core/sql-ast.test.ts", function () {
           or(value(providerId).isNull(), stock.providerId.eq(providerId)),
           or(value(producerId).isNull(), product.producerId.eq(producerId)),
           or(value(warehouseId).isNull(), stock.warehouseId.eq(warehouseId)),
-          or(nvl(location, "").eq(""), stock.location.like(location!)),
+          or(nvl(location, '').eq(''), stock.location.like(location!)),
           or(
             value(qualityStatus).isNull(),
             stock.qualityStatus.eq(qualityStatus)
@@ -133,22 +133,22 @@ describe("tests/core/sql-ast.test.ts", function () {
           or(value(nearExpire).isNull(), stock.isNearExpiry.eq(nearExpire))
         )
       );
-    const countView = detailSql.as("countView");
+    const countView = detailSql.as('countView');
     const countSql = select(count(countView.id)).from(countView);
     const copiedCountSql = countSql.clone();
 
     assert(countView !== copiedCountSql.$froms![0]);
-    assert.deepStrictEqual((copiedCountSql.$froms![0] as any).abc.$name, "abc");
+    assert.deepStrictEqual((copiedCountSql.$froms![0] as any).abc.$name, 'abc');
 
     const sql = db.sqlUtil.sqlify(countSql);
     const copiedSql = db.sqlUtil.sqlify(copiedCountSql);
     assert(
       sql.sql === copiedSql.sql,
-      "克隆功能出现问题：" + sql.sql + "\n\n" + copiedSql.sql
+      '克隆功能出现问题：' + sql.sql + '\n\n' + copiedSql.sql
     );
   });
 
-  it("and/or", function () {
+  it('and/or', function () {
     const sql = select(1).where(
       and(
         value(1).eq(1),
@@ -156,9 +156,9 @@ describe("tests/core/sql-ast.test.ts", function () {
         or(
           value(1).eq(1),
           value(1).eq(1).or(value(1).eq(1)),
-          field("name").in([1, 2, 3, 4]),
-          field("name").in(...[1, 2, 3, 4]),
-          field("name").in(1, 2, 3, 4)
+          field('name').in([1, 2, 3, 4]),
+          field('name').in(...[1, 2, 3, 4]),
+          field('name').in(1, 2, 3, 4)
         )
       )
     );
@@ -167,7 +167,7 @@ describe("tests/core/sql-ast.test.ts", function () {
     console.log(cmd);
     assert(
       cmd.sql.endsWith(
-        "WHERE (1 = 1 AND (1 = 1 OR 1 = 1) AND (1 = 1 OR (1 = 1 OR 1 = 1) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4)))"
+        'WHERE (1 = 1 AND (1 = 1 OR 1 = 1) AND (1 = 1 OR (1 = 1 OR 1 = 1) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4)))'
       )
     );
   });

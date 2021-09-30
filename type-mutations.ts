@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  connect,
+  createConnection,
   Decimal,
   outputCommand,
 } from "lubejs";
@@ -29,10 +29,10 @@ const INT32_MAX_VALUE = 2147483647;
 
 (async () => {
   // 创建一个Lube连接
-  const db = await connect("mssql://sa:!crgd-2021@rancher.vm/Test");
+  const db = await createConnection("mssql://sa:!crgd-2021@rancher.vm/Test");
   // 打开连接
   await db.open();
-    
+
   const runTest = async (operator: string, left: any, right: any) => {
     const leftType = typeOf(left)
     const rightType = typeOf(right)

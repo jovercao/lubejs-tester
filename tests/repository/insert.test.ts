@@ -1,25 +1,18 @@
 import assert from "assert";
-import { User, DB, OrderDetail, Order, Employee, Organization } from "orm";
+import { User, DB, OrderDetail, Order, Employee, Organization } from "@orm";
 import { createContext, Decimal, MigrateCli, outputCommand, SQL } from "lubejs";
+import { connectToEmptyDbContext } from "tests/util";
 
 const {
   star,
   std: { count },
 } = SQL;
 
-describe("Repository: insert", function () {
+describe("Repository: insert ———— ./tests/repository/insert.test.ts", function () {
   this.timeout(0);
   let db: DB;
-  const logit: boolean = false;
   before(async () => {
-    const cli = await new MigrateCli();
-    await cli.dropDatabase();
-    await cli.sync();
-    await cli.dispose();
-    db = await createContext(DB);
-    if (logit) {
-      db.connection.on("command", (cmd) => outputCommand(cmd, process.stdout));
-    }
+    db = await connectToEmptyDbContext();
   });
   after(async () => {
     db.connection.close();

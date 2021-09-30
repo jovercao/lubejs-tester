@@ -1,18 +1,17 @@
 import { LubeConfig } from 'lubejs';
 
-import 'lubejs-mssql';
-import './orm-configure'
+import driver from '@lubejs-driver';
+import '@orm';
 // import 'orm';
 
 // declare module '@jovercao/mssql' = import('mssql')
-
 
 export const config: LubeConfig = {
   default: 'DB',
   migrateDir: 'migrates',
   configures: {
     _DB: {
-      dialect: 'mssql',
+      dialect: driver.dialect,
       host: 'jover.wicp.net',
       user: 'sa',
       password: '!crgd-2019',
@@ -20,28 +19,28 @@ export const config: LubeConfig = {
       port: 2433,
     },
     DB: {
-      dialect: 'mssql',
+      dialect: driver.dialect,
       host: 'rancher.vm',
       user: 'sa',
       password: '!crgd-2021',
       database: 'lubejs-orm-test',
       port: 1433,
     },
-    CoreTest: {
-      dialect: 'mssql',
+    'mssql-core-test': {
+      dialect: driver.dialect,
       host: 'rancher.vm',
       user: 'sa',
       password: '!crgd-2021',
       port: 1433,
-      database: 'lubejs-core-test-db'
+      database: 'lubejs-core-test-db',
     },
-    _CoreTest: {
-      dialect: 'mssql',
+    '_mssql-core-test': {
+      dialect: driver.dialect,
       host: 'jover.wicp.net',
       user: 'sa',
       password: '!crgd-2019',
       port: 2433,
-    }
+    },
   },
 };
 

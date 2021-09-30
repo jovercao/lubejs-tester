@@ -40,12 +40,12 @@ interface IItem {
   FParentId?: number | null;
 }
 
-describe("tests/core/crud.test.ts", function () {
+describe("CrudTest ———— tests/core/crud.test.ts", function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
     db = await connectToEmptyDb({
-      config: "CoreTest",
+      config: "mssql-core-test",
     });
     const $x = new FunctionParameter("x", DbType.int32);
     await db.query(

@@ -1,5 +1,5 @@
 import {
-  connect,
+  createConnection,
   Connection,
   createContext,
   DbType,
@@ -7,8 +7,8 @@ import {
   outputCommand,
   SQL,
   Uuid,
-} from "lubejs";
-import { DB } from "orm";
+} from 'lubejs';
+import { DB } from '@orm';
 
 interface Table1 {
   id: number;
@@ -38,76 +38,76 @@ interface Person {
   age: number;
 }
 
-describe("Quick start", function () {
+describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', function () {
   let db: DB;
   before(async () => {
     db = await createContext(DB);
-    db.connection.on("command", (cmd) => outputCommand(cmd, process.stdout));
+    db.connection.on('command', cmd => outputCommand(cmd, process.stdout));
   });
 
   after(async () => {
     await db.dispose();
   });
 
-  it("Hello World!", async () => {
+  it('Hello World!', async () => {
     (async () => {
       // 创建连接
-      const db = await connect();
+      const db = await createConnection();
       // SELECT 'hello world'
-      console.log(await db.queryScalar(SQL.select("hello world!"))); // => 'hello world'
+      console.log(await db.queryScalar(SQL.select('hello world!'))); // => 'hello world'
 
       await db.close();
     })();
   });
 
-  it("完整范例", async () => {
+  it('完整范例', async () => {
     /**
      * 初始化数据库
      */
     async function initDb(db: Connection) {
       await db.query(
-        SQL.if(SQL.std.existsTable("table1")).then(SQL.dropTable("table1"))
+        SQL.if(SQL.std.existsTable('table1')).then(SQL.dropTable('table1'))
       );
 
       await db.query(
-        SQL.createTable("table1", ({ column }) => [
-          column("id", DbType.int32).identity().primaryKey(),
-          column("name", DbType.string(100)).notNull(),
-          column("stringField", DbType.string(100)).null(),
-          column("floatField", DbType.float).null(),
-          column("dateField", DbType.datetimeoffset).null(),
-          column("decimalField", DbType.decimal(18, 6)),
-          column("uuidField", DbType.uuid),
-          column("updatedAt", DbType.datetimeoffset).default(SQL.std.now()),
-          column("binaryField", DbType.binary(DbType.MAX)),
-          column("createdAt", DbType.datetimeoffset).default(SQL.std.now()),
-          column("operator", DbType.string(100)).null(),
+        SQL.createTable('table1', ({ column }) => [
+          column('id', DbType.int32).identity().primaryKey(),
+          column('name', DbType.string(100)).notNull(),
+          column('stringField', DbType.string(100)).null(),
+          column('floatField', DbType.float).null(),
+          column('dateField', DbType.datetimeoffset).null(),
+          column('decimalField', DbType.decimal(18, 6)),
+          column('uuidField', DbType.uuid),
+          column('updatedAt', DbType.datetimeoffset).default(SQL.std.now()),
+          column('binaryField', DbType.binary(DbType.MAX)),
+          column('createdAt', DbType.datetimeoffset).default(SQL.std.now()),
+          column('operator', DbType.string(100)).null(),
         ])
       );
 
       await db.query(
-        SQL.if(SQL.std.existsTable("pay")).then(SQL.dropTable("pay"))
+        SQL.if(SQL.std.existsTable('pay')).then(SQL.dropTable('pay'))
       );
 
       await db.query(
-        SQL.createTable("pay", ({ column }) => [
-          column("id", DbType.int32).identity().primaryKey(),
-          column("year", DbType.int32),
-          column("month", DbType.int32),
-          column("amount", DbType.decimal(18, 2)),
-          column("personId", DbType.int32),
+        SQL.createTable('pay', ({ column }) => [
+          column('id', DbType.int32).identity().primaryKey(),
+          column('year', DbType.int32),
+          column('month', DbType.int32),
+          column('amount', DbType.decimal(18, 2)),
+          column('personId', DbType.int32),
         ])
       );
 
       await db.query(
-        SQL.if(SQL.std.existsTable("person")).then(SQL.dropTable("person"))
+        SQL.if(SQL.std.existsTable('person')).then(SQL.dropTable('person'))
       );
 
       await db.query(
-        SQL.createTable("person", ({ column }) => [
-          column("id", DbType.int32).identity().primaryKey(),
-          column("name", DbType.int32).notNull(),
-          column("age", DbType.int32),
+        SQL.createTable('person', ({ column }) => [
+          column('id', DbType.int32).identity().primaryKey(),
+          column('name', DbType.int32).notNull(),
+          column('age', DbType.int32),
         ])
       );
     }
@@ -124,81 +124,81 @@ describe("Quick start", function () {
        * ('value1-2', 1, Convert(DATETIMEOFFSET, '2019-11-18 00:00:00'))
        * ('value1-3', 45, Convert(DATETIMEOFFSET, '2019-11-18 00:00:00'))
        */
-      const insertSql = SQL.insert<Table1>("table1").values([
+      const insertSql = SQL.insert<Table1>('table1').values([
         {
-          name: "item1",
-          stringField: "value1-1",
+          name: 'item1',
+          stringField: 'value1-1',
           floatField: 3.14,
           dateField: new Date(),
-          decimalField: new Decimal("3.1415"),
+          decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
-          binaryField: Buffer.from("abcdefeg"),
+          binaryField: Buffer.from('abcdefeg'),
         },
         {
-          name: "item2",
-          stringField: "value1-2",
+          name: 'item2',
+          stringField: 'value1-2',
           floatField: 1.132,
           dateField: new Date(),
-          decimalField: new Decimal("3.1415"),
+          decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
-          binaryField: Buffer.from("abcdefeg"),
+          binaryField: Buffer.from('abcdefeg'),
         },
         {
-          name: "item3",
-          stringField: "value1-3",
+          name: 'item3',
+          stringField: 'value1-3',
           floatField: 45.2656,
           dateField: new Date(),
-          decimalField: new Decimal("3.1415"),
+          decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
-          binaryField: Buffer.from("abcdefeg"),
+          binaryField: Buffer.from('abcdefeg'),
         },
       ]);
 
       await db.query(insertSql);
 
       // 你还以使用以下方式插入，等效于上面的写法
-      await db.insert<Table1>("table1", [
+      await db.insert<Table1>('table1', [
         {
-          name: "item1",
-          stringField: "value1-1",
+          name: 'item1',
+          stringField: 'value1-1',
           floatField: 3.14,
           dateField: new Date(),
-          decimalField: new Decimal("3.1415"),
+          decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
-          binaryField: Buffer.from("abcdefeg"),
+          binaryField: Buffer.from('abcdefeg'),
         },
         {
-          name: "item2",
-          stringField: "value1-2",
+          name: 'item2',
+          stringField: 'value1-2',
           floatField: 1.132,
           dateField: new Date(),
-          decimalField: new Decimal("3.1415"),
+          decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
-          binaryField: Buffer.from("abcdefeg"),
+          binaryField: Buffer.from('abcdefeg'),
         },
         {
-          name: "item3",
-          stringField: "value1-3",
+          name: 'item3',
+          stringField: 'value1-3',
           floatField: 45.2656,
           dateField: new Date(),
-          decimalField: new Decimal("3.1415"),
+          decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
-          binaryField: Buffer.from("abcdefeg"),
+          binaryField: Buffer.from('abcdefeg'),
         },
       ]);
 
       //---------------更新数据------------------
       // UPDATE t SET updatedAt = Convert(DateTime, '2019-11-18 00:00:00') FROM table1 t WHERE id = 1
-      const t = SQL.table<Table1>("table1").as("t");
+      const t = SQL.table<Table1>('table1').as('t');
       const updateSql = SQL.update(t)
-        .set({ updatedAt: new Date(), operator: "your name" })
+        .set({ updatedAt: new Date(), operator: 'your name' })
         .where(t.id.eq(1));
       await db.query(updateSql);
 
       // 你还以使用以下方式更新，等效于上面的写法
       await db.update<Table1>(
-        "table1",
-        { updatedAt: new Date(), operator: "your name" },
+        'table1',
+        { updatedAt: new Date(), operator: 'your name' },
         { id: 1 }
       );
 
@@ -209,29 +209,29 @@ describe("Quick start", function () {
 
       // 你还以使用以下方式删除
       // DELETE table1 WHERE id = 1
-      await db.delete("table1", { id: 1 });
+      await db.delete('table1', { id: 1 });
 
       //----------------查询数据--------------------
       // SELECT t.* FROM table1 AS t WHERE t.id = 1 AND t.name = 'name1'
       const selectSql = SQL.select(t.star)
         .from(t)
-        .where(SQL.and(t.id.eq(1), t.name.eq("name1")));
+        .where(SQL.and(t.id.eq(1), t.name.eq('name1')));
       console.log((await db.query(selectSql)).rows);
 
       //  You can also select in this way
       // SELECT * FROM table1 WHERE id = 1 AND name = 'name1'
       console.log(
-        await await db.select("table1", {
+        await await db.select('table1', {
           where: {
             id: 1,
-            name: "item1",
+            name: 'item1',
           },
         })
       );
 
       // //---------------以下是一个复合查询------------
-      const p = SQL.table<Person>("person").as("p");
-      const pay = SQL.table<Pay>("pay");
+      const p = SQL.table<Person>('person').as('p');
+      const pay = SQL.table<Pay>('pay');
       const sql = SQL.select({
         year: pay.year,
         month: pay.month,
@@ -257,11 +257,11 @@ describe("Quick start", function () {
     }
 
     // 创建一个Lube连接
-    const db = await connect();
+    const db = await createConnection();
     // 打开连接
     await db.open();
     // 输出日志
-    db.on("command", (cmd) => outputCommand(cmd, process.stdout));
+    db.on('command', cmd => outputCommand(cmd, process.stdout));
     try {
       await initDb(db);
       await example(db);

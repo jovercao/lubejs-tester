@@ -2,12 +2,12 @@ import { Connection, SQL, DbType } from "lubejs/core";
 import assert from "assert";
 import { connectToEmptyDb } from "tests/util";
 
-describe("tests/core/program.test.ts", function () {
+describe("Program Statement ———— tests/core/program.test.ts", function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
     db = await connectToEmptyDb({
-      config: "CoreTest",
+      config: "mssql-core-test",
     });
   });
 

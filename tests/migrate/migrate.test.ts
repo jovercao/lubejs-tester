@@ -1,4 +1,4 @@
-import { readdir, rm } from "fs/promises";
+import { readdir, rm } from 'fs/promises';
 import {
   MigrateCli,
   DbContext,
@@ -7,12 +7,12 @@ import {
   generateSchema,
   SQL,
   outputCommand,
-} from "lubejs";
-import assert from "assert";
-import { join } from "path";
-import { existsSync, mkdirSync } from "fs";
+} from 'lubejs';
+import assert from 'assert';
+import { join } from 'path';
+import { existsSync, mkdirSync } from 'fs';
 
-describe("Migrate", function () {
+describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
   let cli: MigrateCli;
   let dbContext: DbContext;
   // let defaultSchema: string;
@@ -20,10 +20,10 @@ describe("Migrate", function () {
   before(async () => {
     cli = await new MigrateCli();
     dbContext = cli.dbContext;
-    dbContext.connection.on("command", (cmd) =>
+    dbContext.connection.on('command', cmd =>
       outputCommand(cmd, process.stdout)
     );
-    const migrateDir = join(process.cwd(), "migrates");
+    const migrateDir = join(process.cwd(), 'migrates');
     if (!existsSync(migrateDir)) {
       mkdirSync(migrateDir);
     }
@@ -38,12 +38,12 @@ describe("Migrate", function () {
     await cli.dispose();
   });
 
-  it("Add & Snapshot", async () => {
+  it('Add & Snapshot', async () => {
     const files = await readdir(cli.migrateDir);
     for (const file of files) {
       await rm(join(cli.migrateDir, file));
     }
-    const initMigrate = await cli.add("Init");
+    const initMigrate = await cli.add('Init');
     await cli.snapshotAll();
     const initSchema: DatabaseSchema = (await import(initMigrate.snapshotPath))
       .default;
@@ -67,12 +67,12 @@ describe("Migrate", function () {
     assert(!addDiff);
   });
 
-  it("Update", async () => {
-    await cli.dropDatabase();
-    await cli.update("Init");
+  it('Update', async () => {
+    await cli.dropTargetDatabase();
+    await cli.update('Init');
     const migrate = await cli.getDbMigrate();
 
-    assert(migrate?.name === "Init");
+    assert(migrate?.name === 'Init');
     const dbSchema = await cli.getDbSchema();
     assert(dbSchema);
     const metadataSchema = generateSchema(dbContext);
@@ -85,8 +85,8 @@ describe("Migrate", function () {
     assert(!difference);
   });
 
-  it("Sync", async () => {
-    await cli.dropDatabase();
+  it('Sync', async () => {
+    await cli.dropTargetDatabase();
     await cli.sync();
     const dbSchema = await cli.getDbSchema();
     assert(dbSchema);
@@ -99,10 +99,10 @@ describe("Migrate", function () {
     assert(!difference);
   });
 
-  it("Script", async () => {
+  it('Script', async () => {
     await cli.script({
-      start: "?",
-      end: "*",
+      start: '?',
+      end: '*',
     });
     // await cli.dropDatabase();
   });

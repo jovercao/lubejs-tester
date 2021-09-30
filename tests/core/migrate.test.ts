@@ -4,17 +4,16 @@ import {
   DbType,
   Parameter,
   FunctionParameter,
-  ProcedureParameter,
 } from "lubejs/core";
 import assert from "assert";
 import { connectToEmptyDb } from "tests/util";
 
-describe("tests/core/migrate.test.ts", function () {
+describe("Migrate ———— tests/core/migrate.test.ts", function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
     db = await connectToEmptyDb({
-      config: "CoreTest",
+      config: "mssql-core-test",
     });
   });
 

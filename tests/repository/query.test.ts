@@ -1,43 +1,34 @@
-import { DB, Order, Position } from "orm";
-import { createContext, Decimal, MigrateCli, outputCommand } from "lubejs";
-import assert from "assert";
+import { DB, Order, Position } from '@orm';
+import { createContext, Decimal, MigrateCli, outputCommand } from 'lubejs';
+import assert from 'assert';
+import { connectToEmptyDbContext } from 'tests/util';
 
-describe("Queryable:", function () {
+describe('Queryable ———— ./tests/repository/query.test.ts', function () {
   this.timeout(0);
   let db: DB;
-  const showLog: boolean = true;
   let orderId: bigint;
   let positionIds: bigint[];
   before(async () => {
-    // 重建数据库
-    const cli = await new MigrateCli();
-    await cli.dropDatabase();
-    await cli.sync();
-    await cli.dispose();
-    db = await createContext(DB);
-    if (showLog) {
-      db.connection.on("command", (cmd) => {
-        outputCommand(cmd, process.stdout);
-      });
-    }
+    db = await connectToEmptyDbContext();
+
     const positions = Position.create([
       {
-        name: "3. Boss",
+        name: '3. Boss',
       },
       {
-        name: "2. Staff",
+        name: '2. Staff',
       },
       {
-        name: "1. @",
+        name: '1. @',
       },
     ]);
     await db.Position.insert(positions);
-    positionIds = positions.map((p) => p.id!);
+    positionIds = positions.map(p => p.id!);
     const order = Order.create({
       date: new Date(),
       details: [
         {
-          product: "Ball pen",
+          product: 'Ball pen',
           count: 1,
           price: new Decimal(0.56),
           amount: new Decimal(1 * 0.56),
@@ -52,69 +43,69 @@ describe("Queryable:", function () {
     db.connection.close();
   });
 
-  it(".filter()", async () => {
+  it('.filter()', async () => {
     const querys = await db.Position.query()
-      .filter((p) => p.name.eq("1. @"))
+      .filter(p => p.name.eq('1. @'))
       .fetchFirst();
-    assert.equal(querys?.name, "1. @");
+    assert.equal(querys?.name, '1. @');
   });
 
-  it(".sort()", async () => {
+  it('.sort()', async () => {
     const positions = await db.Position.query()
-      .filter((p) => p.id.in(positionIds))
-      .sort((p) => [p.name.asc()])
+      .filter(p => p.id.in(positionIds))
+      .sort(p => [p.name.asc()])
       .fetchAll();
-    assert(positions[0]?.name === "1. @");
-    assert(positions[1]?.name === "2. Staff");
-    assert(positions[2]?.name === "3. Boss");
+    assert(positions[0]?.name === '1. @');
+    assert(positions[1]?.name === '2. Staff');
+    assert(positions[2]?.name === '3. Boss');
   });
 
-  it(".take()", async () => {
+  it('.take()', async () => {
     const positions = await db.Position.query()
-      .filter((p) => p.id.in(positionIds))
-      .sort((p) => [p.name.asc()])
+      .filter(p => p.id.in(positionIds))
+      .sort(p => [p.name.asc()])
       .skip(1)
       .take(1)
       .fetchAll();
     assert(positions.length === 1);
-    assert(positions[0]?.name === "2. Staff");
+    assert(positions[0]?.name === '2. Staff');
   });
 
-  it(".count()", async () => {
+  it('.count()', async () => {
     const res = await db.Position.query()
-      .filter((p) => p.id.in(positionIds))
+      .filter(p => p.id.in(positionIds))
       .count()
       .fetchFirst();
 
     assert(res?.count === 3);
   });
 
-  it(".map()", async () => {
+  it('.map()', async () => {
     const res = await db.Position.query()
-      .filter((p) => p.name.eq("1. @"))
-      .map((p) => ({
-        "@name": p.name,
+      .filter(p => p.name.eq('1. @'))
+      .map(p => ({
+        '@name': p.name,
       }))
       .fetchFirst();
 
-    assert(res["@name"] === "1. @");
+    assert(res['@name'] === '1. @');
   });
 
-  it(".include()", async () => {
+  it('.include()', async () => {
     const order = await db.Order.query()
-      .filter((o) => o.id.eq(orderId!))
+      .filter(o => o.id.eq(orderId!))
       .include({ details: true })
       .fetchFirst();
     assert(order?.details?.length === 1);
-    assert(order?.details?.[0]?.product === "Ball pen");
+    assert(order?.details?.[0]?.product === 'Ball pen');
   });
 
-  it(".withDetail", async () => {
+  it('.withDetail', async () => {
     const order = await db.Order.query()
-      .filter((o) => o.id.eq(orderId!))
+      .filter(o => o.id.eq(orderId!))
       .withDetail()
       .fetchFirst();
     assert(order?.details?.length === 1);
-    assert(order?.details?.[0]?.product === "Ball pen");
+    assert(order?.details?.[0]?.product === 'Ball pen');
   });
 });

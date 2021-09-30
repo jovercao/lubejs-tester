@@ -14,9 +14,9 @@
   ],
   "scripts": {
     "update": "pwsh ./update.ps1",
-    "test": "node --trace-uncaught --require ts-node/register --require tsconfig-paths/register node_modules/mocha/bin/_mocha --extension ts --extension js tests/**/*.test.ts",
+    "test": "pwsh ./test.ps1",
     "start": "npm run update && npm run test",
-    "lint": "eslint --fix ./src --ext .ts",
+    "lint": "eslint --fix --ext .ts  .",
     "migrate": "lube migrate"
   },
   "repository": {
@@ -50,6 +50,7 @@
     "@types/power-assert": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
+    "cross-env": "^7.0.3",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.24.2",
