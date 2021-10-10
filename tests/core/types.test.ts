@@ -2,7 +2,7 @@ import { Connection, DbType, SQL, Time } from 'lubejs/core';
 import assert from 'power-assert';
 import { connectToEmptyDb } from 'tests/util';
 
-describe('tests/core/types.test.ts ———— DbType Test', function () {
+describe.only('tests/core/types.test.ts ———— DbType Test', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
@@ -246,7 +246,27 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     assert(res2.rows[0].f1 === value);
   });
 
-  it('binary', async () => {});
+  it('binary', async () => {
+    const value = Buffer.from('Hello world!');
+    // sql传入
+    const sql = SQL.select({
+      f1: SQL.literal(value),
+    });
+
+    const res1 = await db.query(sql);
+
+    assert(Buffer.compare(res1.rows[0].f1, value) === 0);
+
+    const f1 = SQL.input('f1', DbType.binary(DbType.MAX), value);
+
+    // 参数传入
+    const res2 = await db.query(
+      SQL.select({
+        f1,
+      })
+    );
+    assert(Buffer.compare(res2.rows[0].f1 as any, value) === 0);
+  });
 
   it('uuid', async () => {});
 
