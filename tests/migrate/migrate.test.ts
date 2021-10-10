@@ -12,7 +12,7 @@ import assert from 'assert';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 
-describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
+describe.only('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
   let cli: MigrateCli;
   let dbContext: DbContext;
   // let defaultSchema: string;

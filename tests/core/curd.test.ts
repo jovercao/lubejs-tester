@@ -1,6 +1,6 @@
-import assert from "assert";
-import mock from "mockjs";
-import _ from "lodash";
+import assert from 'assert';
+import mock from 'mockjs';
+import _ from 'lodash';
 import {
   Connection,
   SQL,
@@ -8,8 +8,8 @@ import {
   Decimal,
   FunctionParameter,
   ProcedureParameter,
-} from "lubejs";
-import { connectToEmptyDb } from "tests/util";
+} from 'lubejs';
+import { connectToEmptyDb } from 'tests/util';
 
 const {
   table,
@@ -40,16 +40,16 @@ interface IItem {
   FParentId?: number | null;
 }
 
-describe("CrudTest ———— tests/core/crud.test.ts", function () {
+describe('CrudTest ———— tests/core/crud.test.ts', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
     db = await connectToEmptyDb({
-      config: "mssql-core-test",
+      config: 'mssql-core-test',
     });
-    const $x = new FunctionParameter("x", DbType.int32);
+    const $x = new FunctionParameter('x', DbType.int32);
     await db.query(
-      SQL.createFunction("dosomething")
+      SQL.createFunction('dosomething')
         .params($x)
         .returns(DbType.int32)
         .body([SQL.return($x)])
@@ -65,23 +65,23 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     //   return @i
     // END`;
 
-    const $o = new ProcedureParameter<string>("o", DbType.string(20), "INOUT");
-    const $i = new ProcedureParameter<number>("i", DbType.int32);
+    const $o = new ProcedureParameter<string>('o', DbType.string(20), 'INOUT');
+    const $i = new ProcedureParameter<number>('i', DbType.int32);
     await db.query(
-      SQL.createProcedure("doProc")
+      SQL.createProcedure('doProc')
         .params($i, $o)
-        .body($o.set("hello world"), SQL.return($i))
+        .body($o.set('hello world'), SQL.return($i))
     );
 
     await db.query(
-      SQL.createTable("Items", ({ column }) => [
-        column("FId", DbType.int32).identity(1, 1).primaryKey(),
-        column("FName", DbType.string(120)).notNull(),
-        column("FAge", DbType.boolean).null(),
-        column("FSex", DbType.boolean).null(),
-        column("FCreateDate", DbType.datetime).notNull().default(SQL.std.now()),
-        column("Flag", DbType.rowflag).notNull(),
-        column("FParentId", DbType.int32).null(),
+      SQL.createTable('Items', ({ column }) => [
+        column('FId', DbType.int32).identity(1, 1).primaryKey(),
+        column('FName', DbType.string(120)).notNull(),
+        column('FAge', DbType.boolean).null(),
+        column('FSex', DbType.boolean).null(),
+        column('FCreateDate', DbType.datetime).notNull().default(SQL.std.now()),
+        column('Flag', DbType.rowflag).notNull(),
+        column('FParentId', DbType.int32).null(),
       ])
     );
 
@@ -100,85 +100,85 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     await db.close();
   });
 
-  it("db.query(sql, { p1: value1, p2:value2 })", async function () {
-    const rs1 = await db.query("select [Name] = @p1, [Age] = @p2", {
-      p1: "name",
+  it('db.query(sql, { p1: value1, p2:value2 })', async function () {
+    const rs1 = await db.query('select [Name] = @p1, [Age] = @p2', {
+      p1: 'name',
       p2: 100,
     });
-    assert(rs1.rows[0].Name === "name");
+    assert(rs1.rows[0].Name === 'name');
   });
 
-  it("db.query(sqls: string[], ...params)", async function () {
-    const name = "Jover";
+  it('db.query(sqls: string[], ...params)', async function () {
+    const name = 'Jover';
     const rs2 = await db.query`select [Name] = ${name}, [Age] = ${19}`;
     console.log(rs2);
     assert(rs2.rows[0].Name === name);
   });
 
-  it("db.insert(table, fields: string[], rows: ValueObject[]) --超大数量INSERT", async function () {
+  it('db.insert(table, fields: string[], rows: ValueObject[]) --超大数量INSERT', async function () {
     const { rows }: { rows: IItem[] } = mock.mock({
       // 属性 的值是一个数组，其中含有 1 到 10 个元素
-      "rows|3001": [
+      'rows|3001': [
         {
           // 属性 id 是一个自增数，起始值为 1，每次增 1
           // 'FId|+1': 1,
-          "FAge|18-60": 1,
-          "FSex|0-1": false,
-          FName: "@name",
+          'FAge|18-60': 1,
+          'FSex|0-1': false,
+          FName: '@name',
           FCreateDate: new Date(),
         },
       ],
     });
 
     const lines = await db.insert<IItem>(
-      "Items",
-      ["FAge", "FSex", "FName", "FCreateDate", "FParentId"],
+      'Items',
+      ['FAge', 'FSex', 'FName', 'FCreateDate', 'FParentId'],
       rows
     );
     assert(lines === rows.length);
   });
 
-  it("db.insert(table, rows: ValueObject)", async function () {
+  it('db.insert(table, rows: ValueObject)', async function () {
     const row = mock.mock({
       // 属性 id 是一个自增数，起始值为 1，每次增 1
       // 'FId|+1': 1,
-      "FAge|18-60": 1,
-      "FSex|0-1": false,
-      FName: "@name",
+      'FAge|18-60': 1,
+      'FSex|0-1': false,
+      FName: '@name',
       FCreateDate: new Date(),
     });
 
-    const lines = await db.insert("Items", row);
+    const lines = await db.insert('Items', row);
     assert(lines === 1);
   });
 
-  it("db.insert(table, fields, rows: Expression[])", async function () {
+  it('db.insert(table, fields, rows: Expression[])', async function () {
     const lines = await db.insert(
-      "Items",
-      ["FAge", "FSex", "FName"],
-      [18, false, "Lily"]
+      'Items',
+      ['FAge', 'FSex', 'FName'],
+      [18, false, 'Lily']
     );
     assert(lines === 1);
   });
 
-  it("db.insert(table, fields, rows: Expression[][])", async function () {
+  it('db.insert(table, fields, rows: Expression[][])', async function () {
     const lines = await db.insert(
-      "Items",
-      ["FAge", "FSex", "FName"],
+      'Items',
+      ['FAge', 'FSex', 'FName'],
       [
-        [18, false, "Lily"],
-        [18, false, "Three Zhang"],
-        [18, true, "Lao Wang next door"],
+        [18, false, 'Lily'],
+        [18, false, 'Three Zhang'],
+        [18, true, 'Lao Wang next door'],
       ]
     );
     assert(lines === 3);
   });
 
-  it("db.query($with(...))", async function () {
-    const t = table<IItem>("Items").as("t");
-    const x = select(t.star).from(t).where(t.FParentId.isNull()).asWith("x");
-    const i = table<IItem>("Items").as("i");
-    const y = x.as("y");
+  it('db.query($with(...))', async function () {
+    const t = table<IItem>('Items').as('t');
+    const x = select(t.star).from(t).where(t.FParentId.isNull()).asWith('x');
+    const i = table<IItem>('Items').as('i');
+    const y = x.as('y');
 
     const sql = $with([x])
       .select(y.star)
@@ -186,15 +186,15 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
       .unionAll(select(i.star).from(i).join(y, i.FParentId.eq(y.FId)));
   });
 
-  it("db.insert(table, rows: Expression[])", async function () {
+  it('db.insert(table, rows: Expression[])', async function () {
     let err: Error | undefined;
     try {
-      const lines = await db.insert<IItem>("Items", [
-        "Lily",
+      const lines = await db.insert<IItem>('Items', [
+        'Lily',
         18,
         false,
         new Date(),
-        Buffer.from("abc"),
+        Buffer.from('abc'),
         null,
       ]);
       assert(lines === 1);
@@ -203,58 +203,58 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     }
     assert(
       err?.message ===
-        "Cannot insert an explicit value into a timestamp column. Use INSERT with a column list to exclude the timestamp column, or insert a DEFAULT into the timestamp column.",
-      "因为Flag字段原因，该语句必须报错，否则是不正常的"
+        'Cannot insert an explicit value into a timestamp column. Use INSERT with a column list to exclude the timestamp column, or insert a DEFAULT into the timestamp column.',
+      '因为Flag字段原因，该语句必须报错，否则是不正常的'
     );
   });
 
-  it("db.insert(table, fields, rows: Expression[][])", async function () {
+  it('db.insert(table, fields, rows: Expression[][])', async function () {
     const lines = await db.insert<IItem>(
-      "Items",
-      ["FName", "FAge", "FSex", "FCreateDate"],
+      'Items',
+      ['FName', 'FAge', 'FSex', 'FCreateDate'],
       [
-        ["Lily", 18, false, new Date()],
-        ["Wang", 18, false, new Date()],
-        ["Wang next door", 18, true, new Date()],
+        ['Lily', 18, false, new Date()],
+        ['Wang', 18, false, new Date()],
+        ['Wang next door', 18, true, new Date()],
       ]
     );
     assert(lines === 3);
   });
 
-  it("db.query(sql: Insert) => @@IDENTITY", async function () {
+  it('db.query(sql: Insert) => @@IDENTITY', async function () {
     const row = mock.mock({
       // 属性 id 是一个自增数，起始值为 1，每次增 1
       // 'FId|+1': 10000,
-      "FAge|18-60": 1,
-      "FSex|0-1": false,
-      FName: "@name",
+      'FAge|18-60': 1,
+      'FSex|0-1': false,
+      FName: '@name',
       FCreateDate: new Date(),
     });
-    const t = table<IItem>("Items");
+    const t = table<IItem>('Items');
     const sql = insert(t).values(row);
     const { rowsAffected } = await db.query(sql);
     assert(rowsAffected === 1);
     const sql2 = select<IItem>(star)
-      .from("Items")
-      .where(field("FId").eq(identityValue("Items", "FId")));
+      .from('Items')
+      .where(field('FId').eq(identityValue('Items', 'FId')));
     const res2 = await db.query(sql2);
     assert(res2.rows.length > 0);
   });
 
-  it("db.find(condition: WhereObject)", async function () {
-    const item = await db.find<IItem>("Items", {
+  it('db.find(condition: WhereObject)', async function () {
+    const item = await db.find<IItem>('Items', {
       FId: 1,
     });
     assert(item);
   });
 
-  it("update(rowset, ...)", async function () {
-    const rowset = table<IItem>("Items").as("__t__");
+  it('update(rowset, ...)', async function () {
+    const rowset = table<IItem>('Items').as('__t__');
 
     const lines = await db.update(
       rowset,
       {
-        FName: "Baoqing Wang",
+        FName: 'Baoqing Wang',
         FAge: 35,
         FSex: false,
       },
@@ -266,11 +266,11 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     assert(lines === 1);
   });
 
-  it("update(string, ...)", async function () {
+  it('update(string, ...)', async function () {
     const lines = await db.update<IItem>(
-      "Items",
+      'Items',
       {
-        FName: "LIX",
+        FName: 'LIX',
         FAge: 23,
         FSex: false,
       },
@@ -279,15 +279,15 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
       }
     );
     assert(lines === 1);
-    const data = await db.find<IItem>("Items", { FId: 1 });
-    assert(data?.FName, "LIX");
+    const data = await db.find<IItem>('Items', { FId: 1 });
+    assert(data?.FName, 'LIX');
   });
 
-  it("update statement", async function () {
-    const a = table<IItem>("Items");
+  it('update statement', async function () {
+    const a = table<IItem>('Items');
     const sql = update(a)
       .set({
-        FName: "Hello World",
+        FName: 'Hello World',
         FAge: 100,
         FSex: true,
       })
@@ -296,12 +296,12 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     assert(rowsAffected === 1);
   });
 
-  it("update statement -> join update", async function () {
-    const a = table<IItem>("Items").as("a");
-    const b = table<IItem>("Items").as("b");
+  it('update statement -> join update', async function () {
+    const a = table<IItem>('Items').as('a');
+    const b = table<IItem>('Items').as('b');
     const sql = update(a)
       .set({
-        FName: "Hello World",
+        FName: 'Hello World',
         FAge: 100,
         FSex: true,
       })
@@ -312,14 +312,14 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     assert(rowsAffected === 1);
   });
 
-  it("select", async function () {
-    const rows = await db.select<IItem>("Items", {
+  it('select', async function () {
+    const rows = await db.select<IItem>('Items', {
       where: {
         FId: [1, 10, 11, 12, 13, 14],
       },
       sorts: {
-        FId: "ASC",
-        FAge: "DESC",
+        FId: 'ASC',
+        FAge: 'DESC',
       },
       offset: 0,
       limit: 1,
@@ -329,9 +329,9 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     assert.strictEqual(rows[0].FSex, false);
   });
 
-  it("db.query(sql: Select) -> GroupBy", async function () {
-    const a = table<IItem>("Items").as("a");
-    const b = table<IItem>("Items").as("b");
+  it('db.query(sql: Select) -> GroupBy', async function () {
+    const a = table<IItem>('Items').as('a');
+    const b = table<IItem>('Items').as('b');
 
     const x = select<IItem>({
       FId: b.FId,
@@ -342,15 +342,15 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
       Flag: b.Flag,
     })
       .from(b)
-      .as("x");
-
+      .as('x');
+    const dosomething = makeInvoke<number, [number]>('scalar', {
+      name: 'dosomething',
+      schema: 'dbo',
+    });
     const sql = select({
-      Sex: SQL.case<string>(a.FSex).when(true, "Man").else("Woman"),
+      Sex: SQL.case<string>(a.FSex).when(true, 'Man').else('Woman'),
       Now: now(),
-      SomeThingResult: makeInvoke<number, number>("scalar", {
-        name: "dosomething",
-        schema: "dbo",
-      })(100),
+      SomeThingResult: dosomething(100),
       // 子查询
       field: select(group(1)).asValue(),
       aid: a.FId,
@@ -367,10 +367,10 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
       .orderBy(a.FId.asc());
 
     const { rows: rows1 } = await db.query(sql);
-    assert(_.isDate(rows1[0].Now), "不是日期类型");
-    assert(rows1[0].aid === 51, "数据不是预期结果");
-    assert(["Man", "Woman"].includes(rows1[0]["Sex"]), "性别不正确");
-    assert(rows1.length === 10, "查询到的数据不正确");
+    assert(_.isDate(rows1[0].Now), '不是日期类型');
+    assert(rows1[0].aid === 51, '数据不是预期结果');
+    assert(['Man', 'Woman'].includes(rows1[0]['Sex']), '性别不正确');
+    assert(rows1.length === 10, '查询到的数据不正确');
 
     const sql2 = select({ FId: a.FId, FSex: a.FSex }).from(a).distinct();
     const rows2 = (await db.query(sql2)).rows;
@@ -380,22 +380,22 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     assert(rows3[0].count > 0);
   });
 
-  it("db.queryScalar(sql: Select)", async function () {
-    const t = table<IItem>("Items").as("t");
+  it('db.queryScalar(sql: Select)', async function () {
+    const t = table<IItem>('Items').as('t');
     const sql = select(count(star)).from(t);
 
     const records = (await db.queryScalar(sql))!;
     assert(records > 0);
   });
 
-  it("db.query(sql: Select)", async function () {
-    const o = table("sysobjects").as("o");
-    const p = table({ name: "extended_properties", schema: "sys" }).as("p");
+  it('db.query(sql: Select)', async function () {
+    const o = table('sysobjects').as('o');
+    const p = table({ name: 'extended_properties', schema: 'sys' }).as('p');
     const sql = select({
       id: o.id,
       name: o.name,
       desc: p.value,
-      inputValue: input("inputValue", 1000),
+      inputValue: input('inputValue', 1000),
     })
       .from(o)
       .leftJoin(
@@ -404,96 +404,96 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
           .eq(o.id)
           .and(p.minor_id.eq(0))
           .and(p.class.eq(1))
-          .and(p.name.eq("MS_Description"))
+          .and(p.name.eq('MS_Description'))
       )
-      .where(o.type.in("U", "V"));
+      .where(o.type.in('U', 'V'));
     const { rows } = await db.query(sql);
     assert(rows.length > 0);
   });
 
-  it("db.select(table)", async () => {
-    const rows = await db.select("Items");
+  it('db.select(table)', async () => {
+    const rows = await db.select('Items');
     assert(_.isArray(rows));
   });
 
-  it("db.trans -> rollback", async () => {
-    const srcRows = await db.select("Items", {
+  it('db.trans -> rollback', async () => {
+    const srcRows = await db.select('Items', {
       limit: 1,
     });
     try {
       await db.trans(async () => {
-        let lines = await db.delete("Items", { FId: srcRows[0].FId });
+        let lines = await db.delete('Items', { FId: srcRows[0].FId });
         assert(lines > 0);
         const row = {
-          FName: "China",
+          FName: 'China',
           FAge: 70,
           FSex: false,
         };
-        lines = await db.insert("Items", [row]);
+        lines = await db.insert('Items', [row]);
         assert(lines > 0);
 
-        const t = table<IItem>("Items");
+        const t = table<IItem>('Items');
         const item = (
           await db.query(
             select(t.star)
               .from(t)
-              .where(t.FId.eq(identityValue("Items", "FId")))
+              .where(t.FId.eq(identityValue('Items', 'FId')))
           )
         ).rows[0];
         assert(item.FName === row.FName);
-        throw new Error("事务错误回滚测试");
+        throw new Error('事务错误回滚测试');
       });
     } catch (ex: any) {
       assert(db.inTransaction === false);
-      assert(ex.message === "事务错误回滚测试");
+      assert(ex.message === '事务错误回滚测试');
     }
 
-    const rows2 = await db.select("Items", {
+    const rows2 = await db.select('Items', {
       limit: 1,
     });
     assert.deepStrictEqual(rows2[0], srcRows[0]);
   });
 
-  it("db.trans -> commit", async () => {
+  it('db.trans -> commit', async () => {
     await db.trans(async () => {
-      await db.query("SET identity_insert [Items] ON");
-      const lines = await db.insert("Items", [
+      await db.query('SET identity_insert [Items] ON');
+      const lines = await db.insert('Items', [
         {
           // FId: 10000,
-          FName: "Add Test",
+          FName: 'Add Test',
           FSex: false,
           FAge: 18,
         },
       ]);
       assert(lines > 0);
-      await db.query("SET identity_insert [Items] OFF");
+      await db.query('SET identity_insert [Items] OFF');
     });
 
-    const rows = await db.select("Items");
+    const rows = await db.select('Items');
     assert(rows.length > 0);
   });
 
-  it("db.query(sql: Execute)", async function () {
-    const p2 = output("o", DbType.string(0));
-    const sql = execute("doProc", [1, p2]);
+  it('db.query(sql: Execute)', async function () {
+    const p2 = output('o', DbType.string(0));
+    const sql = execute('doProc', [1, p2]);
     const res = await db.query(sql);
 
     assert(res.returnValue === 1);
-    assert(p2.value === "hello world");
+    assert(p2.value === 'hello world');
   });
 
-  it("db.execute(sp, [...args])", async function () {
-    const p2 = output("o", DbType.string(0));
-    const res = await db.execute("doProc", [1, p2]);
+  it('db.execute(sp, [...args])', async function () {
+    const p2 = output('o', DbType.string(0));
+    const res = await db.execute('doProc', [1, p2]);
     assert(res.returnValue === 1);
-    assert(p2.value === "hello world");
+    assert(p2.value === 'hello world');
   });
 
-  it("convert", async () => {
+  it('convert', async () => {
     const number = 1000;
     const date = new Date();
-    const str = "1000";
-    const bin = Buffer.from("abc");
+    const str = '1000';
+    const bin = Buffer.from('abc');
 
     const sql = select({
       strToDate: literal(date.toISOString()).to(DbType.datetimeoffset),
@@ -513,8 +513,8 @@ describe("CrudTest ———— tests/core/crud.test.ts", function () {
     assert.strictEqual(row.binary.toString(), bin.toString());
   });
 
-  it("db.delete", async function () {
-    const lines = await db.delete("Items");
+  it('db.delete', async function () {
+    const lines = await db.delete('Items');
     assert(lines >= 1);
   });
 });
