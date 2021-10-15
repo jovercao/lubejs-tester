@@ -40,7 +40,7 @@ interface IItem {
   FParentId?: number | null;
 }
 
-describe.only('CrudTest ———— tests/core/crud.test.ts', function () {
+describe('CrudTest ———— tests/core/crud.test.ts', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {

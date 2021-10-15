@@ -3,7 +3,7 @@ import { Connection, DbType, isBinary, SQL, Time, Uuid } from 'lubejs/core';
 import assert from 'assert';
 import { connectToEmptyDb } from 'tests/util';
 
-describe('tests/core/types.test.ts ———— DbType Test', function () {
+describe.only('tests/core/types.test.ts ———— DbType Test', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
@@ -14,7 +14,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
 
   after(async () => {
     await db.close();
-  })
+  });
 
   it('string', async () => {
     // sql传入
@@ -167,7 +167,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, o.add(i)),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -196,7 +196,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, o.add(i)),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -226,7 +226,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, o.sub(i)),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -257,7 +257,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, SQL.std.addDays(o, 1)),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -356,7 +356,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, SQL.std.addDays(o, 1)),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -390,7 +390,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, expectOutput),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -426,7 +426,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, expectOutput),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
@@ -451,9 +451,8 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     });
 
     const res1 = await db.query(sql);
-    const data = JSON.parse(res1.rows[0].expr as any);
-    assert(typeof data === 'object');
-    assert.deepStrictEqual(data, value);
+    assert(typeof res1.rows[0].expr === 'object');
+    assert.deepStrictEqual(res1.rows[0].expr, value);
 
     const i = SQL.input('i', DbType.json<typeof value>(), value);
     const o = SQL.output('o', DbType.json<typeof value>(), value);
@@ -469,15 +468,15 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, expectOutput),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
 
-    assert.deepStrictEqual(JSON.parse(res2.rows[0].input), value);
-    assert.deepStrictEqual(JSON.parse(res2.rows[0].output), expectOutput);
-    assert.deepStrictEqual(JSON.parse(res2.output!.o as any), expectOutput);
-    assert.deepStrictEqual(JSON.parse(o.value! as any), expectOutput);
+    assert.deepStrictEqual(res2.rows[0].input, value);
+    assert.deepStrictEqual(res2.rows[0].output, expectOutput);
+    assert.deepStrictEqual(res2.output!.o, expectOutput);
+    assert.deepStrictEqual(o.value!, expectOutput);
   });
 
   it('list', async () => {
@@ -489,10 +488,9 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     });
 
     const res1 = await db.query(sql);
-    const data = JSON.parse(res1.rows[0].expr as any);
-    assert(typeof data === 'object');
+    assert(typeof res1.rows[0].expr === 'object');
 
-    assert.deepStrictEqual(data, value);
+    assert.deepStrictEqual(res1.rows[0].expr, value);
 
     const i = SQL.input('i', DbType.list(DbType.int32), value);
     const o = SQL.output('o', DbType.list(DbType.int32), value);
@@ -504,14 +502,14 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
         SQL.set(o, expectOutput),
         SQL.select({
           input: i,
-          output: o
+          output: o,
         })
       )
     );
 
-    assert.deepStrictEqual(JSON.parse(res2.rows[0].input), value);
-    assert.deepStrictEqual(JSON.parse(res2.rows[0].output), expectOutput);
-    assert.deepStrictEqual(JSON.parse(res2.output!.o as string), expectOutput);
-    assert.deepStrictEqual(JSON.parse(o.value! as any), expectOutput);
+    assert.deepStrictEqual(res2.rows[0].input, value);
+    assert.deepStrictEqual(res2.rows[0].output, expectOutput);
+    assert.deepStrictEqual(res2.output!.o, expectOutput);
+    assert.deepStrictEqual(o.value!, expectOutput);
   });
 });
