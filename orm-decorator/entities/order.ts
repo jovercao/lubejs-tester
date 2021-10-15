@@ -14,7 +14,7 @@ import {
   key,
   nullable,
   oneToMany,
-  ProxiedRowset,
+  XRowset,
   rowflag,
   SQL,
   table,
@@ -42,7 +42,7 @@ import { detail } from 'lubejs/orm/decorators/relation-decorators';
 
    @index()
    @comment('OrderNo')
-   @autogen((item: ProxiedRowset<Order>) => 'abc')
+   @autogen((item: XRowset<Order>) => 'abc')
    @column(DbType.string(20))
    orderNo?: string;
 

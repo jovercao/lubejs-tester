@@ -115,7 +115,7 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     assert(rs2.rows[0].Name === name);
   });
 
-  it('db.insert(table, fields: string[], rows: ValueObject[]) --超大数量INSERT', async function () {
+  it('db.insert(table, rows: ValueObject[]) --超大数量INSERT', async function () {
     const { rows }: { rows: IItem[] } = mock.mock({
       // 属性 的值是一个数组，其中含有 1 到 10 个元素
       'rows|3001': [
@@ -130,15 +130,11 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
       ],
     });
 
-    const lines = await db.insert<IItem>(
-      'Items',
-      ['FAge', 'FSex', 'FName', 'FCreateDate', 'FParentId'],
-      rows
-    );
+    const lines = await db.insert<IItem>('Items', rows);
     assert(lines === rows.length);
   });
 
-  it('db.insert(table, rows: ValueObject)', async function () {
+  it('db.insert<T>(table, rows: ValueObject)', async function () {
     const row = mock.mock({
       // 属性 id 是一个自增数，起始值为 1，每次增 1
       // 'FId|+1': 1,
@@ -152,7 +148,7 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     assert(lines === 1);
   });
 
-  it('db.insert(table, fields, rows: Expression[])', async function () {
+  it('db.insert(table, fields, row: Expression[])', async function () {
     const lines = await db.insert(
       'Items',
       ['FAge', 'FSex', 'FName'],
@@ -161,18 +157,18 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     assert(lines === 1);
   });
 
-  it('db.insert(table, fields, rows: Expression[][])', async function () {
-    const lines = await db.insert(
-      'Items',
-      ['FAge', 'FSex', 'FName'],
-      [
-        [18, false, 'Lily'],
-        [18, false, 'Three Zhang'],
-        [18, true, 'Lao Wang next door'],
-      ]
-    );
-    assert(lines === 3);
-  });
+  // it('db.insert(table, fields, rows: Expression[][])', async function () {
+  //   const lines = await db.insert(
+  //     'Items',
+  //     ['FAge', 'FSex', 'FName'],
+  //     [
+  //       [18, false, 'Lily'],
+  //       [18, false, 'Three Zhang'],
+  //       [18, true, 'Lao Wang next door'],
+  //     ]
+  //   );
+  //   assert(lines === 3);
+  // });
 
   it('db.query($with(...))', async function () {
     const t = table<IItem>('Items').as('t');
@@ -186,30 +182,30 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
       .unionAll(select(i.star).from(i).join(y, i.FParentId.eq(y.FId)));
   });
 
-  it('db.insert(table, rows: Expression[])', async function () {
-    let err: Error | undefined;
-    try {
-      const lines = await db.insert<IItem>('Items', [
-        'Lily',
-        18,
-        false,
-        new Date(),
-        Buffer.from('abc'),
-        null,
-      ]);
-      assert(lines === 1);
-    } catch (e: any) {
-      err = e;
-    }
-    assert(
-      err?.message ===
-        'Cannot insert an explicit value into a timestamp column. Use INSERT with a column list to exclude the timestamp column, or insert a DEFAULT into the timestamp column.',
-      '因为Flag字段原因，该语句必须报错，否则是不正常的'
-    );
-  });
+  // it('db.insert(table, rows: Expression[])', async function () {
+  //   let err: Error | undefined;
+  //   try {
+  //     const lines = await db.insert<IItem>('Items', [
+  //       'Lily',
+  //       18,
+  //       false,
+  //       new Date(),
+  //       Buffer.from('abc'),
+  //       null,
+  //     ]);
+  //     assert(lines === 1);
+  //   } catch (e: any) {
+  //     err = e;
+  //   }
+  //   assert(
+  //     err?.message ===
+  //       'Cannot insert an explicit value into a timestamp column. Use INSERT with a column list to exclude the timestamp column, or insert a DEFAULT into the timestamp column.',
+  //     '因为Flag字段原因，该语句必须报错，否则是不正常的'
+  //   );
+  // });
 
   it('db.insert(table, fields, rows: Expression[][])', async function () {
-    const lines = await db.insert<IItem>(
+    const lines = await db.insert(
       'Items',
       ['FName', 'FAge', 'FSex', 'FCreateDate'],
       [
@@ -254,7 +250,7 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     const lines = await db.update(
       rowset,
       {
-        FName: 'Baoqing Wang',
+        FName: 'Baoqiang Wang',
         FAge: 35,
         FSex: false,
       },
@@ -291,7 +287,7 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
         FAge: 100,
         FSex: true,
       })
-      .where(a.FId.eq(2));
+      .where(a.FId.eq(1));
     const { rowsAffected } = await db.query(sql);
     assert(rowsAffected === 1);
   });
@@ -307,7 +303,7 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
       })
       .from(a)
       .join(b, b.FId.eq(a.FId))
-      .where(a.FId.eq(2));
+      .where(a.FId.eq(1));
     const { rowsAffected } = await db.query(sql);
     assert(rowsAffected === 1);
   });
@@ -326,7 +322,6 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     });
     assert.strictEqual(rows.length, 1);
     assert.strictEqual(rows[0].FId, 1);
-    assert.strictEqual(rows[0].FSex, false);
   });
 
   it('db.query(sql: Select) -> GroupBy', async function () {

@@ -74,7 +74,7 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
           column('id', DbType.int32).identity().primaryKey(),
           column('name', DbType.string(100)).notNull(),
           column('stringField', DbType.string(100)).null(),
-          column('floatField', DbType.float).null(),
+          column('floatField', DbType.float32).null(),
           column('dateField', DbType.datetimeoffset).null(),
           column('decimalField', DbType.decimal(18, 6)),
           column('uuidField', DbType.uuid),

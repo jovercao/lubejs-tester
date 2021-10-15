@@ -9,6 +9,10 @@ import {
   createContext,
 } from 'lubejs';
 
+Reflect.set(BigInt.prototype, 'toJSON', function(this: BigInt) {
+  return this.toString();
+})
+
 export async function connectToEmptyDb(opts?: {
   disableLog?: boolean;
   config?: string;

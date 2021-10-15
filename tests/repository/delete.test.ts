@@ -1,6 +1,6 @@
 import { DB, Employee, EmployeePosition, Order, OrderDetail, User } from '@orm';
 import assert from 'assert';
-import { createContext, Decimal, MigrateCli, outputCommand, SQL } from 'lubejs';
+import { createContext, Decimal, Entity, EntityData, MigrateCli, outputCommand, SQL } from 'lubejs';
 import { connectToEmptyDbContext } from 'tests/util';
 
 describe('Repository: delete ———— ./tests/repository/delete.test.ts', function () {
@@ -82,7 +82,7 @@ describe('Repository: delete ———— ./tests/repository/delete.test.ts', fu
   });
 
   it('ManyToMany: Employee <- EmployeePosition -> Position', async () => {
-    const employee: Employee = {
+    const employee: Employee = Employee.create({
       user: {
         name: 'ManyToManyDelete: user',
         password: 'hehe',
@@ -97,7 +97,7 @@ describe('Repository: delete ———— ./tests/repository/delete.test.ts', fu
           name: 'position2',
         },
       ],
-    };
+    });
     employee.description = 'Updated';
 
     await db.Employee.save(employee);

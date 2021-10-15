@@ -2,17 +2,17 @@ import { readdir, rm } from 'fs/promises';
 import {
   MigrateCli,
   DbContext,
-  compareSchema,
   DatabaseSchema,
   generateSchema,
   SQL,
   outputCommand,
 } from 'lubejs';
+import { compareSchema } from 'lubejs/migrate/compare';
 import assert from 'assert';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 
-describe.only('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
+describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
   let cli: MigrateCli;
   let dbContext: DbContext;
   // let defaultSchema: string;

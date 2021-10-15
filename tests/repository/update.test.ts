@@ -1,4 +1,4 @@
-import { DB, Employee, Order, OrderDetail, User } from '@orm';
+import { DB, Employee, Order, OrderDetail, Position, User } from '@orm';
 import assert from 'assert';
 import { createContext, Decimal, MigrateCli, outputCommand, SQL } from 'lubejs';
 import { connectToEmptyDbContext } from 'tests/util';
@@ -15,14 +15,14 @@ describe('Repository: update ———— ./tests/repository/update.test.ts', fu
   });
 
   it('PrimaryOneToOne: User <- Employee', async () => {
-    const user: User = {
+    const user: User = User.create({
       name: 'primary OneToOne update user',
       password: 'pwd',
       employee: {
         name: 'primary OneToOne update employee',
         organization: (await db.Organization.get(0n))!,
       },
-    };
+    });
     await db.User.save(user);
 
     user.description = 'updated user';
@@ -38,14 +38,14 @@ describe('Repository: update ———— ./tests/repository/update.test.ts', fu
   });
 
   it('ForeignOneToOne: Employee -> User', async () => {
-    const employee: Employee = {
+    const employee: Employee = Employee.create({
       name: 'ForeignOneToOneTest - employee',
       organization: (await db.Organization.get(0n))!,
       user: {
         name: 'ForeignOneToOneTest - User',
         password: '嘿咻',
       },
-    };
+    });
     await db.Employee.save(employee);
 
     employee.description = 'updated employee';
@@ -61,7 +61,7 @@ describe('Repository: update ———— ./tests/repository/update.test.ts', fu
   });
 
   it('OneToMany: Order <- OrderDetail', async () => {
-    const order: Order = {
+    const order: Order = Order.create({
       orderNo: 'OrderNo',
       date: new Date(),
       details: [
@@ -78,20 +78,20 @@ describe('Repository: update ———— ./tests/repository/update.test.ts', fu
           amount: new Decimal(200),
         },
       ],
-    };
+    });
     await db.Order.insert(order);
 
     order.description = 'updated order';
 
     order.details![1].description = 'updated product2';
 
-    order.details!.push({
+    order.details!.push(OrderDetail.create({
       product: 'product3',
       count: 3,
       price: new Decimal(100),
       amount: new Decimal(300),
       description: 'new product3',
-    });
+    }));
 
     // 删除第一个
     order.details!.splice(0, 1);
@@ -114,7 +114,7 @@ describe('Repository: update ———— ./tests/repository/update.test.ts', fu
   });
 
   it('ManyToMany Employee <- EmployeePosition -> Position CRUD', async () => {
-    const employee: Employee = {
+    const employee: Employee = Employee.create({
       user: {
         name: 'ManyToManyTest: user',
         password: 'hehe',
@@ -129,16 +129,16 @@ describe('Repository: update ———— ./tests/repository/update.test.ts', fu
           name: 'ManyToManyTest: position2',
         },
       ],
-    };
+    });
 
     await db.Employee.save(employee);
 
     employee.description = 'updated employee';
     employee.positions![1].description = 'updated posotion2';
 
-    employee.positions!.push({
+    employee.positions!.push(Position.create({
       name: 'ManyToManyTest: position3',
-    });
+    }));
     employee.positions!.splice(0, 1);
 
     await db.Employee.save(employee);

@@ -79,7 +79,7 @@ describe("Program Statement ———— tests/core/program.test.ts", function (
 
   it("set <variant> = ...", async () => {
     const $i = SQL.var<number>("i", DbType.int32);
-    const sql = SQL.declare($i).body(
+    const sql = SQL.declare($i).do(
       $i.set(100),
       SQL.select({
         result: $i,
@@ -91,7 +91,7 @@ describe("Program Statement ———— tests/core/program.test.ts", function (
 
   it("while ... do", async () => {
     const $i = SQL.var<number>("i", DbType.int32);
-    const sql = SQL.declare($i).body(
+    const sql = SQL.declare($i).do(
       SQL.set($i, 1),
       SQL.while($i.lte(10)).do(
         SQL.set($i, $i.add(1)),
@@ -111,7 +111,7 @@ describe("Program Statement ———— tests/core/program.test.ts", function (
       SQL.createTable.column("name", DbType.string(100)).notNull(),
       SQL.createTable.column("value", DbType.string(DbType.MAX)),
     ]);
-    const sql = SQL.declare($t).body(
+    const sql = SQL.declare($t).do(
       SQL.insert($t).values([
         {
           name: "item1",
