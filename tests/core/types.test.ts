@@ -3,7 +3,7 @@ import { Connection, DbType, isBinary, SQL, Time, Uuid } from 'lubejs/core';
 import assert from 'assert';
 import { connectToEmptyDb } from 'tests/util';
 
-describe.only('tests/core/types.test.ts ———— DbType Test', function () {
+describe('tests/core/types.test.ts ———— DbType Test', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
@@ -45,8 +45,8 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
   it('boolean', async () => {
     // sql传入
     const sql = SQL.select({
-      t: true,
-      f: false,
+      t: SQL.literal(true).to(DbType.boolean),
+      f: SQL.literal(false).to(DbType.boolean),
     });
     const res1 = await db.query(sql);
     assert(res1.rows[0].t === true);
@@ -154,7 +154,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
   it('int64', async () => {
     // sql传入
     const sql = SQL.select({
-      expr: SQL.literal(64n),
+      expr: SQL.literal(64n).to(DbType.int64),
     });
     const res1 = await db.query(sql);
     assert(res1.rows[0].expr === 64n);
@@ -181,7 +181,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     const value = Math.PI;
     // sql传入
     const sql = SQL.select({
-      expr: SQL.literal(value, DbType.float32),
+      expr: SQL.literal(value).to(DbType.float32),
     });
 
     const res1 = await db.query(sql);
@@ -207,11 +207,11 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     assert((o.value as number).toFixed(6) === expectOutput);
   });
 
-  it.only('float64', async () => {
+  it('float64', async () => {
     const value = Number.MAX_VALUE - 1;
     // sql传入
     const sql = SQL.select({
-      expr: SQL.literal(value, DbType.float64),
+      expr: SQL.literal(value).to(DbType.float64),
     });
 
     const res1 = await db.query(sql);
@@ -242,7 +242,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     const value = new Date(2020, 0, 1);
     // sql传入
     const sql = SQL.select({
-      expr: SQL.literal(value, DbType.date),
+      expr: SQL.literal(value).to(DbType.date),
     });
 
     const res1 = await db.query(sql);
@@ -275,7 +275,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     const value = new Time(12, 0, 0);
     // sql传入
     const sql = SQL.select({
-      expr: SQL.literal(value, DbType.time),
+      expr: SQL.literal(value).to(DbType.time),
     });
 
     const res1 = await db.query(sql);
@@ -308,7 +308,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     const value = new Date(2020, 0, 1);
     // sql传入
     const sql = SQL.select({
-      expr: SQL.literal(value, DbType.datetime),
+      expr: SQL.literal(value).to(DbType.datetime),
     });
 
     const res1 = await db.query(sql);
@@ -409,7 +409,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     const value = Uuid.new();
     // sql传入
     const sql = SQL.select({
-      expr: value,
+      expr: SQL.literal(value).to(DbType.uuid),
     });
 
     const res1 = await db.query(sql);
