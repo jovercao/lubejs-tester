@@ -36,7 +36,7 @@ interface IItem {
   FAge?: number | null;
   FSex?: boolean | null;
   FCreateDate: Date;
-  Flag: ArrayBuffer;
+  Flag: Uint8Array;
   FParentId?: number | null;
 }
 

@@ -19,7 +19,7 @@ interface Table1 {
   decimalField?: Decimal;
   uuidField?: Uuid;
   updatedAt: Date;
-  binaryField?: ArrayBuffer;
+  binaryField?: Uint8Array;
   createdAt: Date;
   operator?: string;
 }
@@ -124,7 +124,7 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
        * ('value1-2', 1, Convert(DATETIMEOFFSET, '2019-11-18 00:00:00'))
        * ('value1-3', 45, Convert(DATETIMEOFFSET, '2019-11-18 00:00:00'))
        */
-      const insertSql = SQL.insert<Table1>('table1').values([
+      const insertSql = SQL.insert<Table1>('table1').values(
         {
           name: 'item1',
           stringField: 'value1-1',
@@ -152,7 +152,7 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
           uuidField: Uuid.new(),
           binaryField: Buffer.from('abcdefeg'),
         },
-      ]);
+      );
 
       await db.query(insertSql);
 
