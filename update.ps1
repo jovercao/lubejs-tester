@@ -1,8 +1,14 @@
 $startdir = Get-Location
 
 # npm un lubejs lubejs-mssql
-Remove-Item -Recurse -Force .\node_modules\lubejs-mssql
-Remove-Item -Recurse -Force .\node_modules\lubejs
+if (test-path .\node_modules\lubejs-mssql) {
+  # Remove-Item -Recurse -Force .\node_modules\lubejs-mssql
+  npm uninstall lubejs-mssql
+}
+if (test-path .\node_modules\lubejs) {
+  #  Remove-Item -Recurse -Force .\node_modules\lubejs
+  npm uninstall lubejs
+}
 
 Set-Location "$startdir/../lubejs"
 npm run build
