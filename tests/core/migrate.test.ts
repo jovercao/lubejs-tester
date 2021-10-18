@@ -134,7 +134,7 @@ describe("Migrate ———— tests/core/migrate.test.ts", function () {
       SQL.createFunction(`${schemaName}.dosomething`)
         .params($x)
         .returns(DbType.int32)
-        .body(SQL.return($x))
+        .as(SQL.return($x))
     );
     const data1 = await db.queryScalar(
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
@@ -144,7 +144,7 @@ describe("Migrate ———— tests/core/migrate.test.ts", function () {
       SQL.alterFunction(`${schemaName}.dosomething`)
         .params($x)
         .returns(DbType.int32)
-        .body([SQL.return($x.add(1))])
+        .as([SQL.return($x.add(1))])
     );
     const data2 = await db.queryScalar(
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
@@ -160,7 +160,7 @@ describe("Migrate ———— tests/core/migrate.test.ts", function () {
           param("i", DbType.int32),
           param("o", DbType.string(100), "INOUT", "no value"),
         ])
-        .body(([$i, $o]) => [$o.set("hello world"), SQL.return($i)])
+        .as(([$i, $o]) => [$o.set("hello world"), SQL.return($i)])
     );
     const params1 = [1, SQL.output("o", DbType.string(100), "abcdefg")];
     const data1 = await db.execute("doProc", params1);
@@ -173,7 +173,7 @@ describe("Migrate ———— tests/core/migrate.test.ts", function () {
           param("i", DbType.int32),
           param("o", DbType.string(100), "INOUT"),
         ])
-        .body(([$i, $o]) => [$o.set("hello world 2"), SQL.return($i.add(1))])
+        .as(([$i, $o]) => [$o.set("hello world 2"), SQL.return($i.add(1))])
     );
     const params2 = [1, SQL.output("o", DbType.string(100), "abcdefg")];
     const data2 = await db.execute("doProc", params2);
@@ -185,7 +185,7 @@ describe("Migrate ———— tests/core/migrate.test.ts", function () {
 
   it("View", async () => {
     await db.query(
-      SQL.createTable("TestTable").body(({ column }) => [
+      SQL.createTable("TestTable").as(({ column }) => [
         column("id", DbType.int32).identity(1, 1).primaryKey(),
         column("name", DbType.string(100)).notNull(),
         column("description", DbType.string(100)).null(),

@@ -3,7 +3,7 @@ import { Connection, DbType, isBinary, SQL, Time, Uuid } from 'lubejs/core';
 import assert from 'assert';
 import { connectToEmptyDb } from 'tests/util';
 
-describe.only('tests/core/types.test.ts ———— DbType Test', function () {
+describe('tests/core/types.test.ts ———— DbType Test', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
@@ -499,7 +499,7 @@ describe.only('tests/core/types.test.ts ———— DbType Test', function () {
     // 参数传入
     const res2 = await db.query(
       SQL.block(
-        SQL.set(o, expectOutput),
+        o.set(expectOutput),
         SQL.select({
           input: i,
           output: o,
