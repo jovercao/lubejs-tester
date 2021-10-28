@@ -65,12 +65,10 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
      * 初始化数据库
      */
     async function initDb(db: Connection) {
-      await db.query(
-        SQL.if(SQL.std.existsTable('table1')).then(SQL.dropTable('table1'))
-      );
+      await db.query(SQL.dropTable.ifExists('table1'));
 
       await db.query(
-        SQL.createTable('table1', ({ column }) => [
+        SQL.createTable('table1').as(({ column }) => [
           column('id', DbType.int32).identity().primaryKey(),
           column('name', DbType.string(100)).notNull(),
           column('stringField', DbType.string(100)).null(),
@@ -78,19 +76,17 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
           column('dateField', DbType.datetimeoffset).null(),
           column('decimalField', DbType.decimal(18, 6)),
           column('uuidField', DbType.uuid),
-          column('updatedAt', DbType.datetimeoffset).default(SQL.std.now()),
+          column('updatedAt', DbType.datetimeoffset).default(SQL.now()),
           column('binaryField', DbType.binary(DbType.MAX)),
-          column('createdAt', DbType.datetimeoffset).default(SQL.std.now()),
+          column('createdAt', DbType.datetimeoffset).default(SQL.now()),
           column('operator', DbType.string(100)).null(),
         ])
       );
 
-      await db.query(
-        SQL.if(SQL.std.existsTable('pay')).then(SQL.dropTable('pay'))
-      );
+      await db.query(SQL.dropTable.ifExists('pay'));
 
       await db.query(
-        SQL.createTable('pay', ({ column }) => [
+        SQL.createTable('pay').as(({ column }) => [
           column('id', DbType.int32).identity().primaryKey(),
           column('year', DbType.int32),
           column('month', DbType.int32),
@@ -99,12 +95,10 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
         ])
       );
 
-      await db.query(
-        SQL.if(SQL.std.existsTable('person')).then(SQL.dropTable('person'))
-      );
+      await db.query(SQL.dropTable.ifExists('person'));
 
       await db.query(
-        SQL.createTable('person', ({ column }) => [
+        SQL.createTable('person').as(({ column }) => [
           column('id', DbType.int32).identity().primaryKey(),
           column('name', DbType.int32).notNull(),
           column('age', DbType.int32),
@@ -151,7 +145,7 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
           decimalField: new Decimal('3.1415'),
           uuidField: Uuid.new(),
           binaryField: Buffer.from('abcdefeg'),
-        },
+        }
       );
 
       await db.query(insertSql);
@@ -237,17 +231,17 @@ describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', funct
         month: pay.month,
         name: p.name,
         age: p.age,
-        total: SQL.std.sum(pay.amount),
+        total: SQL.sum(pay.amount),
       })
         .from(pay)
         .join(p, pay.personId.eq(p.id))
         .where(p.age.lte(18))
         .groupBy(p.name, p.age, pay.year, pay.month)
-        .having(SQL.std.sum(pay.amount).gte(new Decimal(100000)))
+        .having(SQL.sum(pay.amount).gte(new Decimal(100000)))
         .orderBy(
           pay.year.asc(),
           pay.month.asc(),
-          SQL.std.sum(pay.amount).asc(),
+          SQL.sum(pay.amount).asc(),
           p.age.asc()
         )
         .offset(20)

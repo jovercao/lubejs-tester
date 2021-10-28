@@ -232,7 +232,7 @@ modelBuilder
         builder
           .property((p) => p.date, Date)
           .hasType(DbType.datetime)
-          .hasDefaultValue(SQL.std.now());
+          .hasDefaultValue(SQL.now());
         builder.property((p) => p.description, String).isNullable();
         builder
           .hasMany((p) => p.details, OrderDetail)

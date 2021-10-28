@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DB } from '@orm';
 import {
   Connection,
@@ -7,11 +8,13 @@ import {
   SQL,
   MigrateCli,
   createContext,
+  QueryResult,
+  Statement,
 } from 'lubejs';
 
-Reflect.set(BigInt.prototype, 'toJSON', function(this: BigInt) {
+Reflect.set(BigInt.prototype, 'toJSON', function (this: BigInt) {
   return this.toString();
-})
+});
 
 export async function connectToEmptyDb(opts?: {
   disableLog?: boolean;
@@ -34,10 +37,9 @@ export async function connectToEmptyDb(opts?: {
     db.on('command', cmd => outputCommand(cmd, process.stdout));
   }
 
+  await db.open();
   // 删除数据库
-  await db.query(
-    SQL.if(SQL.std.existsDatabase(dbName)).then(SQL.dropDatabase(dbName))
-  );
+  await db.query(SQL.dropDatabase.ifExists(dbName));
 
   await db.query(SQL.createDatabase(dbName));
   await db.changeDatabase(dbName);
@@ -63,9 +65,11 @@ export async function connectToEmptyDbContext(opts?: {
     targetDatabase = 'lubejs-orm-test';
   }
   const connection = await createConnection(options);
+  await connection.open();
   if (!opts?.disableLog) {
     connection.on('command', cmd => outputCommand(cmd, process.stdout));
   }
+  // connection.query(SQL.dropDatabase.ifExists(targetDatabase));
   const db = await createContext(DB, connection);
 
   const cli = await new MigrateCli(db);
@@ -75,4 +79,22 @@ export async function connectToEmptyDbContext(opts?: {
   await connection.changeDatabase(cli.targetDatabase);
 
   return db;
+}
+
+/**
+ * 执行语句块
+ */
+export async function executeInProcedure(
+  db: Connection,
+  statements: Statement[] | Statement,
+  spName = 'sp_control_test',
+  dropIt = false
+): Promise<QueryResult<any, any, [any]>> {
+  await db.query(SQL.dropProcedure.ifExists(spName));
+  await db.query(SQL.createProcedure(spName).as(statements as any));
+  const result = await db.execute<any>(spName);
+  if (dropIt) {
+    await db.query(SQL.dropProcedure(spName));
+  }
+  return result;
 }

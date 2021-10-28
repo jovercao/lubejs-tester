@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Connection, DbType, isBinary, SQL, Time, Uuid } from 'lubejs/core';
 import assert from 'assert';
-import { connectToEmptyDb } from 'tests/util';
+import { connectToEmptyDb, executeInProcedure } from 'tests/util';
 
 describe('tests/core/types.test.ts ———— DbType Test', function () {
   this.timeout(0);
   let db: Connection;
+
   before(async function () {
     db = await connectToEmptyDb({
       config: 'mssql-core-test',
@@ -27,15 +28,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('s', 'in: hello world');
     const o = SQL.output('o', DbType.string, 'out: hello ');
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, SQL.concat(o, 'lili')),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, SQL.concat(o, 'lili')),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     assert(res2.rows[0].input === 'in: hello world');
     assert(res2.rows[0].output === 'out: hello lili');
     assert(res2.output!.o === 'out: hello lili');
@@ -56,16 +55,14 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i_f = SQL.input('if', false);
     const o = SQL.output('o', DbType.boolean, false);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, true),
-        SQL.select({
-          input_t: i_t,
-          input_f: i_f,
-          output: o,
-        })
-      )
-    );
+    const res2 = await executeInProcedure(db, [
+      SQL.set(o, true),
+      SQL.select({
+        input_t: i_t,
+        input_f: i_f,
+        output: o,
+      }),
+    ]);
     assert(o.value === true);
     assert(res2.output!.o === true);
     assert(res2.rows[0].input_t === true);
@@ -83,15 +80,16 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.int8, 8);
     const o = SQL.output('o', DbType.int8, 8);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
+    const res2 = await db.query([
+      SQL.dropProcedure.ifExists('SP_TEST_LOADER'),
+      SQL.createProcedure('SP_TEST_LOADER').as(
         SQL.set(o, o.add(i).to(DbType.int8)),
         SQL.select({
           input: i,
           output: o,
         })
-      )
-    );
+      ),
+    ]);
     assert(res2.output!.o === 16);
     assert(o.value === 16);
     assert(res2.rows[0].input === 8);
@@ -109,15 +107,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.int16, 16);
     const o = SQL.output('o', DbType.int16, 16);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, o.add(i)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, o.add(i)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     assert(res2.rows[0].input === 16);
     assert(res2.rows[0].output === 32);
     assert(res2.output!.o === 32);
@@ -135,15 +131,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.int32, 32);
     const o = SQL.output('o', DbType.int32, 32);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, o.add(i)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, o.add(i)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
 
     assert(res2.rows[0].input === 32);
     assert(res2.rows[0].output === 64);
@@ -162,15 +156,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.int64, 64n);
     const o = SQL.output('o', DbType.int64, 64n);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, o.add(i)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, o.add(i)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     assert(res2.rows[0].input === 64n);
     assert(res2.rows[0].output === 128n);
     assert(res2.output!.o === 128n);
@@ -191,15 +183,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.float32, value);
     const o = SQL.output('o', DbType.float32, value);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, o.add(i)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, o.add(i)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     const expectOutput = (value + value).toFixed(6);
     assert(res2.rows[0].input.toFixed(6) === value.toFixed(6));
     assert(res2.rows[0].output.toFixed(6) === expectOutput);
@@ -221,15 +211,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.float64, value);
     const o = SQL.output('o', DbType.float64, value);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, o.sub(i)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, o.sub(i)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     const expectOutput = (value - value).toFixed(6);
     assert(typeof res2.rows[0].input === 'number');
     assert(res2.rows[0].input.toFixed(6) === value.toFixed(6));
@@ -252,15 +240,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.date, value);
     const o = SQL.output('o', DbType.date, value);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, SQL.std.addDays(o, 1)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, SQL.addDays(o, 1)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     const expectOutput = new Date(value);
     expectOutput.setDate(value.getDate() + 1);
 
@@ -287,15 +273,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
 
     const expectOutput = new Time('13:00:00');
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, expectOutput),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, expectOutput),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
 
     assert(res2.rows[0].input instanceof Time);
     assert(res2.rows[0].input.valueOf() === value.valueOf());
@@ -318,15 +302,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.datetime, value);
     const o = SQL.output('o', DbType.datetime, value);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, SQL.std.addDays(o, 1)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, SQL.addDays(o, 1)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     const expectOutput = new Date(value);
     expectOutput.setDate(value.getDate() + 1);
 
@@ -351,15 +333,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i = SQL.input('i', DbType.datetimeoffset, value);
     const o = SQL.output('o', DbType.datetimeoffset, value);
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, SQL.std.addDays(o, 1)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, SQL.addDays(o, 1)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     const expectOutput = new Date(value);
     expectOutput.setDate(value.getDate() + 1);
 
@@ -385,15 +365,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const expectOutput = Buffer.from('Hello Jover!');
 
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, expectOutput),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, expectOutput),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
     assert(isBinary(res2.rows[0].input));
     assert(Buffer.compare(res2.rows[0].input, value) === 0);
     assert(
@@ -421,15 +399,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const expectOutput = Uuid.new();
 
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, expectOutput),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, expectOutput),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
 
     assert(res2.rows[0].input instanceof Uuid);
     assert(Uuid.equals(res2.rows[0].input, value));
@@ -463,15 +439,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     };
 
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        SQL.set(o, expectOutput),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      SQL.set(o, expectOutput),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
 
     assert.deepStrictEqual(res2.rows[0].input, value);
     assert.deepStrictEqual(res2.rows[0].output, expectOutput);
@@ -497,15 +471,13 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const expectOutput = [3, 2, 1];
 
     // 参数传入
-    const res2 = await db.query(
-      SQL.block(
-        o.set(expectOutput),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      )
-    );
+    const res2 = await db.query([
+      o.set(expectOutput),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
+    ]);
 
     assert.deepStrictEqual(res2.rows[0].input, value);
     assert.deepStrictEqual(res2.rows[0].output, expectOutput);

@@ -27,7 +27,9 @@ const {
   group,
   literal,
   with: $with,
-  std: { count, now, identityValue },
+  count,
+  now,
+  identityValue,
 } = SQL;
 
 interface IItem {
@@ -40,7 +42,7 @@ interface IItem {
   FParentId?: number | null;
 }
 
-describe('CrudTest ———— tests/core/crud.test.ts', function () {
+describe('tests/core/query.test.ts', function () {
   this.timeout(0);
   let db: Connection;
   before(async function () {
@@ -74,12 +76,12 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     );
 
     await db.query(
-      SQL.createTable('Items', ({ column }) => [
+      SQL.createTable('Items').as(({ column }) => [
         column('FId', DbType.int32).identity(1, 1).primaryKey(),
         column('FName', DbType.string(120)).notNull(),
         column('FAge', DbType.boolean).null(),
         column('FSex', DbType.boolean).null(),
-        column('FCreateDate', DbType.datetime).notNull().default(SQL.std.now()),
+        column('FCreateDate', DbType.datetime).notNull().default(SQL.now()),
         column('Flag', DbType.rowflag).notNull(),
         column('FParentId', DbType.int32).null(),
       ])
@@ -230,7 +232,7 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     const sql = insert(t).values(row);
     const { rowsAffected } = await db.query(sql);
     assert(rowsAffected === 1);
-    const sql2 = select<IItem>(star)
+    const sql2 = select<IItem>(star())
       .from('Items')
       .where(field('FId').eq(identityValue('Items', 'FId')));
     const res2 = await db.query(sql2);
@@ -370,14 +372,14 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
     const sql2 = select({ FId: a.FId, FSex: a.FSex }).from(a).distinct();
     const rows2 = (await db.query(sql2)).rows;
     console.log(rows2[0].FId);
-    const sql3 = select({ count: count(star) }).from(a);
+    const sql3 = select({ count: count(a.FId) }).from(a);
     const rows3 = (await db.query(sql3)).rows;
     assert(rows3[0].count > 0);
   });
 
   it('db.queryScalar(sql: Select)', async function () {
     const t = table<IItem>('Items').as('t');
-    const sql = select(count(star)).from(t);
+    const sql = select(count(t.FId)).from(t);
 
     const records = (await db.queryScalar(sql))!;
     assert(records > 0);
@@ -466,6 +468,49 @@ describe('CrudTest ———— tests/core/crud.test.ts', function () {
 
     const rows = await db.select('Items');
     assert(rows.length > 0);
+  });
+
+  it('db.trans nest transaction', async () => {
+    let itemId: number;
+    const t = table<IItem>('Items');
+    await db.trans(async () => {
+      const row = {
+        FName: 'China',
+        FAge: 70,
+        FSex: false,
+      };
+      const lines = await db.insert('Items', [row]);
+      assert(lines > 0);
+      const item = (
+        await db.query(
+          select(t.star)
+            .from(t)
+            .where(t.FId.eq(identityValue('Items', 'FId')))
+        )
+      ).rows[0];
+      itemId = item.FId;
+      assert(item.FName === row.FName);
+      await db.beginTrans();
+      await db.update(
+        t,
+        {
+          FName: 'Error',
+        },
+        t.FId.eq(itemId)
+      );
+
+      const updatedItem = (
+        await db.query(select(t.star).from(t).where(t.FId.eq(itemId)))
+      ).rows[0];
+      assert(updatedItem.FName === 'Error');
+      await db.rollback();
+    });
+
+    const [row] = await db.select<IItem>('Items', {
+      limit: 1,
+      where: t => t.FId.eq(itemId),
+    });
+    assert(row?.FName === 'China');
   });
 
   it('db.query(sql: Execute)', async function () {

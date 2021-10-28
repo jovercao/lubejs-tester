@@ -1,27 +1,28 @@
 import assert from 'assert';
 import { User, DB, OrderDetail, Order, Employee, Organization } from '@orm';
-import { createContext, Decimal, MigrateCli, outputCommand, SQL } from 'lubejs';
+import { Decimal, SQL } from 'lubejs';
 import { connectToEmptyDbContext } from 'tests/util';
 
 const {
-  star,
-  std: { count },
+  count,
 } = SQL;
 
-describe('Repository: insert ———— ./tests/repository/insert.test.ts', function () {
+describe.only('Repository: insert ———— ./tests/repository/insert.test.ts', function () {
   this.timeout(0);
   let db: DB;
   before(async () => {
     db = await connectToEmptyDbContext();
   });
   after(async () => {
-    db.connection.close();
+    if (db?.connection?.opened) {
+      await db.connection.close();
+    }
   });
 
   it('Single: User', async () => {
     const { count: beforeCount } = (await db.User.query()
       .map(p => ({
-        count: count(star),
+        count: count(p.id),
       }))
       .fetchFirst())!;
     const user: User = User.create({
@@ -33,7 +34,7 @@ describe('Repository: insert ———— ./tests/repository/insert.test.ts', fu
 
     const { count: afterCount } = (await db.User.query()
       .map(p => ({
-        count: count(star),
+        count: count(p.id),
       }))
       .fetchFirst())!;
 

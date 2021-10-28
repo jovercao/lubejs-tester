@@ -10,7 +10,10 @@ const {
   or,
   literal: value,
   field,
-  std: { addDays, now, nvl, count },
+  addDays,
+  now,
+  nvl,
+  count,
 } = SQL;
 
 describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
@@ -140,8 +143,8 @@ describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
     assert(countView !== copiedCountSql.$froms![0]);
     assert.deepStrictEqual((copiedCountSql.$froms![0] as any).abc.$name, 'abc');
 
-    const sql = db.sqlUtil.sqlify(countSql);
-    const copiedSql = db.sqlUtil.sqlify(copiedCountSql);
+    const sql = db.sqlifier.sqlify(countSql);
+    const copiedSql = db.sqlifier.sqlify(copiedCountSql);
     assert(
       sql.sql === copiedSql.sql,
       '克隆功能出现问题：' + sql.sql + '\n\n' + copiedSql.sql
@@ -163,7 +166,7 @@ describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
       )
     );
 
-    const cmd = db.sqlUtil.sqlify(sql);
+    const cmd = db.sqlifier.sqlify(sql);
     console.log(cmd);
     assert(
       cmd.sql.endsWith(
