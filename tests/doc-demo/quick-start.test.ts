@@ -38,7 +38,7 @@ interface Person {
   age: number;
 }
 
-describe.only('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', function () {
+describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', function () {
   it('Hello World!', async () => {
     // 创建连接
     const db = await createConnection();
