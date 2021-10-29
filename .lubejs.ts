@@ -7,9 +7,10 @@ import '@orm';
 // declare module '@jovercao/mssql' = import('mssql')
 
 export const config: LubeConfig = {
-  default: 'DB',
+  defaultConnection: 'DB',
+  defaultPool: 'default',
   migrateDir: 'migrates',
-  configures: {
+  connections: {
     DB: {
       dialect: driver.dialect,
       host: 'rancher.vm',
@@ -27,6 +28,15 @@ export const config: LubeConfig = {
       database: 'lubejs-core-test-db',
     },
   },
+  pools: {
+    default: {
+      min: 5,
+      max: 10,
+      connectTimeout: 30000,
+      idleTimeout: 15000,
+      connection: 'mssql-core-test'
+    }
+  }
 };
 
 export default config;

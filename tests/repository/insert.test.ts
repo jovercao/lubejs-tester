@@ -7,7 +7,7 @@ const {
   count,
 } = SQL;
 
-describe.only('Repository: insert ———— ./tests/repository/insert.test.ts', function () {
+describe('Repository: insert ———— ./tests/repository/insert.test.ts', function () {
   this.timeout(0);
   let db: DB;
   before(async () => {

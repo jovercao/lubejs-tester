@@ -38,26 +38,15 @@ interface Person {
   age: number;
 }
 
-describe('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', function () {
-  let db: DB;
-  before(async () => {
-    db = await createContext(DB);
-    db.connection.on('command', cmd => outputCommand(cmd, process.stdout));
-  });
-
-  after(async () => {
-    await db.dispose();
-  });
-
+describe.only('Quick start  ———— ./tests/doc-demo/quick-start.test.ts', function () {
   it('Hello World!', async () => {
-    (async () => {
-      // 创建连接
-      const db = await createConnection();
-      // SELECT 'hello world'
-      console.log(await db.queryScalar(SQL.select('hello world!'))); // => 'hello world'
+    // 创建连接
+    const db = await createConnection();
+    await db.open();
+    // SELECT 'hello world'
+    console.log(await db.queryScalar(SQL.select('hello world!'))); // => 'hello world'
 
-      await db.close();
-    })();
+    await db.close();
   });
 
   it('完整范例', async () => {

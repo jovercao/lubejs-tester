@@ -55,7 +55,7 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const i_f = SQL.input('if', false);
     const o = SQL.output('o', DbType.boolean, false);
     // 参数传入
-    const res2 = await executeInProcedure(db, [
+    const res2 = await db.query([
       SQL.set(o, true),
       SQL.select({
         input_t: i_t,
@@ -81,14 +81,11 @@ describe('tests/core/types.test.ts ———— DbType Test', function () {
     const o = SQL.output('o', DbType.int8, 8);
     // 参数传入
     const res2 = await db.query([
-      SQL.dropProcedure.ifExists('SP_TEST_LOADER'),
-      SQL.createProcedure('SP_TEST_LOADER').as(
-        SQL.set(o, o.add(i).to(DbType.int8)),
-        SQL.select({
-          input: i,
-          output: o,
-        })
-      ),
+      SQL.set(o, o.add(i).to(DbType.int8)),
+      SQL.select({
+        input: i,
+        output: o,
+      }),
     ]);
     assert(res2.output!.o === 16);
     assert(o.value === 16);

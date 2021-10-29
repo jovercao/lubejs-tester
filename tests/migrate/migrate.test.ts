@@ -6,36 +6,45 @@ import {
   generateSchema,
   SQL,
   outputCommand,
+  Connection,
+  createConnection,
+  loadConfig,
+  getConnectionOptions,
 } from 'lubejs';
 import { compareSchema } from 'lubejs/migrate/compare';
 import assert from 'assert';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
+import { DB } from '@orm';
 
 describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
   let cli: MigrateCli;
   let dbContext: DbContext;
+  let connection: Connection;
   // let defaultSchema: string;
   this.timeout(0);
   before(async () => {
-    cli = await new MigrateCli();
-    dbContext = cli.dbContext;
-    dbContext.connection.on('command', cmd =>
-      outputCommand(cmd, process.stdout)
-    );
+    const options = Object.assign({}, await getConnectionOptions(DB.name));
+    const optDatabase = options.database;
+    connection = await createConnection(options);
+    await connection.changeToSysdb();
+    connection.on('command', cmd => outputCommand(cmd, process.stdout));
+    dbContext = await new DB(connection);
+
+    await connection.open();
+    cli = await new MigrateCli(dbContext);
+    cli.targetDatabase =
+      optDatabase ||
+      dbContext.metadata.database ||
+      dbContext.metadata.className;
     const migrateDir = join(process.cwd(), 'migrates');
     if (!existsSync(migrateDir)) {
       mkdirSync(migrateDir);
     }
-    // try {
-    //   defaultSchema = await cli.getDefaultSchema();
-    // } catch (error) {
-    //   console.error(error);
-    // }
   });
 
   after(async () => {
-    await cli.dispose();
+    await connection?.close();
   });
 
   it('Add & Snapshot', async () => {

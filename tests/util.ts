@@ -10,6 +10,8 @@ import {
   createContext,
   QueryResult,
   Statement,
+  getConnectionOptions,
+  getDefaultConnectionOptions,
 } from 'lubejs';
 
 Reflect.set(BigInt.prototype, 'toJSON', function (this: BigInt) {
@@ -22,8 +24,8 @@ export async function connectToEmptyDb(opts?: {
 }): Promise<Connection> {
   const config = await loadConfig();
   let options = opts?.config
-    ? config.configures[opts.config]
-    : config.configures[config.default];
+    ? await getConnectionOptions(opts.config)
+    : await getDefaultConnectionOptions();
 
   const dbName = options.database || 'lubejs-test-db';
 
@@ -50,10 +52,9 @@ export async function connectToEmptyDbContext(opts?: {
   disableLog?: boolean;
   config?: string;
 }): Promise<DB> {
-  const config = await loadConfig();
   let options = opts?.config
-    ? config.configures[opts.config]
-    : config.configures[config.default];
+    ? await getConnectionOptions(opts.config)
+    : await getConnectionOptions(DB.name);
 
   let targetDatabase: string;
   if (options.database) {
