@@ -10,8 +10,8 @@ import {
   createConnection,
   loadConfig,
   getConnectionOptions,
+  SchemaComparator,
 } from 'lubejs';
-import { compareSchema } from 'lubejs/migrate/compare';
 import assert from 'assert';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
@@ -21,12 +21,14 @@ describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
   let cli: MigrateCli;
   let dbContext: DbContext;
   let connection: Connection;
+  let schemaComparator: SchemaComparator;
   // let defaultSchema: string;
   this.timeout(0);
   before(async () => {
     const options = Object.assign({}, await getConnectionOptions(DB.name));
     const optDatabase = options.database;
     connection = await createConnection(options);
+    schemaComparator = connection.provider.getSchemaComparator();
     await connection.changeToSysdb();
     connection.on('command', cmd => outputCommand(cmd, process.stdout));
     dbContext = await new DB(connection);
@@ -67,12 +69,12 @@ describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
     //   assert(tableChanged.length = 1 && tableChanged[0] === 'seedData');
     // }
 
-    const initDiff = compareSchema(undefined, initSchema, metadataSchema);
+    const initDiff = schemaComparator.compareSchema(undefined, initSchema, metadataSchema);
     assert(!initDiff);
     const addedMigrate = await cli.add();
     await cli.snapshotAll();
     const addSchema = (await import(addedMigrate.snapshotPath)).default;
-    const addDiff = compareSchema(undefined, initSchema, addSchema);
+    const addDiff = schemaComparator.compareSchema(undefined, initSchema, addSchema);
     assert(!addDiff);
   });
 
@@ -86,7 +88,7 @@ describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
     assert(dbSchema);
     const metadataSchema = generateSchema(dbContext);
     // metadataSchema.tables.forEach(table => table.seedData = undefined);
-    const difference = compareSchema(
+    const difference = schemaComparator.compareSchema(
       cli.targetSchemaName,
       metadataSchema,
       dbSchema
@@ -100,7 +102,7 @@ describe('Migrate ———— ./tests/migrate/migrate.test.ts', function () {
     const dbSchema = await cli.getDbSchema();
     assert(dbSchema);
     const metadataSchema = generateSchema(dbContext);
-    const difference = compareSchema(
+    const difference = schemaComparator.compareSchema(
       cli.targetSchemaName,
       metadataSchema,
       dbSchema

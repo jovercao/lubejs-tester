@@ -15,7 +15,7 @@
   "scripts": {
     "update": "pwsh ./update.ps1",
     "test": "pwsh ./test.ps1",
-    "start": "npm run update && npm run test",
+    "start": "pnpm run update && pnpm run test",
     "lint": "eslint --fix --ext .ts  .",
     "migrate": "lube migrate"
   },
@@ -45,7 +45,6 @@
     "@types/lodash": "^4.14.170",
     "@types/mocha": "^8.2.2",
     "@types/mockjs": "^1.0.3",
-    "@types/mssql": "^6.0.8",
     "@types/node": "^14.17.14",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
@@ -70,8 +69,8 @@
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview07.tgz",
-    "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview07.tgz",
+    "lubejs": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs/dist/lubejs-3.0.0-preview07.tgz",
+    "lubejs-mssql": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview07.tgz",
     "reflect-metadata": "^0.1.13"
   }
 }

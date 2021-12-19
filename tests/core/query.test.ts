@@ -345,7 +345,7 @@ describe('tests/core/query.test.ts', function () {
       schema: 'dbo',
     });
     const sql = select({
-      Sex: SQL.case<string>(a.FSex).when(true, 'Man').else('Woman'),
+      Sex: SQL.case(a.FSex).when(true, 'Man').else('Woman'),
       Now: now(),
       SomeThingResult: dosomething(100),
       // 子查询

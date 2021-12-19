@@ -1,7 +1,7 @@
 import { createPool, DbType, Pool, SQL } from 'lubejs';
 import assert from 'assert';
 
-describe.only('test/core/pool.test.ts', function () {
+describe('test/core/pool.test.ts', function () {
   let pool: Pool;
   this.timeout(0);
 
