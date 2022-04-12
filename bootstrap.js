@@ -9,11 +9,11 @@ tsConfigPaths.register({
         ? "./orm-decorator/index"
         : "./orm-configure",
     ],
-    "@orm/*": [
-      process.env.LUBEJS_TEST_KIND === "decorator"
-        ? "./orm-decorator/*"
-        : "./orm-configure/*",
-    ],
+    // "@orm/*": [
+    //   process.env.LUBEJS_TEST_KIND === "decorator"
+    //     ? "./orm-decorator/*"
+    //     : "./orm-configure/*",
+    // ],
     "@lubejs-driver": [
       `./node_modules/lubejs-${process.env.LUBEJS_TEST_DRIVER}`,
     ],
