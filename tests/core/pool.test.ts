@@ -3,6 +3,7 @@ import assert from 'assert';
 
 describe('test/core/pool.test.ts', function () {
   let pool: Pool;
+  const healthChanges: Array<boolean | undefined> = [];
   this.timeout(0);
 
   before(async () => {
@@ -10,11 +11,17 @@ describe('test/core/pool.test.ts', function () {
     pool.on('log', msg => {
       console.log(msg);
     });
+    pool.on('healthy-changed', health => { healthChanges.push(health); });
     await pool.open();
   });
 
   after(async () => {
     await pool?.close();
+  });
+
+  it('连接池打开后应标记为健康并触发健康事件', async () => {
+    assert.strictEqual(pool.healthy, true);
+    assert.deepStrictEqual(healthChanges, [true]);
   });
 
   it('全局连接查询测试', async () => {
