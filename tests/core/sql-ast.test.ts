@@ -1,4 +1,4 @@
-import { DbProvider, SQL } from 'lubejs';
+import { Command, DbProvider, SQL, SqlCommand } from 'lubejs';
 import { driver } from 'lubejs-mssql';
 import assert from 'assert';
 
@@ -145,10 +145,7 @@ describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
 
     const sql = db.sqlifier.sqlify(countSql);
     const copiedSql = db.sqlifier.sqlify(copiedCountSql);
-    assert(
-      sql.sql === copiedSql.sql,
-      '克隆功能出现问题：' + sql.sql + '\n\n' + copiedSql.sql
-    );
+    assert(isEqualCommand(sql, copiedSql), '克隆功能不正确，SQL不匹配');
   });
 
   it('and/or', function () {
@@ -169,9 +166,35 @@ describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
     const cmd = db.sqlifier.sqlify(sql);
     console.log(cmd);
     assert(
-      cmd.sql.endsWith(
+      (cmd as SqlCommand).sql.endsWith(
         'WHERE (1 = 1 AND (1 = 1 OR 1 = 1) AND (1 = 1 OR (1 = 1 OR 1 = 1) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4) OR [name] IN (1,2,3,4)))'
       )
     );
   });
 });
+
+function isEqualCommand(cmd1: Command, cmd2: Command) {
+  const type1 = typeof cmd1;
+  const type2 = typeof cmd2;
+  if (type1 !== type2) return false;
+  if (type1 === 'function') return cmd1 === cmd2;
+  if ((cmd1 as SqlCommand).sql !== (cmd2 as SqlCommand).sql) return false;
+  if (
+    (cmd1 as SqlCommand).params?.length ||
+    0 !== (cmd2 as SqlCommand).params?.length ||
+    0
+  ) {
+    return false;
+  }
+  (cmd1 as SqlCommand).params?.sort((p1, p2) => p1.name.localeCompare(p2.name));
+  (cmd2 as SqlCommand).params?.sort((p1, p2) => p1.name.localeCompare(p2.name));
+  for (let i = 0; i < ((cmd1 as SqlCommand).params?.length || 0); i++) {
+    if (
+      ((cmd1 as SqlCommand).params || [])[i]?.name !==
+      ((cmd1 as SqlCommand).params || [])[i]?.name
+    ) {
+      return false;
+    }
+  }
+  return true;
+}

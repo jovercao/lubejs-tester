@@ -62,15 +62,15 @@
     "tsconfig-paths": "^3.14.1",
     "typedoc": "^0.17.8",
     "typedoc-plugin-markdown": "^2.4.2",
-    "typescript": "^4.6.3"
+    "typescript": "4.4.4"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs/dist/lubejs-3.0.0-preview07.tgz",
-    "lubejs-mssql": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview07.tgz",
+    "lubejs": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs/dist/lubejs-3.0.0-preview08.tgz",
+    "lubejs-mssql": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
     "reflect-metadata": "^0.1.13"
   }
 }

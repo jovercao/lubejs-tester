@@ -11,10 +11,11 @@ Set-Location "$startdir/../lubejs";
 
 $package = ((Get-Content "package.json") | ConvertFrom-Json);
 
-Write-Host $Version
-Write-Host $package.version
+Write-Host "当前版本： $($package.version)"
+Write-Host "发布版本： $Version"
 
 if (($Version -lt $package.version.ToString()) -or ($package.version.Trim() -eq $Version)) {
+  cd $startdir;
   throw '发布版本号错误：版本号不能低于或者等于当前版本！'
 }
 

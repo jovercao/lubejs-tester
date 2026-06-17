@@ -19,5 +19,6 @@ pnpm run build
 $driverVersion = ((Get-Content "package.json") | ConvertFrom-Json).version
 
 Set-Location $startdir
+
 pnpm i "$startdir/../lubejs/dist/lubejs-$lubeVersion.tgz"
 pnpm i "$startdir/../lubejs-mssql/dist/lubejs-mssql-$driverVersion.tgz"
