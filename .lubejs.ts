@@ -6,6 +6,11 @@ import '@orm';
 
 // declare module '@jovercao/mssql' = import('mssql')
 
+const host = process.env.LUBEJS_TEST_HOST || 'localhost';
+const port = Number(process.env.LUBEJS_TEST_PORT || 1433);
+const user = process.env.LUBEJS_TEST_USER || 'sa';
+const password = process.env.LUBEJS_TEST_PASSWORD || 'Lubejs@Test123';
+
 export const config: LubeConfig = {
   defaultConnection: 'DB',
   defaultPool: 'default',
@@ -13,18 +18,18 @@ export const config: LubeConfig = {
   connections: {
     DB: {
       dialect: driver.dialect,
-      host: 'rancher.vm',
-      user: 'sa',
-      password: '!crgd-2021',
+      host,
+      user,
+      password,
       database: 'lubejs-orm-test',
-      port: 1433,
+      port,
     },
     'mssql-core-test': {
       dialect: driver.dialect,
-      host: 'rancher.vm',
-      user: 'sa',
-      password: '!crgd-2021',
-      port: 1433,
+      host,
+      user,
+      password,
+      port,
       database: 'lubejs-core-test-db',
     },
   },
