@@ -151,6 +151,11 @@ describe('tests/core/schema.test.ts', function () {
       SQL.select(SQL.func(`${schemaName}.dosomething`).invokeAsScalar(1))
     );
     assert(data2 === 2);
+    const fnSchema = await db.provider
+      .getSchemaLoader(db)
+      .getFunctionSchema(await db.getDatabaseName(), schemaName, 'dosomething');
+    assert(fnSchema.name === 'dosomething');
+    assert(fnSchema.scripts.includes('RETURN'));
     await db.query(SQL.dropFunction(`${schemaName}.dosomething`));
   });
 
@@ -180,6 +185,16 @@ describe('tests/core/schema.test.ts', function () {
     const data2 = await db.execute('doProc', params2);
     assert((params2[1] as Parameter).value === 'hello world 2');
     assert(data2.returnValue === 2);
+
+    const procSchema = await db.provider
+      .getSchemaLoader(db)
+      .getProcedure(
+        await db.getDatabaseName(),
+        await db.getSchemaName(),
+        'doProc'
+      );
+    assert(procSchema.name === 'doProc');
+    assert(procSchema.scripts.includes('hello world 2'));
 
     await db.query(SQL.dropProcedure('doProc'));
   });
@@ -236,6 +251,15 @@ describe('tests/core/schema.test.ts', function () {
 
     const rows2 = await db.select('TestView');
     assert(rows2[0].name === 'name1-altered');
+
+    const viewSchema = await db.provider
+      .getSchemaLoader(db)
+      .getView(await db.getDatabaseName(), await db.getSchemaName(), 'TestView');
+    assert(viewSchema.name === 'TestView');
+    assert(viewSchema.scripts.includes('TestTable'));
+
+    await db.query(SQL.dropView('TestView'));
+    await db.query(SQL.dropTable('TestTable'));
   });
 
   it('Sequence', async () => {
@@ -255,6 +279,16 @@ describe('tests/core/schema.test.ts', function () {
       SQL.sequence('TestSequence').nextValue()
     );
     assert(value2 === 2);
+
+    const sequenceSchema = await db.provider
+      .getSchemaLoader(db)
+      .getSequence(
+        await db.getDatabaseName(),
+        await db.getSchemaName(),
+        'TestSequence'
+      );
+    assert(sequenceSchema.name === 'TestSequence');
+    assert(sequenceSchema.increment === 1);
 
     await db.query(SQL.dropSequence('TestSequence'));
   });
