@@ -107,4 +107,19 @@ describe('test/core/pool.test.ts', function () {
       }),
     ]);
   });
+
+  it('函数命令执行后应释放连接', async () => {
+    const beforeBorrowed = pool.borrowed;
+    const result = await pool.executor.run(async conn => {
+      const value = await conn.queryScalar(SQL.select(1));
+      return {
+        rows: [{ value }],
+        rowsAffected: 0,
+        output: {},
+      } as any;
+    });
+
+    assert.strictEqual(result.rows[0].value, 1);
+    assert.strictEqual(pool.borrowed, beforeBorrowed);
+  });
 });
