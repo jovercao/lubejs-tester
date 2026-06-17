@@ -69,8 +69,8 @@
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs/dist/lubejs-3.0.0-preview08.tgz",
-    "lubejs-mssql": "file:D:/workspace/@jovercao/lubejs-tester/../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
+    "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview08.tgz",
+    "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
     "reflect-metadata": "^0.1.13"
   }
 }
