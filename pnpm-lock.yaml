@@ -1137,12 +1137,12 @@ packages:
     engines: {node: '>=4'}
 
   lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-0/fkfn7ECwtvAJ+jZz4DaI2pfT8lHdfM67c2R59XlLZseGqDwsajATbJGLLvwhdI49PoP3OXQYPR4fbBhTHwpQ==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-L9hXmCE60BKLKp03kHXl9RBmFkXX79jOWnGHThNNup0+VEy0SVRxtEn81SODJk+xOn9amdU7r8/L3vGqKfkyKA==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-he4Vf+oTW/sKZ09DAzoBjpqePvyi0/Vv9PXL4aMQ14HHu1gzfmF8TG4NosZ8mIW4IHBavIk6y/ax1kV4sNsHBw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-kJX68lG6/B+95SdUUty8NvAGIJKJHKkVdZTUO5VCNmvdY2QqDHbdRr0RNEau2d49BXc60FkPuoUPkd4aXrkdnQ==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
