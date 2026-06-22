@@ -1142,7 +1142,7 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-37Vb9fAxGfwXMPUIdNpVuONAJykII0tu5IFgJBUNq6MxhGVyj5rG1uSuXkQPqeiqOPktRMQYTgUpax6iLUBzJw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-he4Vf+oTW/sKZ09DAzoBjpqePvyi0/Vv9PXL4aMQ14HHu1gzfmF8TG4NosZ8mIW4IHBavIk6y/ax1kV4sNsHBw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
@@ -1490,8 +1490,8 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  semver@7.8.4:
-    resolution: {integrity: sha512-rUCObTnP32Q08R2uuIrt7r9PlEonuTmtuXYcW6s5kjdlj3xbnwe+21yXptAUYcMAABLkYYTtnmzb3w3EDZfueA==}
+  semver@7.8.5:
+    resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1606,6 +1606,10 @@ packages:
   strip-ansi@3.0.0:
     resolution: {integrity: sha512-leU/wDjPxUZLHqEy4mYnNETRx1jAO1BJ6oTgn9PQWeAiO8kfng2LBq1iXYsN8UYPPRmAizc51nUY6w2Nv12Hog==}
     engines: {node: '>=0.10.0'}
+
+  strip-ansi@5.0.0:
+    resolution: {integrity: sha512-Uu7gQyZI7J7gn5qLn1Np3G9vcYGTVqB+lFTytnDJv83dd8T22aGH451P3jueT2/QemInJDfxHB5Tde5OzgG1Ow==}
+    engines: {node: '>=6'}
 
   strip-ansi@5.2.0:
     resolution: {integrity: sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==}
@@ -1997,7 +2001,7 @@ snapshots:
       functional-red-black-tree: 1.0.1
       ignore: 5.3.2
       regexpp: 3.2.0
-      semver: 7.8.4
+      semver: 7.8.5
       tsutils: 3.21.0(typescript@4.4.4)
     optionalDependencies:
       typescript: 4.4.4
@@ -2043,7 +2047,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.0.3
       is-glob: 4.0.3
-      semver: 7.8.4
+      semver: 7.8.5
       tsutils: 3.21.0(typescript@4.4.4)
     optionalDependencies:
       typescript: 4.4.4
@@ -3475,7 +3479,7 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.8.4: {}
+  semver@7.8.5: {}
 
   set-blocking@2.0.0: {}
 
@@ -3578,7 +3582,7 @@ snapshots:
     dependencies:
       emoji-regex: 7.0.3
       is-fullwidth-code-point: 2.0.0
-      strip-ansi: 5.2.0
+      strip-ansi: 5.0.0
 
   string-width@3.1.0:
     dependencies:
@@ -3623,6 +3627,10 @@ snapshots:
   strip-ansi@3.0.0:
     dependencies:
       ansi-regex: 2.1.1
+
+  strip-ansi@5.0.0:
+    dependencies:
+      ansi-regex: 4.1.1
 
   strip-ansi@5.2.0:
     dependencies:

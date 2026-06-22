@@ -36,13 +36,7 @@ describe('AST Test  ————  tests/core/sql-ast.test.ts', function () {
       nearExpire: boolean | null = null,
       unsalable: boolean | null = null,
       keyword: string | null = null;
-    let sorts: [
-        {
-          column: 'quantity';
-          direction: 'DESC';
-        }
-      ],
-      nearExpireDay: number = 180,
+    let nearExpireDay: number = 180,
       unsalableDay: number = 180;
 
     unsalableDay = unsalableDay || 180;
@@ -179,20 +173,16 @@ function isEqualCommand(cmd1: Command, cmd2: Command) {
   if (type1 !== type2) return false;
   if (type1 === 'function') return cmd1 === cmd2;
   if ((cmd1 as SqlCommand).sql !== (cmd2 as SqlCommand).sql) return false;
-  if (
-    (cmd1 as SqlCommand).params?.length ||
-    0 !== (cmd2 as SqlCommand).params?.length ||
-    0
-  ) {
+  const params1 = (cmd1 as SqlCommand).params;
+  const params2 = (cmd2 as SqlCommand).params;
+  if ((params1?.length || 0) !== (params2?.length || 0)) {
     return false;
   }
-  (cmd1 as SqlCommand).params?.sort((p1, p2) => p1.name.localeCompare(p2.name));
-  (cmd2 as SqlCommand).params?.sort((p1, p2) => p1.name.localeCompare(p2.name));
-  for (let i = 0; i < ((cmd1 as SqlCommand).params?.length || 0); i++) {
-    if (
-      ((cmd1 as SqlCommand).params || [])[i]?.name !==
-      ((cmd1 as SqlCommand).params || [])[i]?.name
-    ) {
+  // 比较参数名时排序副本，避免就地修改原 Command 的 params。
+  const names1 = (params1 || []).map(p => p.name).sort((a, b) => a.localeCompare(b));
+  const names2 = (params2 || []).map(p => p.name).sort((a, b) => a.localeCompare(b));
+  for (let i = 0; i < names1.length; i++) {
+    if (names1[i] !== names2[i]) {
       return false;
     }
   }
