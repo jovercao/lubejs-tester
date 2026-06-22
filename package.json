@@ -14,7 +14,10 @@
   ],
   "scripts": {
     "update": "pwsh ./update.ps1",
-    "test": "pwsh ./test.ps1 -Mssql -Configure -Decorator",
+    "test": "pnpm run test:configure && pnpm run test:decorator",
+    "test:offline": "cross-env TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --extension ts --timeout 0 tests/core/sql-ast.test.ts tests/core/sql-ast-ddl.test.ts tests/core/sql-ast-dml.test.ts",
+    "test:configure": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/**/*.test.ts'",
+    "test:decorator": "cross-env LUBEJS_TEST_KIND=decorator LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/**/*.test.ts'",
     "start": "pnpm run update && pnpm run test",
     "lint": "eslint --fix --ext .ts  .",
     "migrate": "lube migrate"
