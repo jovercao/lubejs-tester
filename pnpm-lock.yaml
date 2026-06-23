@@ -1165,17 +1165,17 @@ packages:
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
   lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-L9hXmCE60BKLKp03kHXl9RBmFkXX79jOWnGHThNNup0+VEy0SVRxtEn81SODJk+xOn9amdU7r8/L3vGqKfkyKA==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-stnJxUBLNdkCrCV7+DbIRLQNeZ8XuteBFALEiEQKHQcY9swzKaUctewoXk8NAapzODW0uFJmVxWFSk9sNLnPdA==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-8yoibeqtQ5vcgy75Y9bHDxf9mR4kWgEXN6YLJIQQtgio/nAmEU3Ze2K/II6D3m9XtVlvPFABbECpLfxfVpRj9w==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-3ANh0EcuD8niSwRfHCjOcAXLFy18qhic5AWDCIvniOEMVSwUobNDDlC4u7ghjnFNZkFxiJ+cJfQEFliuim8PEw==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-nf/TFRV/hCjXqw/XgklMkF8VdvqkSjxKfMr6CLeWdzF/D9IOVdAOdBb0u+20GW3FQ6cCocbCiOBLFS5PhXcKFA==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-V3gb+/9/ZHCl7DoxPSs7RyWTrW6sZWBNZe4BVXrPhV990iZaO39khe8kWbez8Ub1zy5h8xdMxcz+7TBatHM5gw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
