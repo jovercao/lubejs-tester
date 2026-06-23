@@ -1,6 +1,7 @@
 import { Connection, SQL, DbType } from 'lubejs/core';
 import assert from 'assert';
-import { connectToEmptyDb, executeInProcedure } from 'tests/util';
+import { connectToEmptyDb } from 'tests/util';
+import { executeInProcedure } from 'tests/mssql/util';
 
 describe('tests/core/control.test.ts', function () {
   this.timeout(0);
