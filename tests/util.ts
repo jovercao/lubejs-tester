@@ -8,8 +8,6 @@ import {
   SQL,
   MigrateCli,
   createContext,
-  QueryResult,
-  Statement,
   getConnectionOptions,
   getDefaultConnectionOptions,
 } from 'lubejs';
@@ -80,22 +78,4 @@ export async function connectToEmptyDbContext(opts?: {
   await connection.changeDatabase(cli.targetDatabase);
 
   return db;
-}
-
-/**
- * 执行语句块
- */
-export async function executeInProcedure(
-  db: Connection,
-  statements: Statement[] | Statement,
-  spName = 'sp_control_test',
-  dropIt = false
-): Promise<QueryResult<any, any, [any]>> {
-  await db.query(SQL.dropProcedure.ifExists(spName));
-  await db.query(SQL.createProcedure(spName).as(statements as any));
-  const result = await db.execute<any>(spName);
-  if (dropIt) {
-    await db.query(SQL.dropProcedure(spName));
-  }
-  return result;
 }

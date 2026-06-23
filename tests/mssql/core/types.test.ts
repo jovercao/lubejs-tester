@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Connection, DbType, isBinary, SQL, Time, Uuid } from 'lubejs/core';
 import assert from 'assert';
-import { connectToEmptyDb, executeInProcedure } from 'tests/util';
+import { connectToEmptyDb } from 'tests/util';
+import { executeInProcedure } from 'tests/mssql/util';
 
 describe('tests/core/types.test.ts ———— DbType Test', function () {
   this.timeout(0);
