@@ -1170,7 +1170,7 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-eJtshoPkd77YBhNcyAx8zayJ/w7I7kpRAbf6KiNVu5QknR9ioPXekUCEA92fxVuE6BxXuVtYBPSrPOlP+ranqA==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-8yoibeqtQ5vcgy75Y9bHDxf9mR4kWgEXN6YLJIQQtgio/nAmEU3Ze2K/II6D3m9XtVlvPFABbECpLfxfVpRj9w==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
