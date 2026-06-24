@@ -45,5 +45,27 @@ export const mssqlAdapter: DialectAdapter = {
       "UPDATE [t1] SET [t1].[b] = N'z' WHERE [t1].[a] = 1",
     'delete.cond':
       'DELETE [t1] WHERE [t1].[a] = 1',
+    'predicates.like':
+      "SELECT [t1].* FROM [t1] WHERE [t1].[b] LIKE N'%x%'",
+    'predicates.in':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] IN (1,2,3)',
+    'predicates.isNull':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[b] IS NULL',
+    'predicates.isNotNull':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[b] IS NOT NULL',
+    'join.inner':
+      'SELECT [t1].[a] AS [a], [t2].[b] AS [b] FROM [t1] JOIN [t2] ON [t1].[a] = [t2].[t1id]',
+    'group-order.group':
+      'SELECT [t1].[a] AS [a], count([t1].[b]) AS [#column_1] FROM [t1] GROUP BY [t1].[a]',
+    'group-order.order':
+      'SELECT [t1].[a] AS [a] FROM [t1] ORDER BY [t1].[a] ASC',
+    'aggregate.count':
+      'SELECT count([t1].[a]) AS [#column_1] FROM [t1]',
+    'aggregate.sum':
+      'SELECT sum([t1].[a]) AS [#column_1] FROM [t1]',
+    'pagination.top':
+      'SELECT TOP 2 [t1].[a] AS [a] FROM [t1]',
+    'pagination.limitOffset':
+      'SELECT [t1].[a] AS [a] FROM [t1] ORDER BY 1 OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY',
   },
 };
