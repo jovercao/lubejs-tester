@@ -20,6 +20,9 @@
     "test:mssql:decorator": "cross-env LUBEJS_TEST_KIND=decorator LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/mssql/**/*.test.ts'",
     "test:mysql:offline": "cross-env LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --extension ts --timeout 0 'tests/mysql/core/sql-ast*.test.ts'",
     "test:mysql:configure": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/mysql/**/*.test.ts'",
+    "test:shared:offline": "cross-env LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/core/**/*.test.ts'",
+    "test:shared:mssql": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
+    "test:shared:mysql": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
     "start": "pnpm run update && pnpm run test",
     "lint": "eslint --fix --ext .ts  .",
     "migrate": "lube migrate"
