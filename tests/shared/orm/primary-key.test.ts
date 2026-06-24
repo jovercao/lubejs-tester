@@ -34,16 +34,9 @@ describe('Primary key (orm metadata)', function () {
     assert.strictEqual(retrieved.name, position.name);
   });
 
-  it('[P0] get by non-existent key returns undefined', async () => {
+  it('[P0] get by non-existent key throws', async () => {
     const nonExistentId = 999999n;
-    let retrieved: any;
-    try {
-      retrieved = await db.Position.get(nonExistentId);
-    } catch (e) {
-      // Some implementations throw, some return undefined
-      // We'll accept either behavior
-      retrieved = undefined;
-    }
-    assert(retrieved === undefined, 'Expected undefined or thrown error');
+    // lubejs: Repository.get 在未找到主键时抛错(非返回 undefined)
+    await assert.rejects(async () => await db.Position.get(nonExistentId));
   });
 });

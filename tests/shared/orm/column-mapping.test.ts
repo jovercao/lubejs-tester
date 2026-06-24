@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { DB, User, Position } from '@orm';
+import { DB, User, Position, Order } from '@orm';
 import { connectToEmptyDbContext } from '../../util';
 
 describe('Column mapping (orm metadata)', function () {
@@ -47,5 +47,21 @@ describe('Column mapping (orm metadata)', function () {
     assert(retrieved !== undefined);
     assert.strictEqual(retrieved.name, position.name);
     assert(retrieved.description == null);
+  });
+
+  it('[P0] date type column round-trip', async () => {
+    const date = new Date('2024-01-15T10:30:00Z');
+    const order = Order.create({
+      date,
+      description: 'date-type-test',
+    });
+    await db.Order.insert(order);
+    assert(order.id !== undefined);
+
+    const retrieved = await db.Order.get(order.id!);
+    assert(retrieved !== undefined);
+    // date 列读回应为 Date 实例(类型映射正确)
+    assert(retrieved.date instanceof Date, 'date 列应映射为 Date 实例');
+    assert.strictEqual(retrieved.description, 'date-type-test');
   });
 });
