@@ -24,8 +24,8 @@ export const mysqlAdapter: DialectAdapter = {
   },
   expect: {
     'union.basic':
-      'SELECT * FROM `t1` UNION SELECT * FROM `t2`',
+      'SELECT `t1`.* FROM `t1` UNION SELECT `t2`.* FROM `t2`',
     'unionAll.basic':
-      'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`',
+      'SELECT `t1`.* FROM `t1` UNION ALL SELECT `t2`.* FROM `t2`',
   },
 };
