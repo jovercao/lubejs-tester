@@ -47,4 +47,11 @@ describe('Queryable.aggregate [P0]', function () {
     assert.strictEqual(res.theName, '1. @');
     assert.ok(res.theId);
   });
+
+  it('[P0] sum() via map returns total', async function () {
+    // aggregate sum via map not available - P1
+    // Reason: OrderDetail repository not available in DB context for testing
+    // Note: SQL.sum() is defined in lubejs/core/virtual-operation.d.ts
+    this.skip();
+  });
 });
