@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { DB, Position } from '@orm';
+import { DB, Position, Order, OrderDetail } from '@orm';
+import { Decimal, SQL } from 'lubejs';
 import { connectToEmptyDbContext } from '../../util';
 
 describe('Queryable.aggregate [P0]', function () {
@@ -49,9 +50,21 @@ describe('Queryable.aggregate [P0]', function () {
   });
 
   it('[P0] sum() via map returns total', async function () {
-    // aggregate sum via map not available - P1
-    // Reason: OrderDetail repository not available in DB context for testing
-    // Note: SQL.sum() is defined in lubejs/core/virtual-operation.d.ts
-    this.skip();
+    // OrderDetail 没有 @repository 属性,用 getRepository 获取;插入带明细的 Order 后对明细求和。
+    const order = Order.create({
+      date: new Date(),
+      details: [
+        { product: 'a', count: 1, price: new Decimal(1.5), amount: new Decimal(1.5) },
+        { product: 'b', count: 2, price: new Decimal(2.5), amount: new Decimal(5) },
+      ],
+    });
+    await db.Order.insert(order);
+    const repo = db.getRepository(OrderDetail);
+    const res = await repo.query()
+      .filter(p => p.orderId.eq(order.id!))
+      .map(p => ({ total: SQL.sum(p.price) }))
+      .fetchFirst();
+    assert.ok(res);
+    assert.strictEqual(Number(res.total), 4);
   });
 });
