@@ -67,5 +67,41 @@ export const mssqlAdapter: DialectAdapter = {
       'SELECT TOP 2 [t1].[a] AS [a] FROM [t1]',
     'pagination.limitOffset':
       'SELECT [t1].[a] AS [a] FROM [t1] ORDER BY 1 OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY',
+    'arithmetic.add':
+      'SELECT [t1].[a] + 1 AS [r] FROM [t1]',
+    'arithmetic.sub':
+      'SELECT [t1].[a] - 1 AS [r] FROM [t1]',
+    'arithmetic.mul':
+      'SELECT [t1].[a] * 2 AS [r] FROM [t1]',
+    'arithmetic.div':
+      'SELECT [t1].[a] / 2 AS [r] FROM [t1]',
+    'arithmetic.mod':
+      'SELECT [t1].[a] % 3 AS [r] FROM [t1]',
+    'comparison.eq':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] = 1',
+    'comparison.neq':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] <> 1',
+    'comparison.lt':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] < 5',
+    'comparison.lte':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] <= 5',
+    'comparison.gt':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] > 5',
+    'comparison.gte':
+      'SELECT [t1].* FROM [t1] WHERE [t1].[a] >= 5',
+    'comparison.and':
+      "SELECT [t1].* FROM [t1] WHERE ([t1].[a] = 1 AND [t1].[b] = N'x')",
+    'comparison.or':
+      'SELECT [t1].* FROM [t1] WHERE ([t1].[a] = 1 OR [t1].[a] = 2)',
+    'case-when.simple':
+      "SELECT CASE WHEN [t1].[a] = 1 THEN N'one' WHEN [t1].[a] = 2 THEN N'two' ELSE N'other' END AS [label] FROM [t1]",
+    'literals.const':
+      'SELECT 1 AS [c] FROM [t1]',
+    'literals.field':
+      'SELECT [a] AS [a] FROM [t1]',
+    'literals.table':
+      'SELECT [t1].* FROM [t1]',
+    'subquery.exists':
+      'SELECT [t1].[a] AS [a] FROM [t1] WHERE EXISTS(SELECT [t2].[a] AS [a] FROM [t2] WHERE [t2].[a] = [t1].[a])',
   },
 };
