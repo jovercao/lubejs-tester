@@ -52,9 +52,9 @@ describe('MigrateCli.sync [P0]', function () {
   });
 
   it('[P0] sync 后库 schema 与实体 schema 无差异', async function () {
-    // mysql 暂跳过:lubejs-mysql schema-loader 仍有字段归一化缺口
-    // (非 identity 列误填 identityStartValue/Increment、冗余 calculateExpression/
-    //  defaultValue/comment 字段等),见 .claude-tasks/TODO-mysql-schema-type-normalize.md
+    // mysql 暂跳过:残余差异为 defaultValue 表达式等价问题
+    // (source SQL.now() 序列化为 " localtime()",db 读回 "now()",语义等价但字符串不等)
+    // 详见 .claude-tasks/TODO-mysql-schema-type-normalize.md
     const { driver } = await import('@lubejs-driver');
     if ((driver as any).dialect === 'mysql') this.skip();
     const dbSchema = await cli.getDbSchema();
