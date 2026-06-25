@@ -52,10 +52,9 @@ describe('MigrateCli.sync [P0]', function () {
   });
 
   it('[P0] sync 后库 schema 与实体 schema 无差异', async function () {
-    // mysql 暂跳过:lubejs-mysql schema-loader 仍有次级归一化缺口
-    // (isNullable 返回 0/1 而非 boolean、isRowflag 冗余字段等),
-    // 类型归一化与例程按库过滤已修(lubejs-mysql 636d421/e8e59c4),
-    // 剩余见 .claude-tasks/TODO-mysql-schema-type-normalize.md
+    // mysql 暂跳过:lubejs-mysql schema-loader 仍有字段归一化缺口
+    // (非 identity 列误填 identityStartValue/Increment、冗余 calculateExpression/
+    //  defaultValue/comment 字段等),见 .claude-tasks/TODO-mysql-schema-type-normalize.md
     const { driver } = await import('@lubejs-driver');
     if ((driver as any).dialect === 'mysql') this.skip();
     const dbSchema = await cli.getDbSchema();
