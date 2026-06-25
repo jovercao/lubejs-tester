@@ -82,8 +82,21 @@ export class CreateMigrate implements Migrate {
 export default CreateMigrate;
 `);
 
+    // AlterMigrate:alterColumn 修改列可空性(up: notNull→null,down 反向)
+    await writeMigrate('AlterMigrate', '20000101000001', `
+export class AlterMigrate implements Migrate {
+  async up(b: MigrateBuilder, d: string): Promise<void> {
+    b.alterColumn('BuilderParent', column => column('name', DbType.string(50)).null(), { isNullable: { source: true, target: false } });
+  }
+  async down(b: MigrateBuilder, d: string): Promise<void> {
+    b.alterColumn('BuilderParent', column => column('name', DbType.string(50)).notNull(), { isNullable: { source: false, target: true } });
+  }
+}
+export default AlterMigrate;
+`);
+
     // DropMigrate:撤销索引/外键/列(up),down 恢复
-    await writeMigrate('DropMigrate', '20000101000001', `
+    await writeMigrate('DropMigrate', '20000101000002', `
 export class DropMigrate implements Migrate {
   async up(b: MigrateBuilder, d: string): Promise<void> {
     b.dropIndex('BuilderChild', 'IX_Child_Code');
@@ -142,6 +155,16 @@ export default DropMigrate;
     assert(fk!.referenceColumns.includes('id'), '引用列应含 id');
   });
 
+  // NOTE:alterColumn —— #15 已统一,compareScalar 纯标量漏检 bug 已修(见 .claude-tasks/TODO-compareScalar-scalar-diff-bug.md),
+  // 且 createMigrateBuilder Proxy 已补数组返回收集(mssql alterColumn 返回语句数组)。
+  it('[P0] alterColumn 修改列可空性', async () => {
+    await cli.update('AlterMigrate');
+    const schema = (await cli.getDbSchema())!;
+    const parent = table(schema, 'BuilderParent');
+    const name = parent.columns.find(c => c.name === 'name')!;
+    assert.strictEqual(name.isNullable, true, 'alterColumn 后 name 列应为可空');
+  });
+
   it('[P0] dropIndex / dropForeignKey / dropColumn(up 方向)', async () => {
     await cli.update('DropMigrate');
     const schema = (await cli.getDbSchema())!;
@@ -161,7 +184,4 @@ export default DropMigrate;
     assert(child.columns.find(c => c.name === 'code'), 'down 后 code 列应恢复');
   });
 
-  // NOTE:alterColumn 基础 —— #15 已统一,但 diff 受 compareScalar 纯标量漏检 bug 影响
-  // (见 .claude-tasks/TODO-compareScalar-scalar-diff-bug.md),方言差异大,留待修复后补。
-  it.skip('[P0] alterColumn 基础(待 compareScalar 修复后补)', async () => {});
 });

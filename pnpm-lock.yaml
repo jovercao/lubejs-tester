@@ -1175,7 +1175,7 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-XJwn2DL2DQG+BSwf7IdEnqFT/go8dvcQK6O8F4YMrbn/kVZa8dc6lzzp20ounEZTm43ff+Is+FFZo3NiDXbANQ==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-wM1aUs/YMUQr0IsEnNrCwKp49KCYgJ/2VrOg1qp9ATcCa1lAL3flYe+KW5FrPVqIYyx8DT393sJ7vPM9V4tEkg==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true

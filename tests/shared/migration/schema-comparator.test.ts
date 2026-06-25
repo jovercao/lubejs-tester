@@ -85,10 +85,43 @@ describe('SchemaComparator [P0]', function () {
     assert(nameChange.changes.type, 'type 应有差异');
   });
 
-  // NOTE: isNullable / isIdentity 等纯标量差异当前不可检测 —— lubejs core 的
-  // compareScalar 在比较器未表态(返回 undefined)且两侧均为非空值时,错误地返回 null。
-  // type/defaultValue 由比较器显式处理故可检测。详见 .claude-tasks/TODO-compareScalar-scalar-diff-bug.md。
-  it.skip('[P0] 列可空性变更 → 待 compareScalar 修复后补', () => {});
+  // compareScalar 纯标量差异漏检 bug 已修复(见 .claude-tasks/TODO-compareScalar-scalar-diff-bug.md),
+  // isNullable/isIdentity 等双侧非空差异现在可被检测。
+  it('[P0] 列可空性变更 → columns 变更', () => {
+    const source = base;
+    const target = cloneWith('User', t => {
+      const name = t.columns.find(c => c.name === 'name')!;
+      name.isNullable = !name.isNullable;
+      return t;
+    });
+    const diff = comparator.compareSchema(defaultSchema, source, target);
+    assert(diff, '应有差异');
+    const tablesDiff = diff.changes!.tables as any;
+    const userChange = tablesDiff.changes.find((d: any) => d.source.name === 'User');
+    assert(userChange, 'User 表应出现在 changes 中');
+    const colsDiff = userChange.changes.columns as any;
+    const nameChange = colsDiff.changes.find((d: any) => d.source.name === 'name');
+    assert(nameChange, 'name 列应出现在列 changes 中');
+    assert(nameChange.changes.isNullable, 'isNullable 应有差异');
+  });
+
+  it('[P0] 列 isIdentity 变更 → columns 变更', () => {
+    const source = base;
+    const target = cloneWith('User', t => {
+      const name = t.columns.find(c => c.name === 'name')!;
+      name.isIdentity = !name.isIdentity;
+      return t;
+    });
+    const diff = comparator.compareSchema(defaultSchema, source, target);
+    assert(diff, '应有差异');
+    const tablesDiff = diff.changes!.tables as any;
+    const userChange = tablesDiff.changes.find((d: any) => d.source.name === 'User');
+    assert(userChange, 'User 表应出现在 changes 中');
+    const colsDiff = userChange.changes.columns as any;
+    const nameChange = colsDiff.changes.find((d: any) => d.source.name === 'name');
+    assert(nameChange, 'name 列应出现在列 changes 中');
+    assert(nameChange.changes.isIdentity, 'isIdentity 应有差异');
+  });
 
   it('[P0] 两 schema 相同 → 返回 null', () => {
     const diff = comparator.compareSchema(defaultSchema, base, base);
