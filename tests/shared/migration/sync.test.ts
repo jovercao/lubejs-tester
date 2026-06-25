@@ -51,13 +51,7 @@ describe('MigrateCli.sync [P0]', function () {
     assert(Array.isArray(rows));
   });
 
-  it('[P0] sync 后库 schema 与实体 schema 无差异', async function () {
-    // mysql 暂跳过:残余差异为 identity 起始值方言差异
-    // (source generateSchema 给 identity 列填 identityStartValue:0;
-    //  mysql auto_increment 不支持 0 起始,DB 实际从 1,loader 读回 1)
-    // 详见 .claude-tasks/TODO-mysql-schema-type-normalize.md
-    const { driver } = await import('@lubejs-driver');
-    if ((driver as any).dialect === 'mysql') this.skip();
+  it('[P0] sync 后库 schema 与实体 schema 无差异', async () => {
     const dbSchema = await cli.getDbSchema();
     assert(dbSchema);
     const metadataSchema = generateSchema(dbContext);

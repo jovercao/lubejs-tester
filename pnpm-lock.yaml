@@ -1170,12 +1170,12 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-3ANh0EcuD8niSwRfHCjOcAXLFy18qhic5AWDCIvniOEMVSwUobNDDlC4u7ghjnFNZkFxiJ+cJfQEFliuim8PEw==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-BR0yB6+s09Q3e1FciGceo0hmI68MyRGRM54GndjUqYbWlzbtWenil6wIEqSJ1MBUs1x8P2FybeHb2LCBmG1uCw==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-V3gb+/9/ZHCl7DoxPSs7RyWTrW6sZWBNZe4BVXrPhV990iZaO39khe8kWbez8Ub1zy5h8xdMxcz+7TBatHM5gw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-Y6o63azxQFD0eoCRVa5m1NVavAH1y49gjK04Il1v+agofFq13oObzp8603Kcd8mAHZggC8TM5Ro0lczVJb+EIg==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
@@ -1279,8 +1279,8 @@ packages:
   node-environment-flags@1.0.5:
     resolution: {integrity: sha512-VNYPRfGfmZLx0Ye20jWzHUjyTW/c+6Wq+iLhDzUI4XmhrDd9l/FozXV3F2xOaXjvp0co0+v1YSR3CMP6g+VvLQ==}
 
-  node-exports-info@1.6.0:
-    resolution: {integrity: sha512-pyFS63ptit/P5WqUkt+UUfe+4oevH+bFeIiPPdfb0pFeYEu/1ELnJu5l+5EcTKYL5M7zaAa7S8ddywgXypqKCw==}
+  node-exports-info@1.6.2:
+    resolution: {integrity: sha512-kXs9Go0cah0qHVV2v389IXQLdLCeE1xfFtjOAF+iobu0OIoG1pje8At2vMHyaPMiPMnG/LWP50twML21eMcAag==}
     engines: {node: '>= 0.4'}
 
   node-fetch@2.7.0:
@@ -3315,7 +3315,7 @@ snapshots:
       object.getownpropertydescriptors: 2.1.9
       semver: 5.7.0
 
-  node-exports-info@1.6.0:
+  node-exports-info@1.6.2:
     dependencies:
       array.prototype.flatmap: 1.3.3
       es-errors: 1.3.0
@@ -3503,7 +3503,7 @@ snapshots:
     dependencies:
       es-errors: 1.3.0
       is-core-module: 2.16.2
-      node-exports-info: 1.6.0
+      node-exports-info: 1.6.2
       object-keys: 1.1.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
