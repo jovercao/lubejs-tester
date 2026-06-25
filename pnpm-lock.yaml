@@ -1170,12 +1170,12 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-BR0yB6+s09Q3e1FciGceo0hmI68MyRGRM54GndjUqYbWlzbtWenil6wIEqSJ1MBUs1x8P2FybeHb2LCBmG1uCw==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-+3ciFDStn5Vw4DonUD2z/Esdu6ZiS5P7GroPLstNDhRDeiRARw9rpuR5VLFhFKKF8dltk1F7yI+cVRQbwHEakg==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-Y6o63azxQFD0eoCRVa5m1NVavAH1y49gjK04Il1v+agofFq13oObzp8603Kcd8mAHZggC8TM5Ro0lczVJb+EIg==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-XJwn2DL2DQG+BSwf7IdEnqFT/go8dvcQK6O8F4YMrbn/kVZa8dc6lzzp20ounEZTm43ff+Is+FFZo3NiDXbANQ==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
