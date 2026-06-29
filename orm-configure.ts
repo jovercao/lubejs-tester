@@ -66,7 +66,7 @@ export class OrderDetail extends Entity implements EntityKey {
 export class Position extends Entity implements EntityKey {
   id?: bigint;
   name!: string;
-  description?: string;
+  description?: string | null;
   employees?: Employee[];
 }
 

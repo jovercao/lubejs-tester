@@ -9,32 +9,32 @@ importers:
   .:
     dependencies:
       lubejs:
-        specifier: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-preview08.tgz
         version: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4)
       lubejs-mssql:
-        specifier: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz
         version: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4)
       lubejs-mysql:
-        specifier: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz
-        version: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz(@types/node@14.18.63)
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz
+        version: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4)
       reflect-metadata:
-        specifier: ^0.1.13
+        specifier: ^0.1.14
         version: 0.1.14
     devDependencies:
       '@types/crypto-js':
-        specifier: ^4.1.1
+        specifier: ^4.2.2
         version: 4.2.2
       '@types/lodash':
-        specifier: ^4.14.181
+        specifier: ^4.17.24
         version: 4.17.24
       '@types/mocha':
         specifier: ^8.2.3
         version: 8.2.3
       '@types/mockjs':
-        specifier: ^1.0.6
+        specifier: ^1.0.10
         version: 1.0.10
       '@types/node':
-        specifier: ^14.18.12
+        specifier: ^14.18.63
         version: 14.18.63
       '@typescript-eslint/eslint-plugin':
         specifier: ^4.33.0
@@ -52,7 +52,7 @@ importers:
         specifier: ^14.1.1
         version: 14.1.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@4.33.0(eslint@6.8.0)(typescript@4.4.4))(eslint@6.8.0))(eslint-plugin-node@10.0.0(eslint@6.8.0))(eslint-plugin-promise@4.3.1)(eslint-plugin-standard@4.1.0(eslint@6.8.0))(eslint@6.8.0)
       eslint-plugin-import:
-        specifier: ^2.26.0
+        specifier: ^2.32.0
         version: 2.32.0(@typescript-eslint/parser@4.33.0(eslint@6.8.0)(typescript@4.4.4))(eslint@6.8.0)
       eslint-plugin-node:
         specifier: ^10.0.0
@@ -64,7 +64,7 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(eslint@6.8.0)
       lodash:
-        specifier: ^4.17.21
+        specifier: ^4.18.1
         version: 4.18.1
       mocha:
         specifier: ^6.2.3
@@ -73,10 +73,10 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       ts-node:
-        specifier: ^10.7.0
+        specifier: ^10.9.2
         version: 10.9.2(@types/node@14.18.63)(typescript@4.4.4)
       tsconfig-paths:
-        specifier: ^3.14.1
+        specifier: ^3.15.0
         version: 3.15.0
       typedoc:
         specifier: ^0.17.8
@@ -84,9 +84,6 @@ importers:
       typedoc-plugin-markdown:
         specifier: ^2.4.2
         version: 2.4.2(typedoc@0.17.8(typescript@4.4.4))
-      typescript:
-        specifier: 4.4.4
-        version: 4.4.4
 
 packages:
 
@@ -1345,17 +1342,17 @@ packages:
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
   lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-g/M4m2DnzSSbN61G89JroBOcQK8q3YX3gbwOazycu7Ue994Mx+ESjWQYLV1Q8GiOqdiLcB1hEi66QagLE29zlg==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-Z/dLrR4jhxCR4RzJdg2oUNrMpUfsEzl/2R5EJuTky+gNMZw6CPZ4rDzqUmU3F61fjjz1eUJcYRJuyxRBj5bB9A==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-KiX7i7RYjIeJZw+5uC8dPoiNbRwOZVXysmXtP0No9EDPNigCXK/AEV/fhwH2S78lneen+KYvESCAYkL1NKAbyg==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-GcBM/+m1+zjoZopTaZUcA8kWc6ekJEpLE/2wWhvQgSy1fcY1A9K5J57qvRPBjV8YWZd8QCf7XDNONrYHOG2I6Q==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-hCfJj5P+THRDJNCp/XG4IcV1ZDHoe1PuXMEcLOQfU4yfG7r4oE0dzTJsU9WpFqu95KlR+k7SvGT9eOzZ4mIlJQ==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-I4nndXfbZkJi21vdo0mwWdU1CVwxJ3i0CjE7BBe8Qdkmt5ZbHAwLOedrM0eAX2VF8LfSgD35KzZ2L8tX81Z1Tw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
@@ -1813,6 +1810,10 @@ packages:
   slice-ansi@2.1.0:
     resolution: {integrity: sha512-Qu+VC3EwYLldKa1fCxuuvULvSJOKEgk9pi8dZeCVK7TqBfUNTH4sFkk4joj8afVSfAYgJoSOetjx9QWOJ5mYoQ==}
     engines: {node: '>=6'}
+
+  snowflake-id-node@4.0.1:
+    resolution: {integrity: sha512-VUHUAkVoZDfsR3dkWd6i6nU1DSlctt/1CZmv3sx17FX5vcmqA8mLaz62JBTfxFAuDeO7wAwStNwVQzHX2BGx8A==}
+    engines: {node: '>=14.0.0'}
 
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
@@ -3680,6 +3681,7 @@ snapshots:
     dependencies:
       '@jovercao/mssql': 7.2.1-jover.9
       lubejs: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4)
+      snowflake-id-node: 4.0.1
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -3688,11 +3690,15 @@ snapshots:
       - supports-color
       - typescript
 
-  lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz(@types/node@14.18.63):
+  lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4):
     dependencies:
+      lubejs: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4)
       mysql2: 3.22.5(@types/node@14.18.63)
     transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
       - '@types/node'
+      - typescript
 
   lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@4.4.4):
     dependencies:
@@ -4214,6 +4220,8 @@ snapshots:
       ansi-styles: 3.2.1
       astral-regex: 1.0.0
       is-fullwidth-code-point: 2.0.0
+
+  snowflake-id-node@4.0.1: {}
 
   source-map@0.6.1: {}
 

@@ -10,7 +10,7 @@ import {
   ProcedureParameter,
   Expression,
 } from 'lubejs';
-import { connectToEmptyDb } from 'tests/util';
+import { connectToEmptyDb } from '../../util';
 
 const {
   table,

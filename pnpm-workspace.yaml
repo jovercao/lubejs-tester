@@ -1,2 +1,2 @@
 allowBuilds:
-  keytar: set this to true or false
+  keytar: true

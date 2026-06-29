@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "update": "pwsh ./update.ps1",
+    "update:lib": "node ./scripts/update.js",
     "test": "pnpm run test:mssql:configure && pnpm run test:mssql:decorator",
     "test:mssql:offline": "cross-env LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --extension ts --timeout 0 'tests/mssql/core/sql-ast*.test.ts'",
     "test:mssql:configure": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/mssql/**/*.test.ts'",
@@ -55,37 +55,36 @@
   },
   "homepage": "https://github.com/jovercao/lubejs#readme",
   "devDependencies": {
-    "@types/crypto-js": "^4.1.1",
-    "@types/lodash": "^4.14.181",
+    "@types/crypto-js": "^4.2.2",
+    "@types/lodash": "^4.17.24",
     "@types/mocha": "^8.2.3",
-    "@types/mockjs": "^1.0.6",
-    "@types/node": "^14.18.12",
+    "@types/mockjs": "^1.0.10",
+    "@types/node": "^14.18.63",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "cross-env": "^7.0.3",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "mocha": "^6.2.3",
     "mockjs": "^1.1.0",
-    "ts-node": "^10.7.0",
-    "tsconfig-paths": "^3.14.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^3.15.0",
     "typedoc": "^0.17.8",
-    "typedoc-plugin-markdown": "^2.4.2",
-    "typescript": "4.4.4"
+    "typedoc-plugin-markdown": "^2.4.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:../lubejs/dist/lubejs-3.0.0-preview08.tgz",
-    "lubejs-mssql": "file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
-    "lubejs-mysql": "file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz",
-    "reflect-metadata": "^0.1.13"
+    "lubejs": "file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-preview08.tgz",
+    "lubejs-mssql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
+    "lubejs-mysql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz",
+    "reflect-metadata": "^0.1.14"
   }
 }

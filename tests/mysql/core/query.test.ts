@@ -1,6 +1,6 @@
 import { Connection, DbType, SQL } from 'lubejs';
 import assert from 'assert';
-import { connectToEmptyDb } from 'tests/util';
+import { connectToEmptyDb } from '../../util';
 
 /**
  * MySQL 基础查询/CRUD/事务集成测试。

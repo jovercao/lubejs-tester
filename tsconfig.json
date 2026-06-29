@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations":"6.0",
-    "baseUrl": ".",
+    // "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
     "module": "commonjs",
     "target": "ES2020",
@@ -16,6 +15,7 @@
     "strict": true,
     "types": ["mocha"],
     "typeRoots": ["./node_modules/@types"],
+    "rootDir": ".",
     "outDir": "dist",
     // "typeRoots": [
     //   "./node_modules/@types",
@@ -45,7 +45,7 @@
   },
   "include": [
     ".lubejs.ts",
-    "./**/*.ts"
+    "./tests/*.ts"
   ],
   "exclude": [
     "node_modules",
