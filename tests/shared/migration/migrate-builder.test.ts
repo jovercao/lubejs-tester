@@ -86,10 +86,10 @@ export default CreateMigrate;
     await writeMigrate('AlterMigrate', '20000101000001', `
 export class AlterMigrate implements Migrate {
   async up(b: MigrateBuilder, d: string): Promise<void> {
-    b.alterColumn('BuilderParent', column => column('name', DbType.string(50)).null(), { isNullable: { source: true, target: false } });
+    b.alterColumn('BuilderParent', column => column('name', DbType.string(50)).null());
   }
   async down(b: MigrateBuilder, d: string): Promise<void> {
-    b.alterColumn('BuilderParent', column => column('name', DbType.string(50)).notNull(), { isNullable: { source: false, target: true } });
+    b.alterColumn('BuilderParent', column => column('name', DbType.string(50)).notNull());
   }
 }
 export default AlterMigrate;
