@@ -8,6 +8,7 @@ import {
   Decimal,
   FunctionParameter,
   ProcedureParameter,
+  Expression,
 } from 'lubejs';
 import { connectToEmptyDb } from 'tests/util';
 
@@ -434,7 +435,7 @@ describe('tests/core/query.test.ts', function () {
           await db.query(
             select(t.star)
               .from(t)
-              .where(t.FId.eq(identityValue('Items', 'FId')))
+              .where(t.FId.eq(identityValue('Items', 'FId') as Expression<number>))
           )
         ).rows[0];
         assert(item.FName === row.FName);
