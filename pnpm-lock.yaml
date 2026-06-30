@@ -1355,7 +1355,7 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs-pgsql@file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-6vuHIiy0i/ukd99TxeXml2aKb/h7hJRjJLK9AFWiVDOagPD6nRVEV2GfJpMAp+RbL50PAQqL8ABP2c72O/PE0A==, tarball: file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-3ARN762UaTWe2zJ0yOo4UXYlynhF+EDoKk48EgyE+ZNY1Ad09WYY9RNNNNfyAFU/pTyXZ333QIaXlpPYiNEn2g==, tarball: file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 

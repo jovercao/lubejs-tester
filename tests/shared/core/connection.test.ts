@@ -79,6 +79,17 @@ describe('Connection (integration)', function () {
           SELECT 1 AS result;
         END
       `);
+    } else if (adapter.driver === 'pgsql') {
+      // pg 存储过程体用 plpgsql,SELECT 需 INTO/PERFORM,此处用 PERFORM 丢弃结果
+      await conn.query(`DROP PROCEDURE IF EXISTS ${adapter.quote(spName)}`);
+      await conn.query(`
+        CREATE PROCEDURE ${adapter.quote(spName)}()
+        LANGUAGE plpgsql
+        AS $$
+        BEGIN
+          PERFORM 1;
+        END $$;
+      `);
     } else {
       await conn.query(`DROP PROCEDURE IF EXISTS ${adapter.quote(spName)}`);
       await conn.query(`
@@ -95,8 +106,8 @@ describe('Connection (integration)', function () {
       assert.ok(result, 'execute should return a result');
     } finally {
       // Cleanup
-      if (adapter.driver === 'mssql') {
-        await conn.query(`DROP PROCEDURE ${adapter.quote(spName)}`);
+      if (adapter.driver === 'pgsql') {
+        await conn.query(`DROP PROCEDURE IF EXISTS ${adapter.quote(spName)}`);
       } else {
         await conn.query(`DROP PROCEDURE ${adapter.quote(spName)}`);
       }

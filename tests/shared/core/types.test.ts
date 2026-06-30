@@ -7,11 +7,11 @@ describe('DbType mapping', function () {
   const db = getProvider();
 
   it('[P0] adapter.typeName maps DbType to dialect types', function () {
-    assert.strictEqual(adapter.typeName(DbType.int32), adapter.driver === 'mssql' ? 'INT' : 'INT');
+    assert.strictEqual(adapter.typeName(DbType.int32), adapter.driver === 'pgsql' ? 'INTEGER' : 'INT');
     assert.strictEqual(adapter.typeName(DbType.int64), 'BIGINT');
     assert.strictEqual(adapter.typeName(DbType.string), adapter.driver === 'mssql' ? 'NVARCHAR(255)' : 'VARCHAR(255)');
     assert.strictEqual(adapter.typeName(DbType.decimal), 'DECIMAL(18,2)');
-    assert.strictEqual(adapter.typeName(DbType.datetime), 'DATETIME');
+    assert.strictEqual(adapter.typeName(DbType.datetime), adapter.driver === 'pgsql' ? 'TIMESTAMP' : 'DATETIME');
   });
 });
 
