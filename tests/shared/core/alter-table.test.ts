@@ -28,6 +28,10 @@ describe('SQL.alterTable', function () {
   });
 
   it('[P0] alterColumn - 生成文本', function () {
+    if (adapter.driver === 'sqlite') {
+      // SQLite doesn't support ALTER COLUMN (requires table recreation)
+      this.skip();
+    }
     const ast = SQL.alterTable('t_alter_modify').alterColumn((col) =>
       col('age', DbType.int64)
     );
@@ -103,6 +107,10 @@ describe('SQL.alterTable (integration)', function () {
   });
 
   it('[P0] alterColumn - 执行', async function () {
+    if (adapter.driver === 'sqlite') {
+      // SQLite doesn't support ALTER COLUMN (requires table recreation)
+      this.skip();
+    }
     const tableName = 't_alter_modify_int';
 
     try {

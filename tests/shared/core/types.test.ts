@@ -7,11 +7,19 @@ describe('DbType mapping', function () {
   const db = getProvider();
 
   it('[P0] adapter.typeName maps DbType to dialect types', function () {
-    assert.strictEqual(adapter.typeName(DbType.int32), adapter.driver === 'pgsql' ? 'INTEGER' : 'INT');
-    assert.strictEqual(adapter.typeName(DbType.int64), 'BIGINT');
-    assert.strictEqual(adapter.typeName(DbType.string), adapter.driver === 'mssql' ? 'NVARCHAR(255)' : 'VARCHAR(255)');
-    assert.strictEqual(adapter.typeName(DbType.decimal), 'DECIMAL(18,2)');
-    assert.strictEqual(adapter.typeName(DbType.datetime), adapter.driver === 'pgsql' ? 'TIMESTAMP' : 'DATETIME');
+    if (adapter.driver === 'sqlite') {
+      assert.strictEqual(adapter.typeName(DbType.int32), 'INTEGER');
+      assert.strictEqual(adapter.typeName(DbType.int64), 'INTEGER');
+      assert.strictEqual(adapter.typeName(DbType.string), 'VARCHAR(255)');
+      assert.strictEqual(adapter.typeName(DbType.decimal), 'NUMERIC(18,2)');
+      assert.strictEqual(adapter.typeName(DbType.datetime), 'TEXT');
+    } else {
+      assert.strictEqual(adapter.typeName(DbType.int32), adapter.driver === 'pgsql' ? 'INTEGER' : 'INT');
+      assert.strictEqual(adapter.typeName(DbType.int64), 'BIGINT');
+      assert.strictEqual(adapter.typeName(DbType.string), adapter.driver === 'mssql' ? 'NVARCHAR(255)' : 'VARCHAR(255)');
+      assert.strictEqual(adapter.typeName(DbType.decimal), 'DECIMAL(18,2)');
+      assert.strictEqual(adapter.typeName(DbType.datetime), adapter.driver === 'pgsql' ? 'TIMESTAMP' : 'DATETIME');
+    }
   });
 });
 
@@ -73,10 +81,17 @@ describe('Types (integration)', function () {
       const amountStr = String(row.amount);
       assert.ok(amountStr === '123.45' || amountStr === '123');
 
-      // datetime -> Date
-      assert.ok(row.created instanceof Date);
-      // Compare times within 1 second (some drivers may truncate milliseconds)
-      assert.ok(Math.abs(row.created.getTime() - testDate.getTime()) < 1000);
+      // datetime -> Date (or string for SQLite)
+      if (adapter.driver === 'sqlite') {
+        // SQLite stores datetime as TEXT; verify we can parse it back to a date
+        const parsedDate = new Date(row.created as string);
+        assert.ok(!isNaN(parsedDate.getTime()));
+        assert.ok(Math.abs(parsedDate.getTime() - testDate.getTime()) < 1000);
+      } else {
+        assert.ok(row.created instanceof Date);
+        // Compare times within 1 second (some drivers may truncate milliseconds)
+        assert.ok(Math.abs(row.created.getTime() - testDate.getTime()) < 1000);
+      }
     });
   });
 });

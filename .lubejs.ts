@@ -15,7 +15,7 @@ const port = Number(process.env.LUBEJS_TEST_PORT || defaultPort);
 const user = process.env.LUBEJS_TEST_USER || defaultUser;
 const password = dialect === 'sqlite' ? undefined : (process.env.LUBEJS_TEST_PASSWORD || 'Lubejs@Test123');
 const database = dialect === 'sqlite'
-  ? (process.env.LUBEJS_TEST_SQLITE_DB || 'file::memory:?cache=shared')
+  ? (process.env.LUBEJS_TEST_SQLITE_DB || ':memory:')
   : 'lubejs-orm-test';
 
 export const config: LubeConfig = {
@@ -32,7 +32,7 @@ export const config: LubeConfig = {
     'mssql-core-test': {
       dialect: driver.dialect,
       ...(dialect !== 'sqlite' ? { host, user, password, port } : {}),
-      database: dialect === 'sqlite' ? 'file::memory:?cache=shared' : 'lubejs-core-test-db',
+      database: dialect === 'sqlite' ? ':memory:' : 'lubejs-core-test-db',
     },
   },
   pools: {

@@ -32,6 +32,15 @@ describe('Connection (integration)', function () {
     await conn.open();
     assert.strictEqual(conn.opened, true, 'connection should be opened after open()');
 
+    // For SQLite: in-memory database gets cleared when the last connection closes,
+    // so we need to recreate our test table if it doesn't exist
+    if (adapter.driver === 'sqlite') {
+      await createFixture(conn, 't1', [
+        { name: 'a', type: DbType.int32 },
+        { name: 'b', type: DbType.string },
+      ]);
+    }
+
     // Verify query still works after reopen
     const t1 = SQL.table('t1');
     const result = await conn.query(SQL.select(t1.star).from(t1));
@@ -66,6 +75,11 @@ describe('Connection (integration)', function () {
   });
 
   it('[P0] conn.execute stored procedure', async function () {
+    if (adapter.driver === 'sqlite') {
+      // SQLite doesn't support stored procedures
+      this.skip();
+    }
+
     // Create a simple stored procedure
     const spName = 'sp_test_connection';
 
