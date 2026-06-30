@@ -3,8 +3,8 @@ import { DbProvider, DbType, Expression } from 'lubejs';
 import { driver } from '@lubejs-driver';
 
 export interface DialectAdapter {
-  driver: 'mssql' | 'mysql';
-  /** 标识符引用:mssql [x] / mysql `x` */
+  driver: 'mssql' | 'mysql' | 'pgsql';
+  /** 标识符引用:mssql [x] / mysql `x` / pgsql "x" */
   quote(name: string): string;
   /** 当前方言 now() 表达式 */
   now(): Expression;
@@ -16,11 +16,16 @@ export interface DialectAdapter {
 
 import { mssqlAdapter } from './mssql';
 import { mysqlAdapter } from './mysql';
+import { pgsqlAdapter } from './pgsql';
 
-const DRIVER = (driver as any).dialect as 'mssql' | 'mysql';
+const DRIVER = (driver as any).dialect as 'mssql' | 'mysql' | 'pgsql';
 
 export const adapter: DialectAdapter =
-  DRIVER === 'mysql' ? mysqlAdapter : mssqlAdapter;
+  DRIVER === 'mysql'
+    ? mysqlAdapter
+    : DRIVER === 'pgsql'
+    ? pgsqlAdapter
+    : mssqlAdapter;
 
 /** 获取当前方言的 DbProvider(用于 offline sqlify) */
 export function getProvider(): DbProvider {

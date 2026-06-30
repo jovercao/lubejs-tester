@@ -8,9 +8,9 @@ import '@orm';
 
 const host = process.env.LUBEJS_TEST_HOST || 'localhost';
 // 各方言默认端口与用户
-const isMysql = driver.dialect === 'mysql';
-const defaultPort = isMysql ? 3306 : 1433;
-const defaultUser = isMysql ? 'root' : 'sa';
+const dialect = driver.dialect as 'mssql' | 'mysql' | 'pgsql';
+const defaultPort = dialect === 'mysql' ? 3306 : dialect === 'pgsql' ? 5432 : 1433;
+const defaultUser = dialect === 'mysql' ? 'root' : dialect === 'pgsql' ? 'postgres' : 'sa';
 const port = Number(process.env.LUBEJS_TEST_PORT || defaultPort);
 const user = process.env.LUBEJS_TEST_USER || defaultUser;
 const password = process.env.LUBEJS_TEST_PASSWORD || 'Lubejs@Test123';

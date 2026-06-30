@@ -20,9 +20,13 @@
     "test:mssql:decorator": "cross-env LUBEJS_TEST_KIND=decorator LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/mssql/**/*.test.ts'",
     "test:mysql:offline": "cross-env LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --extension ts --timeout 0 'tests/mysql/core/sql-ast*.test.ts'",
     "test:mysql:configure": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/mysql/**/*.test.ts'",
+    "test:pgsql:offline": "cross-env LUBEJS_TEST_DRIVER=pgsql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/core/**/*.test.ts'",
+    "test:pgsql:configure": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=pgsql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
+    "test:pgsql:decorator": "cross-env LUBEJS_TEST_KIND=decorator LUBEJS_TEST_DRIVER=pgsql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
     "test:shared:offline": "cross-env LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/core/**/*.test.ts'",
     "test:shared:mssql": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
     "test:shared:mysql": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
+    "test:shared:pgsql": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=pgsql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/**/*.test.ts'",
     "test:shared:orm:mssql:decorator": "cross-env LUBEJS_TEST_KIND=decorator LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/orm/**/*.test.ts'",
     "test:shared:orm:mysql:decorator": "cross-env LUBEJS_TEST_KIND=decorator LUBEJS_TEST_DRIVER=mysql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/orm/**/*.test.ts'",
     "test:shared:orm:mssql:configure": "cross-env LUBEJS_TEST_KIND=configure LUBEJS_TEST_DRIVER=mssql TS_NODE_TRANSPILE_ONLY=true mocha --require ts-node/register --require ./bootstrap.js --extension ts --timeout 0 'tests/shared/orm/**/*.test.ts'",
@@ -85,6 +89,7 @@
     "lubejs": "file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-preview08.tgz",
     "lubejs-mssql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
     "lubejs-mysql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz",
+    "lubejs-pgsql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz",
     "reflect-metadata": "^0.1.14"
   }
 }
