@@ -1,2 +1,3 @@
 allowBuilds:
   keytar: true
+  sqlite3: true

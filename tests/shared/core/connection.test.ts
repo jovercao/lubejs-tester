@@ -8,6 +8,13 @@ describe('Connection (integration)', function () {
 
   before(async function () {
     conn = await getCoreConnection();
+    // For SQLite: clean up any existing table first
+    const t1 = SQL.table('t1');
+    try {
+      await conn.query(SQL.dropTable(t1).ifExists());
+    } catch (e) {
+      // ignore errors
+    }
     await createFixture(conn, 't1', [
       { name: 'a', type: DbType.int32 },
       { name: 'b', type: DbType.string },

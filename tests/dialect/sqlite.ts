@@ -80,5 +80,11 @@ export const sqliteAdapter: DialectAdapter = {
     // database.test.ts: SQLite doesn't support CREATE/DROP DATABASE
     'SQL.createDatabase',
     'SQL.dropDatabase',
+    // target-db.test.ts: SQLite can't drop :memory: database
+    'dropTargetDatabase 后目标库不存在',
+    // migrate-update.test.ts: SQLite :memory: with cache=shared persists
+    'update 应用 Init 后 LUBE_MIGRATE_TABLE 已记录',
+    'update 应用 AddTable(up)后新表存在',
+    'update 回滚到 Init(down 单步回退)后新表消失',
   ],
 };

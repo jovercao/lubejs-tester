@@ -14,8 +14,17 @@ const defaultUser = dialect === 'mysql' ? 'root' : dialect === 'pgsql' ? 'postgr
 const port = Number(process.env.LUBEJS_TEST_PORT || defaultPort);
 const user = process.env.LUBEJS_TEST_USER || defaultUser;
 const password = dialect === 'sqlite' ? undefined : (process.env.LUBEJS_TEST_PASSWORD || 'Lubejs@Test123');
+// sqlite 用临时文件库(多连接共享同一物理文件,支持 ORM DbContext 跨连接读写);
+// :memory: 无法跨连接共享,故测试默认走临时文件。每进程唯一,测前删除。
 const database = dialect === 'sqlite'
-  ? (process.env.LUBEJS_TEST_SQLITE_DB || ':memory:')
+  ? (process.env.LUBEJS_TEST_SQLITE_DB || (() => {
+      const os = require('os');
+      const path = require('path');
+      const fs = require('fs');
+      const f = path.join(os.tmpdir(), `lubejs-sqlite-${process.pid}.db`);
+      try { fs.unlinkSync(f); fs.unlinkSync(f + '-wal'); fs.unlinkSync(f + '-shm'); } catch { /* 不存在忽略 */ }
+      return f;
+    })())
   : 'lubejs-orm-test';
 
 export const config: LubeConfig = {
@@ -32,13 +41,14 @@ export const config: LubeConfig = {
     'mssql-core-test': {
       dialect: driver.dialect,
       ...(dialect !== 'sqlite' ? { host, user, password, port } : {}),
-      database: dialect === 'sqlite' ? ':memory:' : 'lubejs-core-test-db',
+      database: dialect === 'sqlite' ? database : 'lubejs-core-test-db',
     },
   },
   pools: {
     default: {
-      min: 5,
-      max: 10,
+      // sqlite 嵌入式:单连接串行,避免多连接竞态;其他方言 min:5
+      min: dialect === 'sqlite' ? 1 : 5,
+      max: dialect === 'sqlite' ? 1 : 10,
       connectTimeout: 30000,
       idleTimeout: 15000,
       connection: 'mssql-core-test'
