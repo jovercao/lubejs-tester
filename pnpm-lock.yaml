@@ -9,20 +9,20 @@ importers:
   .:
     dependencies:
       lubejs:
-        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-preview08.tgz
-        version: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-rc.1.tgz
+        version: file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       lubejs-mssql:
-        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz
-        version: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz(@types/node@14.18.63)(encoding@0.1.13)(typescript@6.0.3)
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-rc.1.tgz
+        version: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-rc.1.tgz(@types/node@14.18.63)(encoding@0.1.13)(typescript@6.0.3)
       lubejs-mysql:
-        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz
-        version: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-rc.1.tgz
+        version: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       lubejs-pgsql:
-        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz
-        version: file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-pgsql/dist/lubejs-pgsql-3.0.0-rc.1.tgz
+        version: file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       lubejs-sqlite:
-        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz
-        version: file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+        specifier: file:/mnt/d/workspace/@jover/lubejs/lubejs-sqlite/dist/lubejs-sqlite-3.0.0-rc.1.tgz
+        version: file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       reflect-metadata:
         specifier: ^0.1.14
         version: 0.1.14
@@ -1467,28 +1467,28 @@ packages:
     resolution: {integrity: sha512-DqC6n3QQ77zdFpCMASA1a3Jlb64Hv2N2DciFGkO/4L9+q/IpIAuRlKOvCXabtRW6cQf8usbmM6BE/TOPysCdIA==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
-  lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-Z/dLrR4jhxCR4RzJdg2oUNrMpUfsEzl/2R5EJuTky+gNMZw6CPZ4rDzqUmU3F61fjjz1eUJcYRJuyxRBj5bB9A==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz}
+  lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-rc.1.tgz:
+    resolution: {integrity: sha512-Z/dLrR4jhxCR4RzJdg2oUNrMpUfsEzl/2R5EJuTky+gNMZw6CPZ4rDzqUmU3F61fjjz1eUJcYRJuyxRBj5bB9A==, tarball: file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-rc.1.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
-  lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-GcBM/+m1+zjoZopTaZUcA8kWc6ekJEpLE/2wWhvQgSy1fcY1A9K5J57qvRPBjV8YWZd8QCf7XDNONrYHOG2I6Q==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz}
+  lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-rc.1.tgz:
+    resolution: {integrity: sha512-GcBM/+m1+zjoZopTaZUcA8kWc6ekJEpLE/2wWhvQgSy1fcY1A9K5J57qvRPBjV8YWZd8QCf7XDNONrYHOG2I6Q==, tarball: file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-rc.1.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
-  lubejs-pgsql@file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-d8MtXvpTXRrO1MLJFe7MqH4LmQSaqlnWyADfct2VFcF9Z9RBTJwFsMUqH4EYGaYvFjoEFnKGGCoLRX3HFsl/6A==, tarball: file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz}
+  lubejs-pgsql@file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-rc.1.tgz:
+    resolution: {integrity: sha512-d8MtXvpTXRrO1MLJFe7MqH4LmQSaqlnWyADfct2VFcF9Z9RBTJwFsMUqH4EYGaYvFjoEFnKGGCoLRX3HFsl/6A==, tarball: file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-rc.1.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
-  lubejs-sqlite@file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-ov6pqsrHS/XJVnZ5rkBjRzIc9LIkXZIHDJdYTsYBs9DFzqbr67RdgbHPuIUKudpr7k4M9NFkuU+3+9XumsTvaQ==, tarball: file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz}
+  lubejs-sqlite@file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-rc.1.tgz:
+    resolution: {integrity: sha512-ov6pqsrHS/XJVnZ5rkBjRzIc9LIkXZIHDJdYTsYBs9DFzqbr67RdgbHPuIUKudpr7k4M9NFkuU+3+9XumsTvaQ==, tarball: file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-rc.1.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
-  lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-I4nndXfbZkJi21vdo0mwWdU1CVwxJ3i0CjE7BBe8Qdkmt5ZbHAwLOedrM0eAX2VF8LfSgD35KzZ2L8tX81Z1Tw==, tarball: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz}
+  lubejs@file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz:
+    resolution: {integrity: sha512-I4nndXfbZkJi21vdo0mwWdU1CVwxJ3i0CjE7BBe8Qdkmt5ZbHAwLOedrM0eAX2VF8LfSgD35KzZ2L8tX81Z1Tw==, tarball: file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
     hasBin: true
@@ -4148,10 +4148,10 @@ snapshots:
 
   lru.min@1.1.4: {}
 
-  lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz(@types/node@14.18.63)(encoding@0.1.13)(typescript@6.0.3):
+  lubejs-mssql@file:../lubejs-mssql/dist/lubejs-mssql-3.0.0-rc.1.tgz(@types/node@14.18.63)(encoding@0.1.13)(typescript@6.0.3):
     dependencies:
       '@jovercao/mssql': 7.2.1-jover.9(encoding@0.1.13)
-      lubejs: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+      lubejs: file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       snowflake-id-node: 4.0.1
     transitivePeerDependencies:
       - '@swc/core'
@@ -4161,9 +4161,9 @@ snapshots:
       - supports-color
       - typescript
 
-  lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3):
+  lubejs-mysql@file:../lubejs-mysql/dist/lubejs-mysql-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3):
     dependencies:
-      lubejs: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+      lubejs: file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       mysql2: 3.22.5(@types/node@14.18.63)
     transitivePeerDependencies:
       - '@swc/core'
@@ -4171,9 +4171,9 @@ snapshots:
       - '@types/node'
       - typescript
 
-  lubejs-pgsql@file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3):
+  lubejs-pgsql@file:../lubejs-pgsql/dist/lubejs-pgsql-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3):
     dependencies:
-      lubejs: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+      lubejs: file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       pg: 8.22.0
     transitivePeerDependencies:
       - '@swc/core'
@@ -4182,9 +4182,9 @@ snapshots:
       - pg-native
       - typescript
 
-  lubejs-sqlite@file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3):
+  lubejs-sqlite@file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3):
     dependencies:
-      lubejs: file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3)
+      lubejs: file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3)
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - '@swc/core'
@@ -4194,7 +4194,7 @@ snapshots:
       - supports-color
       - typescript
 
-  lubejs@file:../lubejs/dist/lubejs-3.0.0-preview08.tgz(@types/node@14.18.63)(typescript@6.0.3):
+  lubejs@file:../lubejs/dist/lubejs-3.0.0-rc.1.tgz(@types/node@14.18.63)(typescript@6.0.3):
     dependencies:
       colors: 1.4.0
       commander: 7.2.0

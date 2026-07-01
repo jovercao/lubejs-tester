@@ -91,11 +91,11 @@
     "access": "public"
   },
   "dependencies": {
-    "lubejs": "file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-preview08.tgz",
-    "lubejs-mssql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-preview08.tgz",
-    "lubejs-mysql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-preview08.tgz",
-    "lubejs-pgsql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-pgsql/dist/lubejs-pgsql-3.0.0-preview08.tgz",
-    "lubejs-sqlite": "file:/mnt/d/workspace/@jover/lubejs/lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz",
+    "lubejs": "file:/mnt/d/workspace/@jover/lubejs/lubejs/dist/lubejs-3.0.0-rc.1.tgz",
+    "lubejs-mssql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mssql/dist/lubejs-mssql-3.0.0-rc.1.tgz",
+    "lubejs-mysql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-mysql/dist/lubejs-mysql-3.0.0-rc.1.tgz",
+    "lubejs-pgsql": "file:/mnt/d/workspace/@jover/lubejs/lubejs-pgsql/dist/lubejs-pgsql-3.0.0-rc.1.tgz",
+    "lubejs-sqlite": "file:/mnt/d/workspace/@jover/lubejs/lubejs-sqlite/dist/lubejs-sqlite-3.0.0-rc.1.tgz",
     "reflect-metadata": "^0.1.14"
   }
 }
