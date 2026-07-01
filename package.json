@@ -2,6 +2,7 @@
   "name": "lubejs-tester",
   "version": "1.0.1",
   "description": "An easy-to-use nodejs oracledb client",
+  "private": true,
   "main": "dist/index.js",
   "directories": {
     "dist": "dist"
