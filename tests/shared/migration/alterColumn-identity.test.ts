@@ -199,4 +199,47 @@ describe('alterColumn identity 四态 [P0]', function () {
       );
     });
   }
+
+  if (adapter.driver === 'sqlite') {
+    // sqlite identity:add/drop 抛错(AUTOINCREMENT 必须建表期声明,不支持在线增删);
+    // reseed 走 UPDATE sqlite_sequence;keep(undefined)不发 identity 语句。
+    it('[P0] add identity → 抛错(sqlite 不支持后加 AUTOINCREMENT)', () => {
+      assert.throws(
+        () => alter('add'),
+        /ADD\s+IDENTITY\s+not\s+supported\s+in\s+sqlite/i,
+        `sqlite add identity 应抛错,实际: 未抛错`
+      );
+    });
+
+    it('[P0] drop identity → 抛错(对齐 add;sqlite 删 AUTOINCREMENT 需表重建)', () => {
+      assert.throws(
+        () => alter('drop'),
+        /DROP\s+IDENTITY\s+not\s+supported\s+in\s+sqlite/i,
+        `sqlite drop identity 应抛错,实际: 未抛错`
+      );
+    });
+
+    it('[P0] reseed → UPDATE sqlite_sequence', () => {
+      const ret = mb.alterColumn('t_id', (g: any) => {
+        const c = g('id', DbType.int32);
+        c.$identityAction = 'reseed';
+        c.$identitySeed = { startValue: 100, increment: 1 };
+        return c;
+      });
+      const all = sqlify(ret).join('\n');
+      assert(
+        /UPDATE\s+sqlite_sequence\s+SET\s+seq\s*=\s*100/i.test(all),
+        `sqlite reseed 应含 UPDATE sqlite_sequence SET seq = 100,实际: ${all}`
+      );
+    });
+
+    it('[P0] keep(identity 不变)→ 不发 identity 语句', () => {
+      const sqls = alter('keep');
+      const all = sqls.join('\n');
+      assert(
+        !/AUTOINCREMENT|sqlite_sequence|IDENTITY/i.test(all),
+        `sqlite identity 不变不应发 identity 语句,实际: ${all}`
+      );
+    });
+  }
 });

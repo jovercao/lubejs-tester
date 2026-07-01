@@ -1483,7 +1483,7 @@ packages:
     engines: {node: '>=12.0'}
 
   lubejs-sqlite@file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz:
-    resolution: {integrity: sha512-Fegb/wCEhZHzPvULDbdCf2cXmQ9k37kX6cmDPX2MtlVl1qrPrR3yer9h2KEhPHqSpxAcApodnDAPSyzy2MU6IA==, tarball: file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz}
+    resolution: {integrity: sha512-ov6pqsrHS/XJVnZ5rkBjRzIc9LIkXZIHDJdYTsYBs9DFzqbr67RdgbHPuIUKudpr7k4M9NFkuU+3+9XumsTvaQ==, tarball: file:../lubejs-sqlite/dist/lubejs-sqlite-3.0.0-preview08.tgz}
     version: 3.0.0-preview08
     engines: {node: '>=12.0'}
 
